@@ -48,10 +48,12 @@ main:
     RUN_TEST TACF_16KHZ
     FINISH_TEST .EXPECTED_RESULT
 
+; verified 2021-05-27 on my Game Boy Color
+; (a CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT:
     DB $0C
     ;  TAC   IF  TIMA
     DB $04, $00, $80
-    DB $05, $04, $08
+    DB $05, $04, $09
     DB $06, $04, $02
-    DB $07, $04, $01
+    DB $07, $04, $00
