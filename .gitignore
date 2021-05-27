@@ -3,10 +3,9 @@
 
 # IDE
 .idea
-.vscode
-
 # Visual Studio Code: keep common workspace settings
 # (e.g. rgbds-z80 capitalization & includes)
+.vscode/**
 !.vscode/settings.json
 
 # build artifacts

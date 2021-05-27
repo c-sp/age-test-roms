@@ -14,6 +14,6 @@ is your best choice.
 
 # Font
 
-AGE test roms make use of the
+AGE test roms use a slightly modified version of the
 [small blocky font](https://opengameart.org/content/small-blocky-font)
-created by [Jerom](https://opengameart.org/users/jerom).
+originally created by [Jerom](https://opengameart.org/users/jerom).
