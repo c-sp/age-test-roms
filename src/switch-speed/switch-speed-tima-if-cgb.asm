@@ -61,18 +61,21 @@ main:
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; TODO verify
+; 2021-05-28 - verified on my Game Boy Color
+; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8
+    ;
     ;  switch to double speed
     ;  TAC  IF   TIMA
     DB $04, $00, $80
-    DB $05, $04, $09
+    DB $05, $04, $0A
     DB $06, $04, $02
     DB $07, $04, $00
+    ;
     ;  switch to single speed
     ;  TAC  IF   TIMA
     DB $04, $00, $80
-    DB $05, $04, $09
+    DB $05, $04, $0A
     DB $06, $04, $02
     DB $07, $04, $00

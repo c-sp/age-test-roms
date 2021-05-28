@@ -7,19 +7,9 @@ SECTION "main", ROMX
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
 
-    ; store current TAC
-    ;ld a, [rTAC]
-    ;and a, %00000111
-    ;ld [hl+], a
-    NOPS 3
-    NOPS 2
-    NOPS 2
-
     ; store number of nops
-    ;ld a, \1
-    ;ld [hl+], a
-    NOPS 2
-    NOPS 2
+    ld a, \1
+    ld [hl+], a
 
     ; store current TIMA
     ld a, [rTIMA]
@@ -57,48 +47,49 @@ ENDM
 
 
 main:
-    ; TODO find TIMA increment edges
-    RUN_TEST_DS $00, TACF_4KHZ
-    RUN_TEST_DS $10, TACF_4KHZ
-    RUN_TEST_DS $20, TACF_4KHZ
-    RUN_TEST_DS $30, TACF_4KHZ
-    RUN_TEST_DS $40, TACF_4KHZ
-    RUN_TEST_DS $50, TACF_4KHZ
-    RUN_TEST_DS $60, TACF_4KHZ
-    RUN_TEST_DS $70, TACF_4KHZ
-    RUN_TEST_DS $80, TACF_4KHZ
-    RUN_TEST_DS $90, TACF_4KHZ
-    RUN_TEST_DS $A0, TACF_4KHZ
-    RUN_TEST_DS $B0, TACF_4KHZ
-    RUN_TEST_DS $C0, TACF_4KHZ
-    RUN_TEST_DS $D0, TACF_4KHZ
-    RUN_TEST_DS $E0, TACF_4KHZ
-    RUN_TEST_DS $F0, TACF_4KHZ
+    RUN_TEST_DS $F1, TACF_4KHZ
+    RUN_TEST_DS $F2, TACF_4KHZ
+    RUN_TEST_DS $09, TACF_262KHZ
+    RUN_TEST_DS $0A, TACF_262KHZ
+    RUN_TEST_DS $11, TACF_65KHZ
+    RUN_TEST_DS $12, TACF_65KHZ
+    RUN_TEST_DS $31, TACF_16KHZ
+    RUN_TEST_DS $32, TACF_16KHZ
 
-    RUN_TEST_DS $00, TACF_262KHZ
-    RUN_TEST_DS $02, TACF_262KHZ
-    RUN_TEST_DS $04, TACF_262KHZ
-    RUN_TEST_DS $06, TACF_262KHZ
-
-    RUN_TEST_DS $00, TACF_65KHZ
-    RUN_TEST_DS $08, TACF_65KHZ
-    RUN_TEST_DS $10, TACF_65KHZ
-    RUN_TEST_DS $18, TACF_65KHZ
-    RUN_TEST_DS $20, TACF_65KHZ
-    RUN_TEST_DS $28, TACF_65KHZ
-
-    ; RUN_TEST_DS 1, TACF_4KHZ
-    ; RUN_TEST_DS 1, TACF_262KHZ
-    ; RUN_TEST_DS 1, TACF_65KHZ
-    ; RUN_TEST_DS 1, TACF_16KHZ
-
-    ; RUN_TEST_SS 1, TACF_4KHZ
-    ; RUN_TEST_SS 1, TACF_262KHZ
-    ; RUN_TEST_SS 1, TACF_65KHZ
-    ; RUN_TEST_SS 1, TACF_16KHZ
+    RUN_TEST_SS $F1, TACF_4KHZ
+    RUN_TEST_SS $F2, TACF_4KHZ
+    RUN_TEST_SS $09, TACF_262KHZ
+    RUN_TEST_SS $0A, TACF_262KHZ
+    RUN_TEST_SS $11, TACF_65KHZ
+    RUN_TEST_SS $12, TACF_65KHZ
+    RUN_TEST_SS $31, TACF_16KHZ
+    RUN_TEST_SS $32, TACF_16KHZ
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; TODO verify
+; 2021-05-28 - verified on my Game Boy Color
+; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
-    DB 0
+    DB 16 + 16
+    ;
+    ;  switch to double speed
+    ;  NOPS TIMA
+    DB $F1, $80
+    DB $F2, $81
+    DB $09, $09
+    DB $0A, $0A
+    DB $11, $02
+    DB $12, $03
+    DB $31, $00
+    DB $32, $01
+    ;
+    ;  switch to single speed
+    ;  NOPS TIMA
+    DB $F1, $80
+    DB $F2, $81
+    DB $09, $09
+    DB $0A, $0A
+    DB $11, $02
+    DB $12, $03
+    DB $31, $00
+    DB $32, $01

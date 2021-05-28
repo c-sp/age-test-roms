@@ -55,18 +55,36 @@ ENDM
 
 
 main:
-    ; TODO find DIV increment edge
-    RUN_TEST_DS $0, $00
-    RUN_TEST_DS $0, $10
-    RUN_TEST_DS $0, $20
-    RUN_TEST_DS $0, $30
-    RUN_TEST_DS $0, $40
-    RUN_TEST_DS $0, $50
-    RUN_TEST_DS $0, $60
-    RUN_TEST_DS $0, $70
+    RUN_TEST_DS $00, $2D
+    RUN_TEST_DS $00, $2E
+    RUN_TEST_DS $80, $2D
+    RUN_TEST_DS $80, $2E
+
+    RUN_TEST_SS $00, $2D
+    RUN_TEST_SS $00, $2E
+    RUN_TEST_SS $80, $2D
+    RUN_TEST_SS $80, $2E
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; TODO verify
+; 2021-05-28 - verified on my Game Boy Color
+; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
-    DB 0
+    DB 8 + 8 + 8
+    ;
+    ;  NOP1: number of nops before speed switch
+    ;  NOP2: number of nops after speed switch, before reading rDIV
+    ;
+    ;  switch to double speed
+    ;  NOPS1 NOPS2 DIV
+    DB $00,  $2D,  $00
+    DB $00,  $2E,  $01
+    DB $80,  $2D,  $00
+    DB $80,  $2E,  $01
+    ;
+    ;  switch to single speed
+    ;  NOPS1 NOPS2 DIV
+    DB $00,  $2D,  $00
+    DB $00,  $2E,  $01
+    DB $80,  $2D,  $00
+    DB $80,  $2E,  $01
