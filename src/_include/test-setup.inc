@@ -1,7 +1,7 @@
 IF !DEF(INC_TEST_SETUP)
 INC_TEST_SETUP = 1
 
-INCLUDE "utilities.inc"
+INCLUDE "macros.inc"
 
 
 
@@ -55,29 +55,30 @@ setup:
 
 PUSHS
 SECTION "test-result", WRAM0, ALIGN[6] ; align to 64 bytes for easier array handling
-TEST_RESULT_BYTES: DB    ; the actual test result size
+TEST_RESULT_BYTES: DB    ; the actual TEST_RESULT size
 TEST_RESULT:       DS 32 ; allow up to 32 bytes to be stored as test result
 POPS
 
-; Load the address of the next result byte into hl.
+; Load the address of the next test result byte into hl.
 ;
-; @destroys af
+; @destroys af, hl
 ;
-LD_HL_RESULT_BUFFER: MACRO
+BEGIN_WRITE_RESULTS: MACRO
     ld hl, TEST_RESULT_BYTES
     ld a, [hl+]
     add a, l
     ld l, a
 ENDM
 
-; Update the index to the next result byte from hl.
+; Update the index to the next test result byte from hl.
 ;
-; @destroys a, de
+; @destroys af
 ;
-ST_RESULT_BUFFER_HL: MACRO
-    ld de, TEST_RESULT_BYTES
+END_WRITE_RESULTS: MACRO
     ld a, l
-    ld [de], a
+    dec a
+    ld l, 0
+    ld [hl], a
 ENDM
 
 

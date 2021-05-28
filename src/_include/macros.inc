@@ -1,9 +1,7 @@
-IF !DEF(INC_UTILITIES)
-INC_UTILITIES = 1
+IF !DEF(INC_MACROS)
+INC_MACROS = 1
 
 INCLUDE "hardware.inc"
-
-SECTION "utilities", ROM0[$1000]
 
 
 
@@ -103,6 +101,35 @@ ENDM
 
 ; ----------------------------------------------------------------------------
 ;
+;   timer & div macros
+;
+; ----------------------------------------------------------------------------
+
+; (Re-)start the timer with the specified frequency.
+; We also reset the `DIV` and clear `IF`.
+;
+; @param \1 `TAC` frequency flags
+; @destroys a
+;
+RESTART_TIMER_CLEAN: MACRO
+    ; turn off timer
+    xor a, a
+    ld [rTAC], a
+    ld [rTIMA], a
+    ; clear all interrupts
+    ld [rIF], a
+    ; make sure we have a well defined DIV state
+    ; (to prevent arbitrary TIMA increments by future DIV resets)
+    ld [rDIV], a
+    ; start timer
+    ld a, TACF_START | \1
+    ld [rTAC], a
+ENDM
+
+
+
+; ----------------------------------------------------------------------------
+;
 ;   miscellaneous macros
 ;
 ; ----------------------------------------------------------------------------
@@ -134,7 +161,7 @@ ENDM
 ; @destroys a
 ;
 SWITCH_SPEED: MACRO
-	ld a, 30
+	ld a, $30
     ld [rP1], a
 	ld a, 1
 	ld [rKEY1], a
