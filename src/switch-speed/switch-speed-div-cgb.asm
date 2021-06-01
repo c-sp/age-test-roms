@@ -4,6 +4,10 @@ SECTION "main", ROMX
 
 
 
+; The number of machine cylces after speed change until the
+; next DIV increment is constant regardless of the DIV's
+; state right before speed change.
+
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
 

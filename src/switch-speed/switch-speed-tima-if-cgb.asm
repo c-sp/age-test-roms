@@ -4,6 +4,9 @@ SECTION "main", ROMX
 
 
 
+; Verify that DIV and TIMA are running during speed change
+; and that a TIMA overflow may be signalled in IF.
+
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
 
