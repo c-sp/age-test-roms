@@ -8,6 +8,7 @@ SECTION "main", ROMX
 ; active during speed change but the CPU is not.
 ; The estimation's accuracy is 4 machine cycles
 ; (based on the 262KHz timer).
+;
 ; Additionally the number of machine cycles until the first
 ; TIMA increment after speed change is checked.
 
@@ -80,7 +81,7 @@ main:
     DB 16 + 16
     ;
     ;  switch to double speed
-    ;  NOPS TIMA
+    ;  NOPS rTIMA
     DB $F1, $80
     DB $F2, $81
     DB $01, $07
@@ -91,7 +92,7 @@ main:
     DB $32, $01
     ;
     ;  switch to single speed
-    ;  NOPS TIMA
+    ;  NOPS rTIMA
     DB $F1, $80
     DB $F2, $81
     DB $01, $07

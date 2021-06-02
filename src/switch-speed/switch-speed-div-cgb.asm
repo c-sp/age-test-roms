@@ -7,6 +7,11 @@ SECTION "main", ROMX
 ; The number of machine cylces after speed change until the
 ; next DIV increment is constant regardless of the DIV's
 ; state right before speed change.
+; Reading rDIV right after speed change always yields zero.
+;
+; => We know that changing speeds resets the DIV
+;    (most likely due to STOP being executed),
+;    but it is not yet clear when exactly this reset happens.
 
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
@@ -29,7 +34,7 @@ ENDM
 RUN_TEST_DS: MACRO
     ; reset DIV
     ld [rDIV], a
-    ; do some nops to switch speed at different DIV values
+    ; do some nops to switch speeds at different DIV values
     NOPS \1
     ; switch to double speed
     SWITCH_SPEED
@@ -46,7 +51,7 @@ RUN_TEST_SS: MACRO
     SWITCH_SPEED
     ; reset DIV
     ld [rDIV], a
-    ; do some nops to switch speed at different DIV values
+    ; do some nops to switch speeds at different DIV values
     NOPS \1
     ; switch to single speed
     SWITCH_SPEED
@@ -76,18 +81,19 @@ main:
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8
     ;
-    ;  NOP1: number of nops before speed switch
-    ;  NOP2: number of nops after speed switch, before reading rDIV
+    ;  NOPS1: number of nops before switching speeds
+    ;  NOPS2: number of nops after switching speeds
+    ;         and before reading rDIV
     ;
     ;  switch to double speed
-    ;  NOPS1 NOPS2 DIV
+    ;  NOPS1 NOPS2 rDIV
     DB $00,  $2D,  $00
     DB $00,  $2E,  $01
     DB $80,  $2D,  $00
     DB $80,  $2E,  $01
     ;
     ;  switch to single speed
-    ;  NOPS1 NOPS2 DIV
+    ;  NOPS1 NOPS2 rDIV
     DB $00,  $2D,  $00
     DB $00,  $2E,  $01
     DB $80,  $2D,  $00
