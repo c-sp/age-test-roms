@@ -4,23 +4,15 @@ SECTION "main", ROMX
 
 
 
-; Estimate the number of machine cycles DIV and TIMA are
-; active during speed change but the CPU is not.
-; The estimation's accuracy is 4 machine cycles
-; (based on the 262KHz timer).
-;
-; Additionally the number of machine cycles until the first
-; TIMA increment after speed change is checked.
-
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
 
-    ; store number of nops after speed change
-    ld a, \1
-    ld [hl+], a
-
     ; store current TIMA
     ld a, [rTIMA]
+    ld [hl+], a
+
+    ; store number of nops after speed change
+    ld a, \1
     ld [hl+], a
 
     END_WRITE_RESULTS
@@ -55,49 +47,49 @@ ENDM
 
 
 main:
-    RUN_TEST_DS $F1, TACF_4KHZ
-    RUN_TEST_DS $F2, TACF_4KHZ
+    RUN_TEST_DS $F5, TACF_4KHZ
+    RUN_TEST_DS $F6, TACF_4KHZ
     RUN_TEST_DS $01, TACF_262KHZ
     RUN_TEST_DS $02, TACF_262KHZ
-    RUN_TEST_DS $01, TACF_65KHZ
-    RUN_TEST_DS $02, TACF_65KHZ
-    RUN_TEST_DS $31, TACF_16KHZ
-    RUN_TEST_DS $32, TACF_16KHZ
+    RUN_TEST_DS $05, TACF_65KHZ
+    RUN_TEST_DS $06, TACF_65KHZ
+    RUN_TEST_DS $35, TACF_16KHZ
+    RUN_TEST_DS $36, TACF_16KHZ
 
-    RUN_TEST_SS $F1, TACF_4KHZ
-    RUN_TEST_SS $F2, TACF_4KHZ
+    RUN_TEST_SS $F5, TACF_4KHZ
+    RUN_TEST_SS $F6, TACF_4KHZ
     RUN_TEST_SS $01, TACF_262KHZ
     RUN_TEST_SS $02, TACF_262KHZ
-    RUN_TEST_SS $01, TACF_65KHZ
-    RUN_TEST_SS $02, TACF_65KHZ
-    RUN_TEST_SS $31, TACF_16KHZ
-    RUN_TEST_SS $32, TACF_16KHZ
+    RUN_TEST_SS $05, TACF_65KHZ
+    RUN_TEST_SS $06, TACF_65KHZ
+    RUN_TEST_SS $35, TACF_16KHZ
+    RUN_TEST_SS $36, TACF_16KHZ
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; 2021-06-01 - verified on my Game Boy Color
+; 2021-06-03 - verified on my Game Boy Color
 ; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 16 + 16
     ;
     ;  switch to double speed
-    ;  NOPS rTIMA
-    DB $F1, $80
-    DB $F2, $81
-    DB $01, $07
-    DB $02, $08
-    DB $01, $01
-    DB $02, $02
-    DB $31, $00
-    DB $32, $01
+    ;  TIMA NOPS
+    DB $80, $F5
+    DB $81, $F6
+    DB $06, $01
+    DB $07, $02
+    DB $01, $05
+    DB $02, $06
+    DB $00, $35
+    DB $01, $36
     ;
     ;  switch to single speed
-    ;  NOPS rTIMA
-    DB $F1, $80
-    DB $F2, $81
-    DB $01, $07
-    DB $02, $08
-    DB $01, $01
-    DB $02, $02
-    DB $31, $00
-    DB $32, $01
+    ;  TIMA NOPS
+    DB $80, $F5
+    DB $81, $F6
+    DB $06, $01
+    DB $07, $02
+    DB $01, $05
+    DB $02, $06
+    DB $00, $35
+    DB $01, $36
