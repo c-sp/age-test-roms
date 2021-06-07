@@ -53,10 +53,12 @@ setup:
 ;
 ; ----------------------------------------------------------------------------
 
+DEF MAX_RESULT_BYTES EQU 42
+
 PUSHS
 SECTION "test-result", WRAM0, ALIGN[6] ; align to 64 bytes for easier array handling
-TEST_RESULT_BYTES: DB    ; the actual TEST_RESULT size
-TEST_RESULT:       DS 32 ; allow up to 32 bytes to be stored as test result
+TEST_RESULT_BYTES: DB ; the actual TEST_RESULT size
+TEST_RESULT:       DS MAX_RESULT_BYTES ; the test result bytes
 POPS
 
 ; Load the address of the next test result byte into hl.
@@ -148,8 +150,8 @@ finish_test:
 ;
 .compare_test_result:
     ld a, [hl]
-    cp a, 33
-    ret nc ; invalid result: at most 32 bytes allowed
+    cp a, MAX_RESULT_BYTES + 1
+    ret nc ; invalid result (too many test result bytes)
     inc a
     ld c, a ; c = number of bytes to compare
     ld de, TEST_RESULT_BYTES
@@ -211,9 +213,9 @@ finish_test:
 .TEST_FAILED:
     DB "    Test failed!\n\n", 0
 .RESULTS:
-    DB "Results:\n\n", 0
+    DB "Results:\n", 0
 .EXPECTED:
-    DB "Expected:\n\n", 0
+    DB "Expected:\n", 0
 
 ; Move hl to the next screen line.
 ;
@@ -250,7 +252,6 @@ ENDM
 
 ; Print a byte array as hex values.
 ; The array's first byte must contain the number of bytes remaining.
-; At most 33 bytes are printed.
 ;
 ; @param de address of the byte array to print
 ; @param hl destination address
@@ -258,9 +259,9 @@ ENDM
 ;
 .print_hex_array:
     ld a, [de]
-    cp a, 33
+    cp a, MAX_RESULT_BYTES + 1
     jr c, .array_checked
-    ld a, 32
+    ld a, MAX_RESULT_BYTES
 .array_checked:
     inc a
     ld c, a
