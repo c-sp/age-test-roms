@@ -134,8 +134,6 @@ ENDM
 ;
 ; ----------------------------------------------------------------------------
 
-; generate `nop` instructions
-;
 ; @param \1 the number of `nop` instructions to generate
 ; @destroys
 ;
@@ -143,6 +141,47 @@ NOPS: MACRO
     REPT \1
         nop
     ENDR
+ENDM
+
+
+
+; @param \1 the number of 256-`nop` delays to generate (0-255)
+; @destroys
+;
+NOPS256: MACRO
+    IF \1 > 0
+        ; 8 m-cycles for this block
+        push af ; 4 m-cycles
+        push bc ; 4 m-cycles
+
+        ; 8 m-cycles for this block
+        ld b, \1          ; 2 m-cycles
+        ld c, 62 - 24     ; 2 m-cycles
+        nop               ; 1 m-cycle
+        jr .loop_inner\@: ; 3 m-cycles
+
+.loop\@:
+        ; it takes 256 m-cycles for one .loop\@ iteration
+        ; 4 m-cycles for this block
+        ld c, 62 ; 2 m-cycles
+        nop      ; 1 m-cycle
+        nop      ; 1 m-cycle
+
+.loop_inner\@:
+        dec c                ; 1 m-cycle
+        jr nz, .loop_inner\@ ; 3 m-cycles for jump, 2 m-cycles else
+        nop                  ; 1 m-cycle (-> 4 m-cycles for each decrement)
+
+        dec b          ; 1 m-cycle
+        jr nz, .loop\@ ; 3 m-cycles for jump, 2 m-cycles else
+        nop            ; 1 m-cycle (-> 4 m-cycles for each decrement)
+
+        ; 8 m-cycles for this block
+        nop    ; 1 m-cycle
+        nop    ; 1 m-cycle
+        pop bc ; 3 m-cycles
+        pop af ; 3 m-cycles
+    ENDC
 ENDM
 
 
