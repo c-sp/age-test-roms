@@ -138,9 +138,9 @@ ENDM
 ; @destroys
 ;
 NOPS: MACRO
-    IF \1 >= 256
-        NOPS256 \1 / 256
-        REPT \1 % 256
+    IF (\1) >= 256
+        NOPS256 (\1) / 256
+        REPT (\1) % 256
             nop
         ENDR
     ELSE
