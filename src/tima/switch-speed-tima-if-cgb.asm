@@ -4,8 +4,8 @@ SECTION "main", ROMX
 
 
 
-; Verify that DIV and TIMA are running during speed change
-; and that a TIMA overflow may be signalled in IF.
+; Verify that DIV and TIMA are running while switching speeds
+; and that TIMA overflows during speed change are signalled in IF.
 
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
@@ -64,7 +64,7 @@ main:
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; 2021-05-28 - verified on my Game Boy Color
+; 2021-06-15 - verified on my Game Boy Color
 ; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8

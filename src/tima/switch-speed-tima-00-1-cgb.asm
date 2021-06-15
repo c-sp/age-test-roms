@@ -1,4 +1,7 @@
-INCLUDE "src/switch-speed/switch-speed-tima-0x.inc"
+INCLUDE "src/tima/switch-speed-tima-0x.inc"
+
+; Check the machine cycle after switching speeds
+; on which the 4KHz TIMA is incremented.
 
 main:
     RUN_TEST_DS $6E, $F5, TACF_4KHZ
@@ -15,7 +18,7 @@ main:
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; 2021-06-03 - verified on my Game Boy Color
+; 2021-06-15 - verified on my Game Boy Color
 ; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8

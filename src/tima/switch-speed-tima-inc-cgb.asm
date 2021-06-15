@@ -4,6 +4,8 @@ SECTION "main", ROMX
 
 
 
+; Verify the TIMA value right after switching speeds.
+
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
 
@@ -67,7 +69,7 @@ main:
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; 2021-06-03 - verified on my Game Boy Color
+; 2021-06-15 - verified on my Game Boy Color
 ; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 16 + 16

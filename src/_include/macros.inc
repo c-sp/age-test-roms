@@ -138,9 +138,16 @@ ENDM
 ; @destroys
 ;
 NOPS: MACRO
-    REPT \1
-        nop
-    ENDR
+    IF \1 >= 256
+        NOPS256 \1 / 256
+        REPT \1 % 256
+            nop
+        ENDR
+    ELSE
+        REPT \1
+            nop
+        ENDR
+    ENDC
 ENDM
 
 
@@ -155,26 +162,27 @@ NOPS256: MACRO
         push bc ; 4 m-cycles
 
         ; 8 m-cycles for this block
-        ld b, \1          ; 2 m-cycles
-        ld c, 62 - 24     ; 2 m-cycles
-        nop               ; 1 m-cycle
-        jr .loop_inner\@: ; 3 m-cycles
+        ld b, \1                     ; 2 m-cycles, b = number of .loop\@ iterations
+        ld c, (256 - 8 - 24 + 4) / 4 ; 2 m-cycles
+        nop                          ; 1 m-cycle
+        jr .loop_inner\@             ; 3 m-cycles
 
 .loop\@:
         ; it takes 256 m-cycles for one .loop\@ iteration
         ; 4 m-cycles for this block
-        ld c, 62 ; 2 m-cycles
-        nop      ; 1 m-cycle
-        nop      ; 1 m-cycle
+        ld c, (256 - 8) / 4 ; 2 m-cycles, c = number of .loop_inner\@ iterations
+        nop                 ; 1 m-cycle
+        nop                 ; 1 m-cycle
 
+        ; it takes 4 m-cycles for one .loop_inner\@ iteration
 .loop_inner\@:
         dec c                ; 1 m-cycle
         jr nz, .loop_inner\@ ; 3 m-cycles for jump, 2 m-cycles else
-        nop                  ; 1 m-cycle (-> 4 m-cycles for each decrement)
+        nop                  ; 1 m-cycle
 
         dec b          ; 1 m-cycle
         jr nz, .loop\@ ; 3 m-cycles for jump, 2 m-cycles else
-        nop            ; 1 m-cycle (-> 4 m-cycles for each decrement)
+        nop            ; 1 m-cycle
 
         ; 8 m-cycles for this block
         nop    ; 1 m-cycle

@@ -8,10 +8,6 @@ SECTION "main", ROMX
 ; next DIV increment is constant regardless of the DIV's
 ; state right before speed change.
 ; Reading rDIV right after speed change always yields zero.
-;
-; => We know that changing speeds resets the DIV
-;    (most likely due to STOP being executed),
-;    but it is not yet clear when exactly this reset happens.
 
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
@@ -76,7 +72,7 @@ main:
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; 2021-05-28 - verified on my Game Boy Color
+; 2021-06-15 - verified on my Game Boy Color
 ; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8
