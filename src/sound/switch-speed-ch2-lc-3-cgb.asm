@@ -7,8 +7,7 @@ SECTION "main", ROMX
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
 
-    ; store number of nops before switching back to single speed
-    ; & before the second switch to double speed
+    ; store number of nops before the second & the third switch to double speed
     ld a, (\1) * $10 + (\2)
     ld [hl+], a
 
@@ -30,8 +29,8 @@ RUN_TEST: MACRO
 
     ld a, $80
     ld [rNR52], a ; sound on
-    ld a, $2E
-    ld [rNR21], a ; channel 2 length counter = 18
+    ld a, $23
+    ld [rNR21], a ; channel 2 length counter = 29
     ld a, $F0
     ld [rNR22], a
     ld a, $00
@@ -40,8 +39,10 @@ RUN_TEST: MACRO
     ld [rNR24], a ; initialize channel 2 with length counter
 
     SWITCH_SPEED ; switch to double speed
+    SWITCH_SPEED ; switch to single speed
 
     NOPS \1
+    SWITCH_SPEED ; switch to double speed
     SWITCH_SPEED ; switch to single speed
 
     NOPS \2
@@ -56,17 +57,17 @@ ENDM
 
 
 main:
-    RUN_TEST 0, 0, 12269
-    RUN_TEST 0, 0, 12270
+    RUN_TEST 0, 0, 4078
+    RUN_TEST 0, 0, 4079
 
-    RUN_TEST 0, 1, 12269
-    RUN_TEST 0, 1, 12270
+    RUN_TEST 0, 1, 4078
+    RUN_TEST 0, 1, 4079
 
-    RUN_TEST 1, 0, 12269
-    RUN_TEST 1, 0, 12270
+    RUN_TEST 1, 0, 4078
+    RUN_TEST 1, 0, 4079
 
-    RUN_TEST 1, 1, 12269
-    RUN_TEST 1, 1, 12270
+    RUN_TEST 1, 1, 4078
+    RUN_TEST 1, 1, 4079
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
@@ -76,14 +77,14 @@ main:
     DB 8 + 8 + 8
     ;
     ;  NOPS1 NOPS2 NOPS3 NR52
-    DB $00,  $ED,  $F2
-    DB $00,  $EE,  $F0
+    DB $00,  $EE,  $F2
+    DB $00,  $EF,  $F0
 
-    DB $01,  $ED,  $F2
-    DB $01,  $EE,  $F0
+    DB $01,  $EE,  $F2
+    DB $01,  $EF,  $F0
 
-    DB $10,  $ED,  $F2
-    DB $10,  $EE,  $F0
+    DB $10,  $EE,  $F2
+    DB $10,  $EF,  $F0
 
-    DB $11,  $ED,  $F2
-    DB $11,  $EE,  $F0
+    DB $11,  $EE,  $F2
+    DB $11,  $EF,  $F0
