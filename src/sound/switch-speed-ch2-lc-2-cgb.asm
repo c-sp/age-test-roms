@@ -4,6 +4,14 @@ SECTION "main", ROMX
 
 
 
+; - sound off/on
+; - double speed (=> length counter delayed by 1 machine cycle)
+; - 0-1 nops
+; - single speed
+; - 0-1 nops
+; - double speed
+; - length counter never delayed
+
 WRITE_RESULTS: MACRO
     BEGIN_WRITE_RESULTS
 
@@ -75,15 +83,15 @@ main:
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8
     ;
-    ;  NOPS1 NOPS2 NOPS3 NR52
-    DB $00,  $ED,  $F2
-    DB $00,  $EE,  $F0
+    ;  NOPS1&2 NOPS3 NR52
+    DB $00,    $ED,  $F2
+    DB $00,    $EE,  $F0
 
-    DB $01,  $ED,  $F2
-    DB $01,  $EE,  $F0
+    DB $01,    $ED,  $F2
+    DB $01,    $EE,  $F0
 
-    DB $10,  $ED,  $F2
-    DB $10,  $EE,  $F0
+    DB $10,    $ED,  $F2
+    DB $10,    $EE,  $F0
 
-    DB $11,  $ED,  $F2
-    DB $11,  $EE,  $F0
+    DB $11,    $ED,  $F2
+    DB $11,    $EE,  $F0

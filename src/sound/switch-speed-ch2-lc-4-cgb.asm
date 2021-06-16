@@ -6,9 +6,9 @@ SECTION "main", ROMX
 
 ; - sound off/on
 ; - double speed (=> length counter delayed by 1 machine cycle)
+; - sound off
 ; - 0-1 nops
-; - single speed
-; - double speed (=> length counter not delayed any more)
+; - sound on (=> "reactivates" length counter delay for next switch to double speed)
 ; - 0-1 nops
 ; - single speed
 ; - double speed
@@ -39,20 +39,24 @@ RUN_TEST: MACRO
 
     ld a, $80
     ld [rNR52], a ; sound on
-    ld a, $23
-    ld [rNR21], a ; channel 2 length counter = 29
+
+    SWITCH_SPEED ; switch to double speed
+
+    xor a, a
+    ld [rNR52], a ; all sound off
+    ld [rDIV], a  ; reset DIV
+
+    NOPS \1
+    ld a, $80
+    ld [rNR52], a ; sound on
+    ld a, $33
+    ld [rNR21], a ; channel 2 length counter = 13
     ld a, $F0
     ld [rNR22], a
     ld a, $00
     ld [rNR23], a
     ld a, $C7
     ld [rNR24], a ; initialize channel 2 with length counter
-
-    SWITCH_SPEED ; switch to double speed
-
-    NOPS \1
-    SWITCH_SPEED ; switch to single speed
-    SWITCH_SPEED ; switch to double speed
 
     NOPS \2
     SWITCH_SPEED ; switch to single speed
