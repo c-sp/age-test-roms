@@ -44,7 +44,6 @@ RUN_TEST: MACRO
 
     xor a, a
     ld [rNR52], a ; all sound off
-    ld [rDIV], a  ; reset DIV
 
     NOPS \1
     ld a, $80
@@ -85,7 +84,7 @@ main:
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; 2021-06-16 - verified on my Game Boy Color
+; 2021-06-17 - verified on my Game Boy Color
 ; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8
