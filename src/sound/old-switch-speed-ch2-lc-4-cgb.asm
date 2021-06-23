@@ -1,14 +1,13 @@
 ROM_IS_CGB_ONLY = 1
-INCLUDE "test-setup.inc"
-SECTION "main", ROMX
+INCLUDE "test-setup-old.inc"
 
 
 
 ; - sound off/on
 ; - double speed (=> length counter delayed by 1 machine cycle)
+; - sound off
 ; - 0-1 nops
-; - single speed
-; - double speed (=> length counter not delayed any more)
+; - sound on (=> "reactivates" length counter delay for next switch to double speed)
 ; - 0-1 nops
 ; - single speed
 ; - double speed
@@ -39,20 +38,23 @@ RUN_TEST: MACRO
 
     ld a, $80
     ld [rNR52], a ; sound on
-    ld a, $23
-    ld [rNR21], a ; channel 2 length counter = 29
+
+    SWITCH_SPEED ; switch to double speed
+
+    xor a, a
+    ld [rNR52], a ; all sound off
+
+    NOPS \1
+    ld a, $80
+    ld [rNR52], a ; sound on
+    ld a, $33
+    ld [rNR21], a ; channel 2 length counter = 13
     ld a, $F0
     ld [rNR22], a
     ld a, $00
     ld [rNR23], a
     ld a, $C7
     ld [rNR24], a ; initialize channel 2 with length counter
-
-    SWITCH_SPEED ; switch to double speed
-
-    NOPS \1
-    SWITCH_SPEED ; switch to single speed
-    SWITCH_SPEED ; switch to double speed
 
     NOPS \2
     SWITCH_SPEED ; switch to single speed
@@ -81,7 +83,7 @@ main:
 
     FINISH_TEST .EXPECTED_RESULT_CGB_AB
 
-; 2021-06-16 - verified on my Game Boy Color
+; 2021-06-17 - verified on my Game Boy Color
 ; (CPU CGB A/B according to which.gb 0.3)
 .EXPECTED_RESULT_CGB_AB:
     DB 8 + 8 + 8

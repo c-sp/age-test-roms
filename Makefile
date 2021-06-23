@@ -17,7 +17,7 @@ all: $(ROMS)
 
 $(ROMS): $(BIN_DIR)/%.gb : $(OBJ_DIR)/%.o
 	@mkdir -p $(@D)
-	rgblink -n $(basename $@).sym -m $(basename $@).map -o $@ $<
+	rgblink -t -n $(basename $@).sym -m $(basename $@).map -o $@ $<
 	rgbfix -v -p 255 $@
 
 $(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.asm

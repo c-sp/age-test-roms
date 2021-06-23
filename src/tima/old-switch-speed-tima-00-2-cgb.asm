@@ -1,4 +1,4 @@
-INCLUDE "src/tima/switch-speed-tima-0x.inc"
+INCLUDE "src/tima/old-switch-speed-tima-0x.inc"
 
 main:
     RUN_TEST_DS $6E + $7F, $F5, TACF_4KHZ

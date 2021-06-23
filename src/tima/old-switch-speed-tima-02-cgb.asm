@@ -1,4 +1,4 @@
-INCLUDE "src/tima/switch-speed-tima-0x.inc"
+INCLUDE "src/tima/old-switch-speed-tima-0x.inc"
 
 ; Check the machine cycle after switching speeds
 ; on which the 65KHz TIMA is incremented.

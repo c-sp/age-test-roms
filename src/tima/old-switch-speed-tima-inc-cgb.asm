@@ -1,6 +1,5 @@
 ROM_IS_CGB_ONLY = 1
-INCLUDE "test-setup.inc"
-SECTION "main", ROMX
+INCLUDE "test-setup-old.inc"
 
 
 

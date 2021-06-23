@@ -13,39 +13,42 @@ INCLUDE "hardware.inc"
 
 ; Wait for LY == \1.
 ;
-; @destroys af
+; @destroys
 ;
 WAIT_FOR_LY: MACRO
+    push af
 .loop\@
     ld a, [rLY]
     cp a, \1
     jr nz, .loop\@
+    pop af
 ENDM
-
-
 
 ; Wait for v-blank beginning.
 ;
 ; @see WAIT_FOR_LY
-; @destroys af
+; @destroys
 ;
 WAIT_FOR_VBLANK: MACRO
     WAIT_FOR_LY 144
 ENDM
 
-
-
 ; Wait for V-Blank and turn of the LCD.
 ;
 ; @see WAIT_FOR_VBLANK
-; @destroys af, hl
+; @destroys
 ;
 LCD_OFF: MACRO
+    push af
+    push hl
     ld hl, rLCDC
     bit 7, [hl]
-    ret z ; LCD already off
+    jr z, .already_off\@
     WAIT_FOR_VBLANK
     res 7, [hl]
+.already_off\@:
+    pop hl
+    pop af
 ENDM
 
 
@@ -74,8 +77,6 @@ CLEAR_MEMORY: MACRO
     jr nz, .clear\@
 ENDM
 
-
-
 ; copy (non-overlapping) memory
 ;
 ; @param \1 source address
@@ -101,36 +102,7 @@ ENDM
 
 ; ----------------------------------------------------------------------------
 ;
-;   timer & div macros
-;
-; ----------------------------------------------------------------------------
-
-; (Re-)start the timer with the specified frequency.
-; We also reset the `DIV` and clear `IF`.
-;
-; @param \1 `TAC` frequency flags
-; @destroys a
-;
-RESTART_TIMER_CLEAN: MACRO
-    ; turn off timer
-    xor a, a
-    ld [rTAC], a
-    ld [rTIMA], a
-    ; clear all interrupts
-    ld [rIF], a
-    ; make sure we have a well defined DIV state
-    ; (to prevent arbitrary TIMA increments by future DIV resets)
-    ld [rDIV], a
-    ; start timer
-    ld a, TACF_START | \1
-    ld [rTAC], a
-ENDM
-
-
-
-; ----------------------------------------------------------------------------
-;
-;   miscellaneous macros
+;   nop macros
 ;
 ; ----------------------------------------------------------------------------
 
@@ -149,8 +121,6 @@ NOPS: MACRO
         ENDR
     ENDC
 ENDM
-
-
 
 ; @param \1 the number of 256-`nop` delays to generate (0-255)
 ; @destroys
@@ -194,14 +164,32 @@ ENDM
 
 
 
-; enter an infinite loop
+; ----------------------------------------------------------------------------
 ;
-FREEZE: MACRO
-.loop\@:
-    jr .loop\@
+;    miscellaneous macros
+;
+; ----------------------------------------------------------------------------
+
+; (Re-)start the timer with the specified frequency.
+; We also reset the `DIV` and clear `IF`.
+;
+; @param \1 `TAC` frequency flags
+; @destroys a
+;
+RESTART_TIMER_CLEAN: MACRO
+    ; turn off timer
+    xor a, a
+    ld [rTAC], a
+    ld [rTIMA], a
+    ; clear all interrupts
+    ld [rIF], a
+    ; make sure we have a well defined DIV state
+    ; (to prevent arbitrary TIMA increments by future DIV resets)
+    ld [rDIV], a
+    ; start timer
+    ld a, TACF_START | \1
+    ld [rTAC], a
 ENDM
-
-
 
 ; switch between CGB speed modes
 ;

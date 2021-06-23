@@ -1,96 +1,115 @@
 ROM_IS_CGB_ONLY = 1
 INCLUDE "test-setup.inc"
-SECTION "main", ROMX
 
 
 
-; The number of machine cylces after speed change until the
-; next DIV increment is constant regardless of the DIV's
-; state right before speed change.
-; Reading rDIV right after speed change always yields zero.
+; Verified:
+;   2021-06-23 pass on CPU CGB E (CPU-CGB-06)
+;   2021-06-23 pass on CPU CGB B (CPU-CGB-02)
+EXPECTED_TEST_RESULTS:
+    ; number of test result rows
+    DB 5
+    ; double speed
+    DB $00, $01,  $00, $01,  $00, $01,  $00, $01
+    ; double speed -> single speed
+    DB $00, $01,  $00, $01,  $00, $01,  $00, $01
+    DB $00, $01,  $00, $01,  $00, $01,  $00, $01
+    ; double speed -> single speed -> double speed
+    DB $00, $01,  $00, $01,  $00, $01,  $00, $01
+    DB $00, $01,  $00, $01,  $00, $01,  $00, $01
 
-WRITE_RESULTS: MACRO
-    BEGIN_WRITE_RESULTS
 
-    ; store number of nops before speed switch
-    ld a, \1
-    ld [hl+], a
 
-    ; store number of nops after speed switch
-    ld a, \2
-    ld [hl+], a
-
-    ; store current DIV
+STORE_DIV: MACRO
     ld a, [rDIV]
     ld [hl+], a
-
-    END_WRITE_RESULTS
 ENDM
 
-RUN_TEST_DS: MACRO
-    ; reset DIV
-    ld [rDIV], a
-    ; do some nops to switch speeds at different DIV values
-    NOPS \1
-    ; switch to double speed
-    SWITCH_SPEED
-    ; do some nops to find the DIV increment edge
-    NOPS \2
-    ; store test results
-    WRITE_RESULTS \1, \2
-    ; switch to single speed
-    SWITCH_SPEED
+TEST_DS: MACRO
+    ld [rDIV], a ; reset div
+    NOPS \1      ; wait before switching to double speed
+    SWITCH_SPEED ; switch to double speed
+    NOPS \2      ; wait before reading rDIV
+    STORE_DIV    ; store rDIV
+    SWITCH_SPEED ; switch to single speed
 ENDM
 
-RUN_TEST_SS: MACRO
-    ; switch to double speed
-    SWITCH_SPEED
-    ; reset DIV
-    ld [rDIV], a
-    ; do some nops to switch speeds at different DIV values
-    NOPS \1
-    ; switch to single speed
-    SWITCH_SPEED
-    ; do some nops to find the DIV increment edge
-    NOPS \2
-    ; store test results
-    WRITE_RESULTS \1, \2
+TEST_DS_SS: MACRO
+    ld [rDIV], a ; reset div
+    SWITCH_SPEED ; switch to double speed
+    NOPS \1      ; wait before switching to single speed
+    SWITCH_SPEED ; switch to single speed
+    NOPS \2      ; wait before reading rDIV
+    STORE_DIV    ; store rDIV
+ENDM
+
+TEST_DS_SS_DS: MACRO
+    ld [rDIV], a ; reset div
+    SWITCH_SPEED ; switch to double speed
+    NOPS \1      ; wait before switching to single speed
+    SWITCH_SPEED ; switch to single speed
+    NOPS \2      ; wait before switching to double speed
+    SWITCH_SPEED ; switch to double speed
+    NOPS \3      ; wait before reading rDIV
+    STORE_DIV    ; store rDIV
+    SWITCH_SPEED ; switch to single speed
 ENDM
 
 
 
-main:
-    RUN_TEST_DS $00, $2D
-    RUN_TEST_DS $00, $2E
-    RUN_TEST_DS $80, $2D
-    RUN_TEST_DS $80, $2E
+run_test:
+    LCD_OFF
+    ld hl, TEST_RESULTS
 
-    RUN_TEST_SS $00, $2D
-    RUN_TEST_SS $00, $2E
-    RUN_TEST_SS $80, $2D
-    RUN_TEST_SS $80, $2E
+    ; double speed
 
-    FINISH_TEST .EXPECTED_RESULT_CGB_AB
+    TEST_DS $00, $3C
+    TEST_DS $00, $3D
+    TEST_DS $01, $3C
+    TEST_DS $01, $3D
+    TEST_DS $40, $3C
+    TEST_DS $40, $3D
+    TEST_DS $41, $3C
+    TEST_DS $41, $3D
 
-; 2021-06-15 - verified on my Game Boy Color
-; (CPU CGB A/B according to which.gb 0.3)
-.EXPECTED_RESULT_CGB_AB:
-    DB 8 + 8 + 8
-    ;
-    ;  NOPS1: number of nops before switching speeds
-    ;  NOPS2: number of nops after switching speeds
-    ;         and before reading rDIV
-    ;
-    ;  switch to double speed
-    ;  NOPS1 NOPS2 rDIV
-    DB $00,  $2D,  $00
-    DB $00,  $2E,  $01
-    DB $80,  $2D,  $00
-    DB $80,  $2E,  $01
-    ;
-    ;  switch to single speed
-    ;  NOPS1 NOPS2 rDIV
-    DB $00,  $2D,  $00
-    DB $00,  $2E,  $01
-    DB $80,  $2D,  $00
-    DB $80,  $2E,  $01
+    ; double speed -> single speed
+
+    TEST_DS_SS $00, $3C
+    TEST_DS_SS $00, $3D
+    TEST_DS_SS $01, $3C
+    TEST_DS_SS $01, $3D
+    TEST_DS_SS $02, $3C
+    TEST_DS_SS $02, $3D
+    TEST_DS_SS $03, $3C
+    TEST_DS_SS $03, $3D
+
+    TEST_DS_SS $40, $3C
+    TEST_DS_SS $40, $3D
+    TEST_DS_SS $41, $3C
+    TEST_DS_SS $41, $3D
+    TEST_DS_SS $42, $3C
+    TEST_DS_SS $42, $3D
+    TEST_DS_SS $43, $3C
+    TEST_DS_SS $43, $3D
+
+    ; double speed -> single speed -> double speed
+
+    TEST_DS_SS_DS $00, $00, $3C
+    TEST_DS_SS_DS $00, $00, $3D
+    TEST_DS_SS_DS $01, $00, $3C
+    TEST_DS_SS_DS $01, $00, $3D
+    TEST_DS_SS_DS $02, $00, $3C
+    TEST_DS_SS_DS $02, $00, $3D
+    TEST_DS_SS_DS $03, $00, $3C
+    TEST_DS_SS_DS $03, $00, $3D
+
+    TEST_DS_SS_DS $00, $01, $3C
+    TEST_DS_SS_DS $00, $01, $3D
+    TEST_DS_SS_DS $01, $01, $3C
+    TEST_DS_SS_DS $01, $01, $3D
+    TEST_DS_SS_DS $02, $01, $3C
+    TEST_DS_SS_DS $02, $01, $3D
+    TEST_DS_SS_DS $03, $01, $3C
+    TEST_DS_SS_DS $03, $01, $3D
+
+    ret
