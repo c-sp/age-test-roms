@@ -4,8 +4,8 @@ INCLUDE "test-setup.inc"
 
 
 ; Verified:
-;   2021-06-23 pass on CPU CGB E (CPU-CGB-06)
-;   2021-06-23 pass on CPU CGB B (CPU-CGB-02)
+;   passes on CPU CGB E - CPU-CGB-06 (2021-06-23)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-06-23)
 EXPECTED_TEST_RESULTS:
     ; number of test result rows
     DB 5
@@ -20,7 +20,7 @@ EXPECTED_TEST_RESULTS:
 
 
 
-STORE_DIV: MACRO
+SAVE_DIV: MACRO
     ld a, [rDIV]
     ld [hl+], a
 ENDM
@@ -30,7 +30,7 @@ TEST_DS: MACRO
     NOPS \1      ; wait before switching to double speed
     SWITCH_SPEED ; switch to double speed
     NOPS \2      ; wait before reading rDIV
-    STORE_DIV    ; store rDIV
+    SAVE_DIV     ; read rDIV
     SWITCH_SPEED ; switch to single speed
 ENDM
 
@@ -40,7 +40,7 @@ TEST_DS_SS: MACRO
     NOPS \1      ; wait before switching to single speed
     SWITCH_SPEED ; switch to single speed
     NOPS \2      ; wait before reading rDIV
-    STORE_DIV    ; store rDIV
+    SAVE_DIV     ; read rDIV
 ENDM
 
 TEST_DS_SS_DS: MACRO
@@ -51,7 +51,7 @@ TEST_DS_SS_DS: MACRO
     NOPS \2      ; wait before switching to double speed
     SWITCH_SPEED ; switch to double speed
     NOPS \3      ; wait before reading rDIV
-    STORE_DIV    ; store rDIV
+    SAVE_DIV     ; read rDIV
     SWITCH_SPEED ; switch to single speed
 ENDM
 

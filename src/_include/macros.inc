@@ -170,16 +170,24 @@ ENDM
 ;
 ; ----------------------------------------------------------------------------
 
+; Turn off the timer.
+;
+; @destroys a
+;
+TIMER_OFF: MACRO
+    xor a, a
+    ld [rTAC], a
+ENDM
+
 ; (Re-)start the timer with the specified frequency.
 ; We also reset the `DIV` and clear `IF`.
 ;
 ; @param \1 `TAC` frequency flags
 ; @destroys a
 ;
-RESTART_TIMER_CLEAN: MACRO
+TIMER_RESTART_CLEAN: MACRO
     ; turn off timer
-    xor a, a
-    ld [rTAC], a
+    TIMER_OFF
     ld [rTIMA], a
     ; clear all interrupts
     ld [rIF], a

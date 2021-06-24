@@ -45,6 +45,7 @@ SECTION "entry", ROM0[$100]
 
 SECTION "main", ROM0[$150]
 main:
+    CLEAR_MEMORY TEST_RESULTS, 256
     call run_test ; must be defined by the code that is including this file
 
 
@@ -61,9 +62,8 @@ main:
     ld [hl], 1
     call .print_results
     call .prepare_lcd
-    xor a, a
-    ld hl, TEST_SUCCESS
-    cp a, [hl]
+    ld a, [TEST_SUCCESS]
+    or a, a
     jr z, .test_failed
 
 .test_passed:
@@ -203,6 +203,8 @@ main:
     ld hl, _SCRN0 + 4
     call .print_ascii
     call .setup_font
+    xor a, a
+    ld [rSCX], a
     ld a, LCDCF_ON | LCDCF_BG8000 | LCDCF_BGON
     ld [rLCDC], a
     ret
