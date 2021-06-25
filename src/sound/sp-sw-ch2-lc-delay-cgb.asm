@@ -1,4 +1,4 @@
-ROM_IS_CGB_ONLY = 1
+DEF ROM_IS_CGB_ONLY EQU 1
 INCLUDE "test-setup.inc"
 
 
@@ -27,42 +27,41 @@ EXPECTED_TEST_RESULTS:
 
 
 SAVE_NR52: MACRO
-    ld a, [rNR52]
+    ldh a, [rNR52]
     ld [hl+], a
 ENDM
 
-SAVE_4_BYTE_PADDING: MACRO
-    xor a, a
-    ld [hl+], a
-    ld [hl+], a
-    ld [hl+], a
-    ld [hl+], a
+ADD_4_BYTE_PADDING: MACRO
+    inc hl
+    inc hl
+    inc hl
+    inc hl
 ENDM
 
 SOUND_OFF: MACRO
     xor a, a
-    ld [rNR52], a
+    ldh [rNR52], a
 ENDM
 
 SOUND_ON: MACRO
     ld a, $80
-    ld [rNR52], a
+    ldh [rNR52], a
 ENDM
 
 INIT_TEST: MACRO
     SOUND_OFF
-    ld [rDIV], a ; reset DIV
+    ldh [rDIV], a ; reset DIV
 ENDM
 
 INIT_CH2_LC: MACRO
     ld a, \1
-    ld [rNR21], a ; channel 2 length counter = \1
+    ldh [rNR21], a ; channel 2 length counter = \1
     ld a, $F0
-    ld [rNR22], a
+    ldh [rNR22], a
     ld a, $00
-    ld [rNR23], a
+    ldh [rNR23], a
     ld a, $C7
-    ld [rNR24], a ; initialize channel 2 with length counter
+    ldh [rNR24], a ; initialize channel 2 with length counter
 ENDM
 
 
@@ -105,7 +104,7 @@ TEST_DS_DIV_RESET: MACRO
     INIT_CH2_LC $3B ; channel 2 length counter = 5
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
     NOPS \1
-    ld [rDIV], a    ; reset DIV
+    ldh [rDIV], a    ; reset DIV
     NOPS \2
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
@@ -194,19 +193,19 @@ run_test:
     TEST_DS_CH2_INIT 0, 4074
     TEST_DS_CH2_INIT 1, 4072
     TEST_DS_CH2_INIT 1, 4073
-    SAVE_4_BYTE_PADDING
+    ADD_4_BYTE_PADDING
 
     TEST_DS_DIV_RESET 0, 4093
     TEST_DS_DIV_RESET 0, 4094
     TEST_DS_DIV_RESET 1, 4093
     TEST_DS_DIV_RESET 1, 4094
-    SAVE_4_BYTE_PADDING
+    ADD_4_BYTE_PADDING
 
     TEST_DS_ON 0, 4067
     TEST_DS_ON 0, 4068
     TEST_DS_ON 1, 4066
     TEST_DS_ON 1, 4067
-    SAVE_4_BYTE_PADDING
+    ADD_4_BYTE_PADDING
 
     TEST_DS_OFF_ON 0, 0, 4063
     TEST_DS_OFF_ON 0, 0, 4064

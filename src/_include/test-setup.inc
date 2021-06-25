@@ -204,9 +204,9 @@ main:
     call .print_ascii
     call .setup_font
     xor a, a
-    ld [rSCX], a
+    ldh [rSCX], a
     ld a, LCDCF_ON | LCDCF_BG8000 | LCDCF_BGON
-    ld [rLCDC], a
+    ldh [rLCDC], a
     ret
 
 .TEST_PASSED:
@@ -256,25 +256,26 @@ main:
     COPY_MEMORY .FONT_DATA_BEGIN, _VRAM8000, .FONT_DATA_END - .FONT_DATA_BEGIN
     ; setup BGP
     ld a, %11100100
-    ld [rBGP], a
+    ldh [rBGP], a
     ; setup CGB background palette
     ld a, %10000000
-    ld [rBCPS], a
+    ldh [rBCPS], a
+    ld c, rBCPD & $FF
     ld a, %11111111 ; r = g = b = %11111
-    ld [rBCPD], a
+    ldh [c], a
     ld a, %01111111
-    ld [rBCPD], a
+    ldh [c], a
     ld a, %10110101 ; r = g = b = %10101
-    ld [rBCPD], a
+    ldh [c], a
     ld a, %01010110
-    ld [rBCPD], a
+    ldh [c], a
     ld a, %01001010 ; r = g = b = %01010
-    ld [rBCPD], a
+    ldh [c], a
     ld a, %00101001
-    ld [rBCPD], a
+    ldh [c], a
     xor a, a        ; r = g = b = %00000
-    ld [rBCPD], a
-    ld [rBCPD], a
+    ldh [c], a
+    ldh [c], a
     ret
 
 

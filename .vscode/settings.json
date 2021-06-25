@@ -1,6 +1,9 @@
 {
     "files.eol": "\n",
-    "rgbdsz80.includePath": "src/_include",
+    "rgbdsz80.includePath": [
+        "src",
+        "src/_include"
+    ],
     "rgbdsz80.formatting.capitalization": {
         "language.keyword": "upper",
         "language.register": "lower",

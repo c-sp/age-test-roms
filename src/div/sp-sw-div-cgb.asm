@@ -1,4 +1,4 @@
-ROM_IS_CGB_ONLY = 1
+DEF ROM_IS_CGB_ONLY EQU 1
 INCLUDE "test-setup.inc"
 
 
@@ -21,12 +21,12 @@ EXPECTED_TEST_RESULTS:
 
 
 SAVE_DIV: MACRO
-    ld a, [rDIV]
+    ldh a, [rDIV]
     ld [hl+], a
 ENDM
 
 TEST_DS: MACRO
-    ld [rDIV], a ; reset div
+    ldh [rDIV], a ; reset div
     NOPS \1      ; wait before switching to double speed
     SWITCH_SPEED ; switch to double speed
     NOPS \2      ; wait before reading rDIV
@@ -35,7 +35,7 @@ TEST_DS: MACRO
 ENDM
 
 TEST_DS_SS: MACRO
-    ld [rDIV], a ; reset div
+    ldh [rDIV], a ; reset div
     SWITCH_SPEED ; switch to double speed
     NOPS \1      ; wait before switching to single speed
     SWITCH_SPEED ; switch to single speed
@@ -44,7 +44,7 @@ TEST_DS_SS: MACRO
 ENDM
 
 TEST_DS_SS_DS: MACRO
-    ld [rDIV], a ; reset div
+    ldh [rDIV], a ; reset div
     SWITCH_SPEED ; switch to double speed
     NOPS \1      ; wait before switching to single speed
     SWITCH_SPEED ; switch to single speed

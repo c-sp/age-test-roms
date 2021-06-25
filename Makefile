@@ -23,7 +23,7 @@ $(ROMS): $(BIN_DIR)/%.gb : $(OBJ_DIR)/%.o
 $(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.asm
 	@mkdir -p $(@D)
 	@mkdir -p $(@D:$(OBJ_DIR)/%=$(DEP_DIR)/%)
-	rgbasm -h -Weverything -i $(SRC_DIR)/_include -M $(DEP_DIR)/$*.d -o $@ $<
+	rgbasm -h -Weverything -i $(SRC_DIR) -i $(SRC_DIR)/_include -M $(DEP_DIR)/$*.d -o $@ $<
 
 $(DEPS):
 

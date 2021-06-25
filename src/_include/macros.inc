@@ -18,7 +18,7 @@ INCLUDE "hardware.inc"
 WAIT_FOR_LY: MACRO
     push af
 .loop\@
-    ld a, [rLY]
+    ldh a, [rLY]
     cp a, \1
     jr nz, .loop\@
     pop af
@@ -176,7 +176,7 @@ ENDM
 ;
 TIMER_OFF: MACRO
     xor a, a
-    ld [rTAC], a
+    ldh [rTAC], a
 ENDM
 
 ; (Re-)start the timer with the specified frequency.
@@ -188,15 +188,15 @@ ENDM
 TIMER_RESTART_CLEAN: MACRO
     ; turn off timer
     TIMER_OFF
-    ld [rTIMA], a
+    ldh [rTIMA], a
     ; clear all interrupts
-    ld [rIF], a
+    ldh [rIF], a
     ; make sure we have a well defined DIV state
     ; (to prevent arbitrary TIMA increments by future DIV resets)
-    ld [rDIV], a
+    ldh [rDIV], a
     ; start timer
     ld a, TACF_START | \1
-    ld [rTAC], a
+    ldh [rTAC], a
 ENDM
 
 ; switch between CGB speed modes
@@ -205,9 +205,9 @@ ENDM
 ;
 SWITCH_SPEED: MACRO
 	ld a, $30
-    ld [rP1], a
+    ldh [rP1], a
 	ld a, 1
-	ld [rKEY1], a
+	ldh [rKEY1], a
 	stop
 ENDM
 
