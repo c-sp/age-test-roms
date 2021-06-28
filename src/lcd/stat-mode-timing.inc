@@ -76,54 +76,63 @@ SECTION "scanline-stats", WRAM0
 SCANLINE_STATS: DS 16 * 8 * BYTES_PER_SCANLINE
 POPS
 
-; @param \1 expected scanline bytes
-; @param \2 number of scx tests
-; @param \3 scanlines per scx test
-; @destroys af, bc, de, hl
-;
-COMPARE_SCANLINE_RESULTS: MACRO
-    STATIC_ASSERT (\2 > 0) && (\2 <= 16)
-    STATIC_ASSERT (\3 > 0) && (\3 <= 8)
-
+PREPRAE_RESULT_COMPARISON: MACRO
     ld hl, TEST_RESULTS
     ld bc, SCANLINE_STATS
-    ld de, \1
+    ld de, EXPECTED_SCANLINE_STATS
+ENDM
 
-    FOR S, \2
-        FOR I, \3
-            call compare_scanline
-            ld [hl+], a
-        ENDR
-        REPT 8 - \3
-            inc hl
-        ENDR
+; @param \1 number of scanline-stat-lines to put into one result line
+; @param bc
+; @param de
+; @param hl
+; @destroys af
+;
+COMPARE_RESULTS: MACRO
+    STATIC_ASSERT (\1 > 0) && (\1 <= 8)
+
+    FOR I, \1
+        call compare_scanline
+        ld [hl+], a
+    ENDR
+    REPT 8 - \1
+        inc hl
     ENDR
 ENDM
 
-; @param bc scanline bytes
-; @param de expected scanline bytes
+; @param bc address of the next scanline byte
+; @param de address of the next expected scanline byte
+;
 ; @return a index of first mismatch, $FF if all bytes are equal
-; @destroys af, bc, de
+; @return bc address of the next scanline byte
+; @return de address of the next expected scanline byte
+;
+; @destroys f
 ;
 compare_scanline:
     push hl
     ld l, BYTES_PER_SCANLINE
 .compare_byte:
     ld a, [de]
-    inc de
     ld h, a
     ld a, [bc]
-    inc bc
     cp a, h
     jr z, .next_byte
     ld a, BYTES_PER_SCANLINE
     sub l
-    pop hl
-    ret
+.fast_forward:
+    inc de
+    inc bc
+    dec l
+    jr nz, .fast_forward
+    jr .return
 .next_byte:
+    inc de
+    inc bc
     dec l
     jr nz, .compare_byte
     ld a, $FF
+.return:
     pop hl
     ret
 

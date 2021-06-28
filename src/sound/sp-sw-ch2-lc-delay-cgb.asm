@@ -235,4 +235,5 @@ run_test:
     TEST_DS_SS_DS_SS_DS 1, 1, 4094
 
     SOUND_OFF
+    ld hl, EXPECTED_TEST_RESULTS
     ret

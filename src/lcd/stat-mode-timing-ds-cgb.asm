@@ -1,31 +1,39 @@
 DEF ROM_IS_CGB_ONLY EQU 1
 INCLUDE "test-setup.inc"
-INCLUDE "lcd/stat-timing.inc"
+INCLUDE "lcd/stat-mode-timing.inc"
 
 
 
 ; Verified:
-;   passes on CPU CGB E - CPU-CGB-06 (2021-06-25)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-06-25)
+;   passes on CPU CGB E - CPU-CGB-06 (2021-06-28)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-06-28)
 EXPECTED_TEST_RESULTS:
-    DB 10 ; number of test result rows
-
+    ; number of test result rows
+    DB 14
+    ; mode 0
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 0
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 1
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 2
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 3
-
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 4
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 5
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 6
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 7
-
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 8
     DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 9
+    ; mode 1,2
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 0
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 4
+    ; mode 3
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 0
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 4
 
 EXPECTED_SCANLINE_STATS:
     ; *includes scanlines of the next frame
     ;
+    ; mode 0 beginning depends on SCX
+    ; (and more, but this test is limited to SCX)
+    ; -------------------------------------------
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 0
     DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
@@ -96,11 +104,32 @@ EXPECTED_SCANLINE_STATS:
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
+    ;
+    ; mode 1,2 beginning does not depend on SCX
+    ; -----------------------------------------
+    ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
+    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80 ; SCX 0
+    DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
+    DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
+    ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
+    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80 ; SCX 7
+    DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
+    DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
+    ;
+    ; mode 3 beginning does not depend on SCX
+    ; ---------------------------------------
+    ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
+    DB $80, $82, $82, $82,  $82, $82, $81, $81,  $81, $81, $82, $82 ; SCX 0
+    DB $80, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
+    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
+    ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
+    DB $80, $82, $82, $82,  $82, $82, $81, $81,  $81, $81, $82, $82 ; SCX 7
+    DB $80, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
+    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
 
-DEF SCX_COUNT     EQU 10
-DEF TESTS_PER_SCX EQU 6
-
-DEF INITIAL_NOPS  EQU (80 + 172) / 2 - 13
+DEF M0_INITIAL_NOPS  EQU ((80 + 172) / 2 - 13)
+DEF M12_INITIAL_NOPS EQU (456 / 2 - 13)
+DEF M3_INITIAL_NOPS  EQU (80 / 2 - 13)
 
 
 
@@ -108,12 +137,34 @@ run_test:
     SWITCH_SPEED
 
     ld hl, SCANLINE_STATS
-    FOR S, SCX_COUNT
-        FOR I, TESTS_PER_SCX
-            READ_LINES_STAT_DS S, INITIAL_NOPS + I
+    FOR SCX, 10
+        FOR I, 6
+            READ_LINES_STAT_DS SCX, M0_INITIAL_NOPS + I
         ENDR
     ENDR
 
-    COMPARE_SCANLINE_RESULTS EXPECTED_SCANLINE_STATS, SCX_COUNT, TESTS_PER_SCX
+    READ_LINES_STAT_DS 0, M12_INITIAL_NOPS
+    READ_LINES_STAT_DS 0, M12_INITIAL_NOPS + 1
+    READ_LINES_STAT_DS 0, M12_INITIAL_NOPS + 2
+    READ_LINES_STAT_DS 7, M12_INITIAL_NOPS
+    READ_LINES_STAT_DS 7, M12_INITIAL_NOPS + 1
+    READ_LINES_STAT_DS 7, M12_INITIAL_NOPS + 2
+
+    READ_LINES_STAT_DS 0, M3_INITIAL_NOPS
+    READ_LINES_STAT_DS 0, M3_INITIAL_NOPS + 1
+    READ_LINES_STAT_DS 0, M3_INITIAL_NOPS + 2
+    READ_LINES_STAT_DS 7, M3_INITIAL_NOPS
+    READ_LINES_STAT_DS 7, M3_INITIAL_NOPS + 1
+    READ_LINES_STAT_DS 7, M3_INITIAL_NOPS + 2
+
+    PREPRAE_RESULT_COMPARISON
+    FOR N, 10
+        COMPARE_RESULTS 6
+    ENDR
+    FOR N, 4
+        COMPARE_RESULTS 3
+    ENDR
+
     SWITCH_SPEED
+    ld hl, EXPECTED_TEST_RESULTS
     ret

@@ -18,4 +18,5 @@ device_specific_tests:
     TEST_INC_EDGE 14, 60, TACF_16KHZ ; trigger immediate increment by DIV reset
     TEST_INC_EDGE 14, 61, TACF_16KHZ ; trigger immediate increment by DIV reset
 
+    ld hl, EXPECTED_TEST_RESULTS
     ret

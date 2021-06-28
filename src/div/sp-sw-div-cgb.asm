@@ -112,4 +112,5 @@ run_test:
     TEST_DS_SS_DS $03, $01, $3C
     TEST_DS_SS_DS $03, $01, $3D
 
+    ld hl, EXPECTED_TEST_RESULTS
     ret

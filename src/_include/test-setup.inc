@@ -29,6 +29,13 @@ ENDC
 
 
 
+CP_IS_CGB: MACRO
+    ld a, [IS_CGB]
+    or a, a
+ENDM
+
+
+
 ; ----------------------------------------------------------------------------
 ;
 ;   entry
@@ -36,6 +43,7 @@ ENDC
 ; ----------------------------------------------------------------------------
 
 SECTION "test-result", WRAM0
+IS_CGB: DS 1
 TEST_SUCCESS: DS 1
 TEST_RESULTS: DS 256
 
@@ -45,6 +53,12 @@ SECTION "entry", ROM0[$100]
 
 SECTION "main", ROM0[$150]
 main:
+    ld hl, IS_CGB
+    ld [hl], 0
+    cp a, $11
+    jr nz, .no_cgb
+    ld [hl], 1
+.no_cgb:
     CLEAR_MEMORY TEST_RESULTS, 256
     call run_test ; must be defined by the code that is including this file
 
@@ -56,10 +70,12 @@ main:
 ;
 ; ----------------------------------------------------------------------------
 
+    push hl ; expected test results
     LCD_OFF
     CLEAR_MEMORY _SCRN0, 18 * 32 ; clear tile map at $9800
     ld hl, TEST_SUCCESS
     ld [hl], 1
+    pop de ; expected test results
     call .print_results
     call .prepare_lcd
     ld a, [TEST_SUCCESS]
@@ -93,7 +109,6 @@ main:
 ;
 .print_results:
     ld bc, TEST_RESULTS
-    ld de, EXPECTED_TEST_RESULTS
     ld hl, _SCRN0 + 2 * 32
 
     ld a, [de] ; number of rows (8 bytes per row)
