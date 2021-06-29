@@ -27,9 +27,9 @@ ENDM
 
 TEST_DS: MACRO
     ldh [rDIV], a ; reset div
-    NOPS \1      ; wait before switching to double speed
+    DELAY \1     ; wait before switching to double speed
     SWITCH_SPEED ; switch to double speed
-    NOPS \2      ; wait before reading rDIV
+    DELAY \2     ; wait before reading rDIV
     SAVE_DIV     ; read rDIV
     SWITCH_SPEED ; switch to single speed
 ENDM
@@ -37,20 +37,20 @@ ENDM
 TEST_DS_SS: MACRO
     ldh [rDIV], a ; reset div
     SWITCH_SPEED ; switch to double speed
-    NOPS \1      ; wait before switching to single speed
+    DELAY \1     ; wait before switching to single speed
     SWITCH_SPEED ; switch to single speed
-    NOPS \2      ; wait before reading rDIV
+    DELAY \2     ; wait before reading rDIV
     SAVE_DIV     ; read rDIV
 ENDM
 
 TEST_DS_SS_DS: MACRO
     ldh [rDIV], a ; reset div
     SWITCH_SPEED ; switch to double speed
-    NOPS \1      ; wait before switching to single speed
+    DELAY \1     ; wait before switching to single speed
     SWITCH_SPEED ; switch to single speed
-    NOPS \2      ; wait before switching to double speed
+    DELAY \2     ; wait before switching to double speed
     SWITCH_SPEED ; switch to double speed
-    NOPS \3      ; wait before reading rDIV
+    DELAY \3     ; wait before reading rDIV
     SAVE_DIV     ; read rDIV
     SWITCH_SPEED ; switch to single speed
 ENDM

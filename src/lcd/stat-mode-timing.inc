@@ -5,24 +5,24 @@ INC_STAT_TIMING = 1
 
 _READ_LINES_STAT: MACRO
     STATIC_ASSERT (\2 == 4) || (\2 == 2)
-    ld c, \1           ; 2 m-cycles
+    ld c, \1            ; 2 m-cycles
 .loop\@:
-    ldh a, [rSTAT]     ; 3 m-cycles
-    ld [hl+], a        ; 2 m-cycles
-    NOPS 456 / \2 - 10
-    dec c              ; 1 m-cycle
-    jp nz, .loop\@     ; 4 m-cycles for jump, 3 m-cycles else
-    nop                ; 1 m-cycle to make jp always use 4 m-cycles
+    ldh a, [rSTAT]      ; 3 m-cycles
+    ld [hl+], a         ; 2 m-cycles
+    DELAY 456 / \2 - 10
+    dec c               ; 1 m-cycle
+    jp nz, .loop\@      ; 4 m-cycles for jump, 3 m-cycles else
+    nop                 ; 1 m-cycle to make jp always use 4 m-cycles
 ENDM
 
 _READ_LINES_STAT_SPARSE: MACRO
     _READ_LINES_STAT 4, \1 ; read first 4 scanlines
 
-    NOPS (138 * 456) / \1 - 2 ; skip 138 scanlines
-    _READ_LINES_STAT 4, \1    ; read 4 scanlines (142 - 145)
+    DELAY (138 * 456) / \1 - 2 ; skip 138 scanlines
+    _READ_LINES_STAT 4, \1     ; read 4 scanlines (142 - 145)
 
-    NOPS (6 * 456) / \1 - 2 ; skip 6 scanlines
-    _READ_LINES_STAT  4, \1 ; read 4 scanlines (152 - 155, includes 2 scanlines of the next frame)
+    DELAY (6 * 456) / \1 - 2 ; skip 6 scanlines
+    _READ_LINES_STAT  4, \1  ; read 4 scanlines (152 - 155, includes 2 scanlines of the next frame)
 ENDM
 
 DEF BYTES_PER_SCANLINE EQU 12
@@ -52,20 +52,20 @@ _INIT_READ_LINE_STAT: MACRO
 ENDM
 
 ; @param \1 scx
-; @param \2 initial nops
+; @param \2 initial delay (m-cycles)
 ;
 READ_LINES_STAT: MACRO
     _INIT_READ_LINE_STAT \1
-    NOPS \2
+    DELAY \2
     call read_lines_stat
 ENDM
 
 ; @param \1 scx
-; @param \2 initial nops
+; @param \2 initial delay (m-cycles)
 ;
 READ_LINES_STAT_DS: MACRO
     _INIT_READ_LINE_STAT \1
-    NOPS \2
+    DELAY \2
     call read_lines_stat_ds
 ENDM
 

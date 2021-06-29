@@ -50,15 +50,15 @@ ENDM
 ; 1->0 edge and not the 0->1 edge.
 TEST_INC_EDGE: MACRO
     TIMER_RESTART_CLEAN \3
-    NOPS \1
+    DELAY \1
     SWITCH_SPEED ; switch to double speed
-    NOPS \2
+    DELAY \2
     SAVE_TIMA
 
     TIMER_RESTART_CLEAN \3
-    NOPS \1
+    DELAY \1
     SWITCH_SPEED ; switch to single speed
-    NOPS \2
+    DELAY \2
     SAVE_TIMA
 ENDM
 

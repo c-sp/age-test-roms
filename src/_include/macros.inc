@@ -62,70 +62,95 @@ ENDM
 ; clear memory
 ;
 ; @param \1 destination address
-; @param \2 number of bytes to clear
-; @destroys af, bc, hl
+; @param \2 the value to set
+; @param \3 number of bytes to clear
+; @destroys af, bc, d, hl
 ;
-CLEAR_MEMORY: MACRO
+MEMSET: MACRO
     ld hl, \1
-    ld bc, \2
-.clear\@:
-    xor a, a
+    ld d, \2
+    ld bc, \3
+.memset\@:
+    ld a, d
     ld [hl+], a
     dec bc
     ld a, b
     or a, c
-    jr nz, .clear\@
+    jr nz, .memset\@
 ENDM
 
 ; copy (non-overlapping) memory
 ;
-; @param \1 source address
-; @param \2 destination address
+; @param \1 destination address
+; @param \2 source address
 ; @param \3 number of bytes to copy
 ; @destroys af, bc, de, hl
 ;
-COPY_MEMORY: MACRO
-    ld de, \1
-    ld hl, \2
+MEMCPY: MACRO
+    ld hl, \1
+    ld de, \2
     ld bc, \3
-.copy\@:
+.memcpy\@:
     ld a, [de]
     ld [hl+], a
     inc de
     dec bc
     ld a, b
     or a, c
-    jr nz, .copy\@
+    jr nz, .memcpy\@
 ENDM
 
 
 
 ; ----------------------------------------------------------------------------
 ;
-;   nop macros
+;   delay macros
 ;
 ; ----------------------------------------------------------------------------
 
+; Generate `N` `nop` instructions.
+;
 ; @param \1 the number of `nop` instructions to generate
 ; @destroys
 ;
+; @see DELAY, DELAY256
+;
 NOPS: MACRO
+    REPT \1
+        nop
+    ENDR
+ENDM
+
+; Generate a delay of N m-cycles.
+; As this macro uses `DELAY256` internally,
+; it is not suited to wait for an interrupt.
+; See `DELAY256` for an explanation on this.
+;
+; @param \1 size of the delay in m-cycles
+; @destroys
+;
+; @see DELAY256, NOPS
+;
+DELAY: MACRO
     IF (\1) >= 256
-        NOPS256 (\1) / 256
-        REPT (\1) % 256
-            nop
-        ENDR
+        DELAY256 (\1) / 256
+        NOPS (\1) % 256
     ELSE
-        REPT \1
-            nop
-        ENDR
+        NOPS \1
     ENDC
 ENDM
 
+; Generate a delay of `N * 256` m-cycles.
+; The delay is implemented as "busy wait" loop.
+; It is thus not suited for measuring interrupt edges
+; as interrupts cannot be served on each m-cycle.
+;
 ; @param \1 the number of 256-`nop` delays to generate (0-255)
 ; @destroys
 ;
-NOPS256: MACRO
+; @see DELAY, NOPS
+;
+DELAY256: MACRO
     IF \1 > 0
         ; 8 m-cycles for this block
         push af ; 4 m-cycles
@@ -137,8 +162,8 @@ NOPS256: MACRO
         nop                          ; 1 m-cycle
         jr .loop_inner\@             ; 3 m-cycles
 
-.loop\@:
         ; it takes 256 m-cycles for one .loop\@ iteration
+.loop\@:
         ; 4 m-cycles for this block
         ld c, (256 - 8) / 4 ; 2 m-cycles, c = number of .loop_inner\@ iterations
         nop                 ; 1 m-cycle
@@ -148,11 +173,11 @@ NOPS256: MACRO
 .loop_inner\@:
         dec c                ; 1 m-cycle
         jr nz, .loop_inner\@ ; 3 m-cycles for jump, 2 m-cycles else
-        nop                  ; 1 m-cycle
+        nop                  ; 1 m-cycle to pad the jr's else-path to 3 cycles
 
         dec b          ; 1 m-cycle
         jr nz, .loop\@ ; 3 m-cycles for jump, 2 m-cycles else
-        nop            ; 1 m-cycle
+        nop            ; 1 m-cycle to pad the jr's else-path to 3 cycles
 
         ; 8 m-cycles for this block
         nop    ; 1 m-cycle

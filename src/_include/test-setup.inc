@@ -13,25 +13,23 @@ INCLUDE "macros.inc"
 
 IF DEF(ROM_IS_CGB_ONLY)
     SECTION "cgb-mode", ROM0[$143]
-        DB $C0
+        DB CART_COMPATIBLE_GBC
 
 ELIF DEF(ROM_IS_CGB_COMPATIBLE)
     SECTION "cgb-mode", ROM0[$143]
-        DB $80
+        DB CART_COMPATIBLE_DMG_GBC
 
 ELIF DEF(ROM_IS_DMG_ONLY)
     SECTION "cgb-mode", ROM0[$143]
-        DB $00
+        DB CART_COMPATIBLE_DMG
 
 ELSE
     FAIL "rom mode not specified: set one of ROM_IS_CGB_ONLY, ROM_IS_CGB_COMPATIBLE or ROM_IS_DMG_ONLY before including test-setup.inc"
 ENDC
 
-
-
 CP_IS_CGB: MACRO
     ld a, [IS_CGB]
-    or a, a
+    cp a, 1
 ENDM
 
 
@@ -53,13 +51,20 @@ SECTION "entry", ROM0[$100]
 
 SECTION "main", ROM0[$150]
 main:
+    ; check the hardware:
+    ; is this a Game Boy Color?
     ld hl, IS_CGB
-    ld [hl], 0
-    cp a, $11
-    jr nz, .no_cgb
     ld [hl], 1
-.no_cgb:
-    CLEAR_MEMORY TEST_RESULTS, 256
+    cp a, $11
+    jr z, .cgb_recognized
+    ld [hl], 0
+    ; no Game Boy Color:
+    ; fail test, if Game Boy Color required
+    ld a, [$143]
+    cp a, CART_COMPATIBLE_GBC
+    jp nc, .fail_cgb_required
+.cgb_recognized:
+    MEMSET TEST_RESULTS, 0, 256
     call run_test ; must be defined by the code that is including this file
 
 
@@ -70,18 +75,19 @@ main:
 ;
 ; ----------------------------------------------------------------------------
 
-    push hl ; expected test results
+    push hl ; address of expected test results in hl
     LCD_OFF
-    CLEAR_MEMORY _SCRN0, 18 * 32 ; clear tile map at $9800
+    MEMSET _SCRN0, 0, 18 * 32 ; clear tile map at $9800
     ld hl, TEST_SUCCESS
     ld [hl], 1
-    pop de ; expected test results
+    pop de ; address of expected test results in de
     call .print_results
-    call .prepare_lcd
+
+.show_final_screen:
+    call .prepare_lcd ; also prints "TEST PASSED" or "TEST FAILED" at the top
     ld a, [TEST_SUCCESS]
     or a, a
     jr z, .test_failed
-
 .test_passed:
     ld b, 3
     ld c, 5
@@ -91,13 +97,28 @@ main:
     ld l, 34
     ld b, b ; indicate finished test
     jr .freeze
-
 .test_failed:
     ld b, 0
     ld b, b ; indicate finished test
-
 .freeze:
     jr .freeze
+
+.fail_cgb_required:
+    LCD_OFF
+    MEMSET _SCRN0, 0, 18 * 32 ; clear tile map at $9800
+    xor a, a
+    ld [TEST_SUCCESS], a
+    ld de, .CGB_REQUIRED_1
+    ld hl, _SCRN0 + 3 * 32
+    call .print_ascii
+    ld de, .CGB_REQUIRED_2
+    ld hl, _SCRN0 + 4 * 32
+    call .print_ascii
+    jp .show_final_screen
+.CGB_REQUIRED_1:
+    DB "   GAME BOY COLOR", 0
+.CGB_REQUIRED_2:
+    DB "      REQUIRED", 0
 
 
 
@@ -268,7 +289,7 @@ main:
 
 .setup_font:
     ; copy tile data for ASCII characters 32 - 95 in different styles
-    COPY_MEMORY .FONT_DATA_BEGIN, _VRAM8000, .FONT_DATA_END - .FONT_DATA_BEGIN
+    MEMCPY _VRAM8000, .FONT_DATA_BEGIN, .FONT_DATA_END - .FONT_DATA_BEGIN
     ; setup BGP
     ld a, %11100100
     ldh [rBGP], a

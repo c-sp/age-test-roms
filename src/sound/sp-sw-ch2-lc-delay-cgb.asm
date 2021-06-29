@@ -71,12 +71,12 @@ ENDM
 ; sound was activated and speeds were switched.
 TEST_DS: MACRO
     INIT_TEST
-    NOPS \1
+    DELAY \1
     SOUND_ON
     INIT_CH2_LC $3B ; channel 2 length counter = 5
-    NOPS \2
+    DELAY \2
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
-    NOPS \3
+    DELAY \3
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
 ENDM
@@ -88,9 +88,9 @@ TEST_DS_CH2_INIT: MACRO
     INIT_TEST
     SOUND_ON
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
-    NOPS \1
+    DELAY \1
     INIT_CH2_LC $3F ; channel 2 length counter = 1
-    NOPS \2
+    DELAY \2
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
 ENDM
@@ -103,9 +103,9 @@ TEST_DS_DIV_RESET: MACRO
     SOUND_ON
     INIT_CH2_LC $3B ; channel 2 length counter = 5
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
-    NOPS \1
+    DELAY \1
     ldh [rDIV], a    ; reset DIV
-    NOPS \2
+    DELAY \2
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
 ENDM
@@ -114,10 +114,10 @@ ENDM
 TEST_DS_ON: MACRO
     INIT_TEST
     SWITCH_SPEED    ; switch to double speed (sound is off)
-    NOPS \1
+    DELAY \1
     SOUND_ON
     INIT_CH2_LC $3F ; channel 2 length counter = 1
-    NOPS \2
+    DELAY \2
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
 ENDM
@@ -127,12 +127,12 @@ TEST_DS_OFF_ON: MACRO
     INIT_TEST
     SOUND_ON
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
-    NOPS \1
+    DELAY \1
     SOUND_OFF
-    NOPS \2
+    DELAY \2
     SOUND_ON
     INIT_CH2_LC $3F ; channel 2 length counter = 1
-    NOPS \3
+    DELAY \3
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
 ENDM
@@ -146,11 +146,11 @@ TEST_DS_SS_DS: MACRO
     SOUND_ON
     INIT_CH2_LC $2F ; channel 2 length counter = 17
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
-    NOPS \1
+    DELAY \1
     SWITCH_SPEED    ; switch to single speed
-    NOPS \2
+    DELAY \2
     SWITCH_SPEED    ; switch to double speed (length counter ticks not delayed)
-    NOPS \3
+    DELAY \3
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
 ENDM
@@ -163,13 +163,13 @@ TEST_DS_SS_DS_SS_DS: MACRO
     SOUND_ON
     INIT_CH2_LC $23 ; channel 2 length counter = 29
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
-    NOPS \1
+    DELAY \1
     SWITCH_SPEED    ; switch to single speed
     SWITCH_SPEED    ; switch to double speed (length counter ticks not delayed)
-    NOPS \2
+    DELAY \2
     SWITCH_SPEED    ; switch to single speed
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
-    NOPS \3
+    DELAY \3
     SAVE_NR52       ; read channel-2-on flag
     SWITCH_SPEED    ; switch to single speed
 ENDM
