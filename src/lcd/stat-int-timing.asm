@@ -3,6 +3,10 @@ INCLUDE "test-setup.inc"
 
 
 
+; TODO rewrite this with less LCD on/off switching
+
+
+
 ; Verified:
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-06-29)
 ;   passes on CPU CGB B - CPU-CGB-02 (2021-06-29)

@@ -3,6 +3,10 @@ INC_STAT_TIMING = 1
 
 
 
+; TODO rewrite this with less LCD on/off switching
+
+
+
 _READ_LINES_STAT: MACRO
     STATIC_ASSERT (\2 == 4) || (\2 == 2)
     ld c, \1            ; 2 m-cycles
