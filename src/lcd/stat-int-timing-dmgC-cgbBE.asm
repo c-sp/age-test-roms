@@ -1,3 +1,11 @@
+; Basic interrupt $02 (LCD mode) timing is measured.
+; Edge cases are ignored here.
+;
+; Verified:
+;   passes on CPU CGB E - CPU-CGB-06 (2021-06-29)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-06-29)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-06-29)
+;
 DEF ROM_IS_CGB_COMPATIBLE EQU 1
 INCLUDE "test-setup.inc"
 
@@ -7,10 +15,6 @@ INCLUDE "test-setup.inc"
 
 
 
-; Verified:
-;   passes on CPU CGB E - CPU-CGB-06 (2021-06-29)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-06-29)
-;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-06-29)
 EXPECTED_TEST_RESULTS_DMG:
     ; number of test result rows
     DB 5
@@ -82,7 +86,7 @@ TEST_STAT_INT: MACRO
     push hl
     ld hl, read_stat\@
 
-    LCD_OFF
+    call lcd_off
     ld a, \1
     ldh [rSCX], a
     xor a, a

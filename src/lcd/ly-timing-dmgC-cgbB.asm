@@ -1,44 +1,52 @@
-DEF ROM_IS_CGB_COMPATIBLE EQU 1
+; Test LY timing
+;
+; Verified (CGB_E undefined):
+;    fails on CPU CGB E - CPU-CGB-06 (2021-07-01)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-07-01)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-01)
+;
+; Verified (CGB_E set):
+;   passes on CPU CGB E - CPU-CGB-06 (2021-07-01)
+;    fails on CPU CGB B - CPU-CGB-02 (2021-07-01)
+;    fails on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-01)
+;
+IF DEF(CGB_E)
+    DEF ROM_IS_CGB_ONLY EQU 1
+    DEF L99 EQU $99
+ELSE
+    DEF ROM_IS_CGB_COMPATIBLE EQU 1
+    DEF L99 EQU $00
+ENDC
+
 INCLUDE "test-setup.inc"
 
 
 
-; Verified:
-;    fails on CPU CGB E - CPU-CGB-06 (2021-06-30)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-06-30)
-;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-06-30)
 EXPECTED_TEST_RESULTS_DMG:
     DB 4
-    DB $00, $00, $01, $02, $8E, $97, $98, $00
-    DB $00, $01, $02, $03, $8F, $98, $99, $00
-    DB $00, $01, $02, $03, $8F, $98, $00, $00
-    DB $00, $01, $02, $03, $8F, $98, $00, $00
-
-IF DEF(CGB_E)
-    DEF L99 EQU $99
-ELSE
-    DEF L99 EQU $00
-ENDC
+    DB $00, $00, $01, $02, $8F, $98, $00, $00
+    DB $00, $01, $02, $03, $90, $99, $00, $01
+    DB $00, $01, $02, $03, $90, $00, $00, $01
+    DB $00, $01, $02, $03, $90, $00, $00, $01
 
 EXPECTED_TEST_RESULTS_CGB:
     DB 9
     ; single speed
-    DB $00, $00, $01, $02, $8E, $97, $98, $00
-    DB $00, $01, $02, $03, $8F, $98, $99, $00
-    DB $00, $01, $02, $03, $8F, $98, L99, $00
-    DB $00, $01, $02, $03, $8F, $98, $00, $00
+    DB $00, $00, $01, $02, $8F, $98, $00, $00
+    DB $00, $01, $02, $03, $90, $99, $00, $01
+    DB $00, $01, $02, $03, $90, L99, $00, $01
+    DB $00, $01, $02, $03, $90, $00, $00, $01
     ; double speed
-    DB $00, $00, $01, $02, $8E, $97, $98, $00
-    DB $00, $01, $02, $03, $8F, $98, $99, $00
-    DB $00, $01, $02, $03, $8F, $98, $99, $00
-    DB $00, $01, $02, $03, $8F, $98, $99, $00
-    DB $00, $01, $02, $03, $8F, $98, $00, $00
+    DB $00, $00, $01, $02, $8F, $98, $00, $00
+    DB $00, $01, $02, $03, $90, $99, $00, $01
+    DB $00, $01, $02, $03, $90, $99, $00, $01
+    DB $00, $01, $02, $03, $90, $99, $00, $01
+    DB $00, $01, $02, $03, $90, $00, $00, $01
 
 
 
 timed_ly_reads:
     ; read within scanline 0
-    ; (read rLY 8 m-cycles after the LCD was switched on)
     ld a, [de]  ; 2 m-cycles
     ld [hl+], a ; 2 m-cycles
     ; read on the edge of scanline 0/1
@@ -54,7 +62,7 @@ timed_ly_reads:
     ld a, [de]
     ld [hl+], a
     ; read on the edge of scanline 143/144
-    DELAY (456 / 4) - 4 + (456 / 4) * 139
+    DELAY (456 / 4) - 4 + (456 / 4) * 140
     ld a, [de]
     ld [hl+], a
     ; read on the edge of scanline 152/153
@@ -73,7 +81,6 @@ timed_ly_reads:
 
 timed_ly_reads_ds:
     ; read within scanline 0
-    ; (read rLY 8 m-cycles after the LCD was switched on)
     ld a, [de]  ; 2 m-cycles
     ld [hl+], a ; 2 m-cycles
     ; read on the edge of scanline 0/1
@@ -89,7 +96,7 @@ timed_ly_reads_ds:
     ld a, [de]
     ld [hl+], a
     ; read on the edge of scanline 143/144
-    DELAY (456 / 2) - 4 + (456 / 2) * 139
+    DELAY (456 / 2) - 4 + (456 / 2) * 140
     ld a, [de]
     ld [hl+], a
     ; read on the edge of scanline 152/153
@@ -108,7 +115,7 @@ timed_ly_reads_ds:
 
 TEST: MACRO
     ld de, rLY
-    LCD_OFF
+    call lcd_off
     ld a, LCDCF_ON | LCDCF_BGON
     ldh [rLCDC], a
     DELAY \1

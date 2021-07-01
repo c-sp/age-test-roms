@@ -44,7 +44,7 @@ PURGE _READ_LINES_STAT, _READ_LINES_STAT_SPARSE
 
 
 _INIT_READ_LINE_STAT: MACRO
-    LCD_OFF
+    call lcd_off
     xor a, a
     ldh [rSTAT], a
     cpl

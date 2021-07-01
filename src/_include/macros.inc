@@ -7,55 +7,7 @@ INCLUDE "hardware.inc"
 
 ; ----------------------------------------------------------------------------
 ;
-;   LCD macros
-;
-; ----------------------------------------------------------------------------
-
-; Wait for LY == \1.
-;
-; @destroys
-;
-WAIT_FOR_LY: MACRO
-    push af
-.loop\@
-    ldh a, [rLY]
-    cp a, \1
-    jr nz, .loop\@
-    pop af
-ENDM
-
-; Wait for v-blank beginning.
-;
-; @see WAIT_FOR_LY
-; @destroys
-;
-WAIT_FOR_VBLANK: MACRO
-    WAIT_FOR_LY 144
-ENDM
-
-; Wait for V-Blank and turn of the LCD.
-;
-; @see WAIT_FOR_VBLANK
-; @destroys
-;
-LCD_OFF: MACRO
-    push af
-    push hl
-    ld hl, rLCDC
-    bit 7, [hl]
-    jr z, .already_off\@
-    WAIT_FOR_VBLANK
-    res 7, [hl]
-.already_off\@:
-    pop hl
-    pop af
-ENDM
-
-
-
-; ----------------------------------------------------------------------------
-;
-;   memory macros
+;   memory
 ;
 ; ----------------------------------------------------------------------------
 
@@ -104,7 +56,7 @@ ENDM
 
 ; ----------------------------------------------------------------------------
 ;
-;   delay macros
+;   delay
 ;
 ; ----------------------------------------------------------------------------
 
@@ -191,7 +143,7 @@ ENDM
 
 ; ----------------------------------------------------------------------------
 ;
-;    miscellaneous macros
+;    miscellaneous
 ;
 ; ----------------------------------------------------------------------------
 

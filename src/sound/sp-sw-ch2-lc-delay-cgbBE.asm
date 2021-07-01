@@ -1,11 +1,14 @@
+; Tests how CGB speed switching affects APU length counter timing
+;
+; Verified:
+;   passes on CPU CGB E - CPU-CGB-06 (2021-06-24)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-06-24)
+;
 DEF ROM_IS_CGB_ONLY EQU 1
 INCLUDE "test-setup.inc"
 
 
 
-; Verified:
-;   passes on CPU CGB E - CPU-CGB-06 (2021-06-24)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-06-24)
 EXPECTED_TEST_RESULTS:
     ; number of test result rows
     DB 7
@@ -177,7 +180,7 @@ ENDM
 
 
 run_test:
-    LCD_OFF
+    call lcd_off
     ld hl, TEST_RESULTS
 
     TEST_DS 0, 0, 4093

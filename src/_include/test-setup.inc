@@ -50,6 +50,7 @@ SECTION "entry", ROM0[$100]
     jp main
 
 SECTION "main", ROM0[$150]
+INCLUDE "utilities.inc"
 main:
     ; check the hardware:
     ; is this a Game Boy Color?
@@ -76,7 +77,7 @@ main:
 ; ----------------------------------------------------------------------------
 
     push hl ; address of expected test results in hl
-    LCD_OFF
+    call lcd_off
     MEMSET _SCRN0, 0, 18 * 32 ; clear tile map at $9800
     ld hl, TEST_SUCCESS
     ld [hl], 1
@@ -104,7 +105,7 @@ main:
     jr .freeze
 
 .fail_cgb_required:
-    LCD_OFF
+    call lcd_off
     MEMSET _SCRN0, 0, 18 * 32 ; clear tile map at $9800
     xor a, a
     ld [TEST_SUCCESS], a

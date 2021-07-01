@@ -1,32 +1,50 @@
-DEF ROM_IS_CGB_ONLY EQU 1
+; Test LCD mode timing.
+; Mode 3 duration is measured for different SCX values but
+; without any window or sprite rendering.
+;
+; Verified (CGB_E undefined):
+;    fails on CPU CGB E - CPU-CGB-06 (2021-07-01)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-07-01)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-01)
+;
+; Verified (CGB_E set):
+;   passes on CPU CGB E - CPU-CGB-06 (2021-07-01)
+;    fails on CPU CGB B - CPU-CGB-02 (2021-07-01)
+;    fails on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-01)
+;
+IF DEF(CGB_E)
+    DEF ROM_IS_CGB_ONLY EQU 1
+    DEF M1E EQU $81 ; no mode-0 m-cycle at the end of mode-1 on CGB-E
+ELSE
+    DEF ROM_IS_CGB_COMPATIBLE EQU 1
+    DEF M1E EQU $80
+ENDC
+
 INCLUDE "test-setup.inc"
 INCLUDE "lcd/stat-mode-timing.inc"
 
 
 
-; Verified:
-;   passes on CPU CGB E - CPU-CGB-06 (2021-06-28)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-06-28)
 EXPECTED_TEST_RESULTS:
     ; number of test result rows
     DB 14
     ; mode 0
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 0
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 1
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 2
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 3
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 4
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 5
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 6
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 7
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 8
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00 ; SCX 9
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 0
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 1
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 2
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 3
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 4
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 5
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 6
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 7
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 8
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 9
     ; mode 1,2
     DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 0
-    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 4
+    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 7
     ; mode 3
-    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 0
-    DB $FF, $FF, $FF, $00, $00, $00, $00, $00 ; SCX 4
+    DB $FF, $FF, $00, $00, $00, $00, $00, $00 ; SCX 0
+    DB $FF, $FF, $00, $00, $00, $00, $00, $00 ; SCX 7
 
 EXPECTED_SCANLINE_STATS:
     ; *includes scanlines of the next frame
@@ -36,72 +54,42 @@ EXPECTED_SCANLINE_STATS:
     ; -------------------------------------------
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 0
-    DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 1
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 2
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 3
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 4
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 5
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 6
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 7
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 8
-    DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83 ; SCX 9
-    DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
-    DB $83, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
-    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80
     ;
@@ -109,62 +97,54 @@ EXPECTED_SCANLINE_STATS:
     ; -----------------------------------------
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80 ; SCX 0
-    DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
+    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, M1E, $80, $80
     DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, $81, $80, $80 ; SCX 7
-    DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
+    DB $80, $80, $80, $80,  $80, $80, $81, $81,  $81, M1E, $80, $80
     DB $82, $82, $82, $82,  $82, $81, $81, $81,  $81, $82, $82, $82
     ;
     ; mode 3 beginning does not depend on SCX
     ; ---------------------------------------
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $80, $82, $82, $82,  $82, $82, $81, $81,  $81, $81, $82, $82 ; SCX 0
-    DB $80, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     ; scanlines 0-3         scanlines 142-145    scanlines 152-155*
     DB $80, $82, $82, $82,  $82, $82, $81, $81,  $81, $81, $82, $82 ; SCX 7
-    DB $80, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
     DB $83, $83, $83, $83,  $83, $83, $81, $81,  $81, $81, $83, $83
 
-DEF M0_INITIAL_M_CYCLES  EQU ((80 + 172) / 2 - 13)
-DEF M12_INITIAL_M_CYCLES EQU (456 / 2 - 13)
-DEF M3_INITIAL_M_CYCLES  EQU (80 / 2 - 13)
+DEF M0_INITIAL_M_CYCLES  EQU ((80 + 172) / 4 - 12)
+DEF M12_INITIAL_M_CYCLES EQU (456 / 4 - 13)
+DEF M3_INITIAL_M_CYCLES  EQU (80 / 4 - 12)
 
 
 
 run_test:
-    SWITCH_SPEED
-
     ld hl, SCANLINE_STATS
     FOR SCX, 10
-        FOR I, 6
-            READ_LINES_STAT_DS SCX, M0_INITIAL_M_CYCLES + I
-        ENDR
+        READ_LINES_STAT SCX, M0_INITIAL_M_CYCLES
+        READ_LINES_STAT SCX, M0_INITIAL_M_CYCLES + 1
+        READ_LINES_STAT SCX, M0_INITIAL_M_CYCLES + 2
     ENDR
 
-    READ_LINES_STAT_DS 0, M12_INITIAL_M_CYCLES
-    READ_LINES_STAT_DS 0, M12_INITIAL_M_CYCLES + 1
-    READ_LINES_STAT_DS 0, M12_INITIAL_M_CYCLES + 2
-    READ_LINES_STAT_DS 7, M12_INITIAL_M_CYCLES
-    READ_LINES_STAT_DS 7, M12_INITIAL_M_CYCLES + 1
-    READ_LINES_STAT_DS 7, M12_INITIAL_M_CYCLES + 2
+    READ_LINES_STAT 0, M12_INITIAL_M_CYCLES
+    READ_LINES_STAT 0, M12_INITIAL_M_CYCLES + 1
+    READ_LINES_STAT 0, M12_INITIAL_M_CYCLES + 2
+    READ_LINES_STAT 7, M12_INITIAL_M_CYCLES
+    READ_LINES_STAT 7, M12_INITIAL_M_CYCLES + 1
+    READ_LINES_STAT 7, M12_INITIAL_M_CYCLES + 2
 
-    READ_LINES_STAT_DS 0, M3_INITIAL_M_CYCLES
-    READ_LINES_STAT_DS 0, M3_INITIAL_M_CYCLES + 1
-    READ_LINES_STAT_DS 0, M3_INITIAL_M_CYCLES + 2
-    READ_LINES_STAT_DS 7, M3_INITIAL_M_CYCLES
-    READ_LINES_STAT_DS 7, M3_INITIAL_M_CYCLES + 1
-    READ_LINES_STAT_DS 7, M3_INITIAL_M_CYCLES + 2
+    READ_LINES_STAT 0, M3_INITIAL_M_CYCLES
+    READ_LINES_STAT 0, M3_INITIAL_M_CYCLES + 1
+    READ_LINES_STAT 7, M3_INITIAL_M_CYCLES
+    READ_LINES_STAT 7, M3_INITIAL_M_CYCLES + 1
 
     PREPRAE_RESULT_COMPARISON
-    FOR N, 10
-        COMPARE_RESULTS 6
-    ENDR
-    FOR N, 4
+    FOR N, 12
         COMPARE_RESULTS 3
     ENDR
+    COMPARE_RESULTS 2
+    COMPARE_RESULTS 2
 
-    SWITCH_SPEED
     ld hl, EXPECTED_TEST_RESULTS
     ret
