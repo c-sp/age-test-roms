@@ -1,14 +1,13 @@
 ; Test LY timing
 ;
 ; Verified (CGB_E undefined):
-;    fails on CPU CGB E - CPU-CGB-06 (2021-07-01)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-07-01)
-;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-01)
+;    fails on CPU CGB E - CPU-CGB-06 (2021-07-02)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-07-02)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-02)
 ;
 ; Verified (CGB_E set):
-;   passes on CPU CGB E - CPU-CGB-06 (2021-07-01)
-;    fails on CPU CGB B - CPU-CGB-02 (2021-07-01)
-;    fails on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-01)
+;   passes on CPU CGB E - CPU-CGB-06 (2021-07-02)
+;    fails on CPU CGB B - CPU-CGB-02 (2021-07-02)
 ;
 IF DEF(CGB_E)
     DEF ROM_IS_CGB_ONLY EQU 1
@@ -46,75 +45,74 @@ EXPECTED_TEST_RESULTS_CGB:
 
 
 timed_ly_reads:
-    ; read within scanline 0
+    ; read within line 0
     ld a, [de]  ; 2 m-cycles
     ld [hl+], a ; 2 m-cycles
-    ; read on the edge of scanline 0/1
+    ; read on the edge of line 0/1
     DELAY (454 / 4) - 13
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 1/2
+    ; read on the edge of line 1/2
     DELAY (456 / 4) - 4
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 2/3
+    ; read on the edge of line 2/3
     DELAY (456 / 4) - 4
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 143/144
+    ; read on the edge of line 143/144
     DELAY (456 / 4) - 4 + (456 / 4) * 140
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 152/153
+    ; read on the edge of line 152/153
     DELAY (456 / 4) - 4 + (456 / 4) * 8
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 153/0
+    ; read on the edge of line 153/0
     DELAY (456 / 4) - 4
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 0/1
+    ; read on the edge of line 0/1
     DELAY (456 / 4) - 4
     ld a, [de]
     ld [hl+], a
     ret
 
 timed_ly_reads_ds:
-    ; read within scanline 0
+    ; read within line 0
     ld a, [de]  ; 2 m-cycles
     ld [hl+], a ; 2 m-cycles
-    ; read on the edge of scanline 0/1
+    ; read on the edge of line 0/1
     DELAY (454 / 2) - 14
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 1/2
+    ; read on the edge of line 1/2
     DELAY (456 / 2) - 4
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 2/3
+    ; read on the edge of line 2/3
     DELAY (456 / 2) - 4
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 143/144
+    ; read on the edge of line 143/144
     DELAY (456 / 2) - 4 + (456 / 2) * 140
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 152/153
+    ; read on the edge of line 152/153
     DELAY (456 / 2) - 4 + (456 / 2) * 8
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 153/0
+    ; read on the edge of line 153/0
     DELAY (456 / 2) - 4
     ld a, [de]
     ld [hl+], a
-    ; read on the edge of scanline 0/1
+    ; read on the edge of line 0/1
     DELAY (456 / 2) - 4
     ld a, [de]
     ld [hl+], a
     ret
 
 TEST: MACRO
-    ld de, rLY
     call lcd_off
     ld a, LCDCF_ON | LCDCF_BGON
     ldh [rLCDC], a
@@ -126,6 +124,7 @@ ENDM
 
 run_test:
     ld hl, TEST_RESULTS
+    ld de, rLY
 
     TEST 0, timed_ly_reads
     TEST 1, timed_ly_reads
@@ -133,11 +132,10 @@ run_test:
     TEST 3, timed_ly_reads
 
     CP_IS_CGB
-    jr z, .run_cgb_tests
+    jr z, .run_test_cgb
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret
-
-.run_cgb_tests:
+.run_test_cgb:
     SWITCH_SPEED
 
     TEST 0, timed_ly_reads_ds

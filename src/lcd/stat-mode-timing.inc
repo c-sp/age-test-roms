@@ -20,16 +20,21 @@ _READ_LINES_STAT: MACRO
 ENDM
 
 _READ_LINES_STAT_SPARSE: MACRO
-    _READ_LINES_STAT 4, \1 ; read first 4 scanlines
+    _READ_LINES_STAT 4, \1 ; read first 4 lines
 
-    DELAY (138 * 456) / \1 - 2 ; skip 138 scanlines
-    _READ_LINES_STAT 4, \1     ; read 4 scanlines (142 - 145)
+    DELAY (138 * 456) / \1 - 2 ; skip 138 lines
+    _READ_LINES_STAT 4, \1     ; read 4 lines (142 - 145)
 
-    DELAY (6 * 456) / \1 - 2 ; skip 6 scanlines
-    _READ_LINES_STAT  4, \1  ; read 4 scanlines (152 - 155, includes 2 scanlines of the next frame)
+    DELAY (6 * 456) / \1 - 2 ; skip 6 lines
+    _READ_LINES_STAT  4, \1  ; read 4 lines (152 - 155, includes 2 lines of the next frame)
 ENDM
 
-DEF BYTES_PER_SCANLINE EQU 12
+DEF BYTES_PER_LINE EQU 12
+
+PUSHS
+SECTION "line-stats", WRAM0
+LINE_STATS: DS 16 * 8 * BYTES_PER_LINE
+POPS
 
 read_lines_stat:
     _READ_LINES_STAT_SPARSE 4
@@ -72,73 +77,6 @@ READ_LINES_STAT_DS: MACRO
     DELAY \2
     call read_lines_stat_ds
 ENDM
-
-
-
-PUSHS
-SECTION "scanline-stats", WRAM0
-SCANLINE_STATS: DS 16 * 8 * BYTES_PER_SCANLINE
-POPS
-
-PREPRAE_RESULT_COMPARISON: MACRO
-    ld hl, TEST_RESULTS
-    ld bc, SCANLINE_STATS
-    ld de, EXPECTED_SCANLINE_STATS
-ENDM
-
-; @param \1 number of scanline-stat-lines to put into one result line
-; @param bc
-; @param de
-; @param hl
-; @destroys af
-;
-COMPARE_RESULTS: MACRO
-    STATIC_ASSERT (\1 > 0) && (\1 <= 8)
-
-    FOR I, \1
-        call compare_scanline
-        ld [hl+], a
-    ENDR
-    REPT 8 - \1
-        inc hl
-    ENDR
-ENDM
-
-; @param bc address of the next scanline byte
-; @param de address of the next expected scanline byte
-;
-; @return a index of first mismatch, $FF if all bytes are equal
-; @return bc address of the next scanline byte
-; @return de address of the next expected scanline byte
-;
-; @destroys f
-;
-compare_scanline:
-    push hl
-    ld l, BYTES_PER_SCANLINE
-.compare_byte:
-    ld a, [de]
-    ld h, a
-    ld a, [bc]
-    cp a, h
-    jr z, .next_byte
-    ld a, BYTES_PER_SCANLINE
-    sub l
-.fast_forward:
-    inc de
-    inc bc
-    dec l
-    jr nz, .fast_forward
-    jr .return
-.next_byte:
-    inc de
-    inc bc
-    dec l
-    jr nz, .compare_byte
-    ld a, $FF
-.return:
-    pop hl
-    ret
 
 
 

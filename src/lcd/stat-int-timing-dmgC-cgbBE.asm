@@ -2,9 +2,9 @@
 ; Edge cases are ignored here.
 ;
 ; Verified:
-;   passes on CPU CGB E - CPU-CGB-06 (2021-06-29)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-06-29)
-;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-06-29)
+;   passes on CPU CGB E - CPU-CGB-06 (2021-07-02)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-07-02)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-02)
 ;
 DEF ROM_IS_CGB_COMPATIBLE EQU 1
 INCLUDE "test-setup.inc"
@@ -18,11 +18,11 @@ INCLUDE "test-setup.inc"
 EXPECTED_TEST_RESULTS_DMG:
     ; number of test result rows
     DB 5
-    ; mode 0 (scanline >0)
+    ; mode 0 (line >0)
     DB $80, $82, $80, $82, $80, $82, $80, $82 ; SCX 0 - 3
     DB $80, $82, $80, $82, $80, $82, $80, $82 ; SCX 4 - 7
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 8 - 9
-    ; mode 2 (scanline >0)
+    ; mode 2 (line >0)
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 0, 7
     ; mode 1
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 0, 7
@@ -33,22 +33,22 @@ EXPECTED_TEST_RESULTS_CGB:
     ;
     ; single speed
     ;
-    ; mode 0 (scanline >0)
+    ; mode 0 (line >0)
     DB $80, $82, $80, $82, $80, $82, $80, $82 ; SCX 0 - 3
     DB $80, $82, $80, $82, $80, $82, $80, $82 ; SCX 4 - 7
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 8 - 9
-    ; mode 2 (scanline >0)
+    ; mode 2 (line >0)
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 0, 7
     ; mode 1
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 0, 7
     ;
     ; double speed
     ;
-    ; mode 0 (scanline >0)
+    ; mode 0 (line >0)
     DB $80, $82, $80, $82, $80, $82, $80, $82 ; SCX 0 - 3
     DB $80, $82, $80, $82, $80, $82, $80, $82 ; SCX 4 - 7
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 8 - 9
-    ; mode 2 (scanline >0)
+    ; mode 2 (line >0)
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 0, 7
     ; mode 1
     DB $80, $82, $80, $82, $00, $00, $00, $00 ; SCX 0, 7
@@ -84,7 +84,7 @@ wait_for_int:
 ;
 TEST_STAT_INT: MACRO
     push hl
-    ld hl, read_stat\@
+    ld hl, .read_stat\@
 
     call lcd_off
     ld a, \1
@@ -107,12 +107,12 @@ TEST_STAT_INT: MACRO
     xor a, a
     ldh [rSTAT], a
     ld a, $FF
-    jp save_result\@
+    jp .save_result\@
 
-read_stat\@:
+.read_stat\@:
     DELAY \4
     ldh a, [rSTAT]
-save_result\@:
+.save_result\@:
     pop hl
     ld [hl+], a
 ENDM
@@ -129,7 +129,7 @@ ENDM
 run_test:
     ld hl, TEST_RESULTS
 
-    ; 230 m-cycles -> set rSTAT at the beginning of scanline 3 during mode 2
+    ; 230 m-cycles -> set rSTAT at the beginning of line 3 during mode 2
     TEST_STAT_INT 0, 230, STATF_MODE00, 34
     TEST_STAT_INT 0, 230, STATF_MODE00, 35
     TEST_STAT_INT 1, 230, STATF_MODE00, 34
@@ -165,14 +165,13 @@ run_test:
     PAD_RESULTS 4
 
     CP_IS_CGB
-    jr z, .run_cgb_tests
+    jr z, .run_test_cgb
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret
-
-.run_cgb_tests:
+.run_test_cgb:
     SWITCH_SPEED
 
-    ; 460 m-cycles -> set rSTAT at the beginning of scanline 3 during mode 2
+    ; 460 m-cycles -> set rSTAT at the beginning of line 3 during mode 2
     TEST_STAT_INT 0, 460, STATF_MODE00, 85
     TEST_STAT_INT 0, 460, STATF_MODE00, 86
     TEST_STAT_INT 1, 460, STATF_MODE00, 84
