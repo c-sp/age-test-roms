@@ -1,13 +1,13 @@
 ; Test LY timing
 ;
 ; Verified (CGB_E undefined):
-;    fails on CPU CGB E - CPU-CGB-06 (2021-07-02)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-07-02) TODO double speed fails
-;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-02)
+;    fails on CPU CGB E - CPU-CGB-06 (2021-07-03)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-07-03)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-03)
 ;
 ; Verified (CGB_E set):
-;   passes on CPU CGB E - CPU-CGB-06 (2021-07-02) TODO double speed fails
-;    fails on CPU CGB B - CPU-CGB-02 (2021-07-02)
+;   passes on CPU CGB E - CPU-CGB-06 (2021-07-03)
+;    fails on CPU CGB B - CPU-CGB-02 (2021-07-03)
 ;
 IF DEF(CGB_E)
     DEF ROM_IS_CGB_ONLY EQU 1
@@ -44,14 +44,14 @@ EXPECTED_TEST_RESULTS_CGB:
     DB $FF, $FF, $FF, $FF, $00, $00, $00, $00
     DB $FF, $FF, $FF, $FF, $00, $00, $00, $00
     ; double speed
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00
 
 
 
@@ -104,6 +104,7 @@ EXPECTED_OAM_VALUES:
     ;
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 0
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
@@ -111,6 +112,7 @@ EXPECTED_OAM_VALUES:
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 1
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
@@ -118,6 +120,7 @@ EXPECTED_OAM_VALUES:
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 2
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
@@ -125,6 +128,7 @@ EXPECTED_OAM_VALUES:
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 3
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
@@ -132,6 +136,7 @@ EXPECTED_OAM_VALUES:
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 4
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
@@ -139,6 +144,7 @@ EXPECTED_OAM_VALUES:
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 5
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
@@ -146,6 +152,7 @@ EXPECTED_OAM_VALUES:
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 6
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
@@ -153,6 +160,7 @@ EXPECTED_OAM_VALUES:
     DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
     ; line 0, 1, 143                  line 0, 1 (next frame)
     DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 7
+    DB $00, $FF, EFF, $FF, EFF, $FF,  EFF, $FF, EFF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
     DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
@@ -210,7 +218,7 @@ timed_oam_reads:
 
 timed_oam_reads_ds:
     ; read at the edge of line 0 mode 3
-    DELAY 31
+    DELAY 30
     ld a, [de]        ; 2 m-cycles
     ld [hl+], a       ; 2 m-cycles
     ; read at the edge of line 0 mode 0
@@ -279,7 +287,7 @@ compact_test_results:
     ld de, EXPECTED_OAM_VALUES
     ld hl, TEST_RESULTS
     COMPACT_RESULTS_LINES 8, 4, BYTES_PER_LINE
-    COMPACT_RESULTS_LINES 8, 6, BYTES_PER_LINE
+    COMPACT_RESULTS_LINES 8, 7, BYTES_PER_LINE
     ret
 
 
@@ -313,6 +321,7 @@ run_test:
         TEST SCX, timed_oam_reads_ds, 3
         TEST SCX, timed_oam_reads_ds, 4
         TEST SCX, timed_oam_reads_ds, 5
+        TEST SCX, timed_oam_reads_ds, 6
     ENDR
 
     SWITCH_SPEED
