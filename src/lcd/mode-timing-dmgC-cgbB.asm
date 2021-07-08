@@ -20,7 +20,7 @@ ELSE
 ENDC
 
 INCLUDE "test-setup.inc"
-INCLUDE "lcd/stat-mode-timing.inc"
+INCLUDE "lcd/mode-timing.inc"
 
 
 

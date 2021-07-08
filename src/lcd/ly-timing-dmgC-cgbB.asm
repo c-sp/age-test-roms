@@ -135,6 +135,7 @@ run_test:
     jr z, .run_test_cgb
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret
+
 .run_test_cgb:
     SWITCH_SPEED
 

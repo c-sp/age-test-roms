@@ -8,7 +8,7 @@
 ;
 DEF ROM_IS_CGB_ONLY EQU 1
 INCLUDE "test-setup.inc"
-INCLUDE "lcd/stat-mode-timing.inc"
+INCLUDE "lcd/mode-timing.inc"
 
 
 
