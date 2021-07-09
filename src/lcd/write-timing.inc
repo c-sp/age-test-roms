@@ -5,7 +5,7 @@ INCLUDE "test-setup.inc"
 
 
 
-DEF BYTES_PER_LINE EQU 10
+DEF BYTES_PER_LINE EQU 12
 
 PUSHS
 SECTION "timing-results", WRAM0
@@ -16,6 +16,10 @@ MACRO _TEST
     call prepare_memory
 
     push hl
+    xor a, a
+    ldh [rSTAT], a
+    cpl
+    ldh [rLYC], a
     ld a, \1
     ld [rSCX], a
     ld a, LCDCF_ON | LCDCF_BGON
@@ -77,7 +81,6 @@ MACRO RUN_TEST
     CP_IS_CGB
     jp z, .run_test_cgb\@
     call compact_test_results
-    ;MEMCPY TEST_RESULTS, TIMING_RESULTS + (5 + 2) * BYTES_PER_LINE, 16 * 8
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret
 
