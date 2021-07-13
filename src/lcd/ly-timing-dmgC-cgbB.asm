@@ -112,7 +112,7 @@ timed_ly_reads_ds:
     ld [hl+], a
     ret
 
-TEST: MACRO
+MACRO TEST
     call lcd_off
     ld a, LCDCF_ON | LCDCF_BGON
     ldh [rLCDC], a
@@ -131,7 +131,7 @@ run_test:
     TEST 2, timed_ly_reads
     TEST 3, timed_ly_reads
 
-    CP_IS_CGB
+    CP_ALLOW_CGB_FEATURES
     jr z, .run_test_cgb
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret

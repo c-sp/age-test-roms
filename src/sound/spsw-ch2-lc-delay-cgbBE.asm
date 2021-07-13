@@ -29,34 +29,34 @@ EXPECTED_TEST_RESULTS:
 
 
 
-SAVE_NR52: MACRO
+    MACRO SAVE_NR52
     ldh a, [rNR52]
     ld [hl+], a
 ENDM
 
-ADD_4_BYTE_PADDING: MACRO
+MACRO ADD_4_BYTE_PADDING
     inc hl
     inc hl
     inc hl
     inc hl
 ENDM
 
-SOUND_OFF: MACRO
+MACRO SOUND_OFF
     xor a, a
     ldh [rNR52], a
 ENDM
 
-SOUND_ON: MACRO
+MACRO SOUND_ON
     ld a, $80
     ldh [rNR52], a
 ENDM
 
-INIT_TEST: MACRO
+MACRO INIT_TEST
     SOUND_OFF
     ldh [rDIV], a ; reset DIV
 ENDM
 
-INIT_CH2_LC: MACRO
+MACRO INIT_CH2_LC
     ld a, \1
     ldh [rNR21], a ; channel 2 length counter = \1
     ld a, $F0
@@ -72,7 +72,7 @@ ENDM
 ; Length counter ticks are delayed by 1 m-cycle after
 ; switching to double speed no matter on what 1MHz edge
 ; sound was activated and speeds were switched.
-TEST_DS: MACRO
+MACRO TEST_DS
     INIT_TEST
     DELAY \1
     SOUND_ON
@@ -87,7 +87,7 @@ ENDM
 ; Initialising channel 2 while running at double speed does
 ; not neutralise the current 1-m-cycle length counter
 ; delay no matter on what 2MHz edge channel 2 was initialised.
-TEST_DS_CH2_INIT: MACRO
+MACRO TEST_DS_CH2_INIT
     INIT_TEST
     SOUND_ON
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
@@ -101,7 +101,7 @@ ENDM
 ; Resetting the DIV while running at double speed does
 ; not neutralise the current 1-m-cycle length counter
 ; delay no matter on what 2MHz edge the DIV was reset.
-TEST_DS_DIV_RESET: MACRO
+MACRO TEST_DS_DIV_RESET
     INIT_TEST
     SOUND_ON
     INIT_CH2_LC $3B ; channel 2 length counter = 5
@@ -114,7 +114,7 @@ TEST_DS_DIV_RESET: MACRO
 ENDM
 
 ; TODO describe
-TEST_DS_ON: MACRO
+MACRO TEST_DS_ON
     INIT_TEST
     SWITCH_SPEED    ; switch to double speed (sound is off)
     DELAY \1
@@ -126,7 +126,7 @@ TEST_DS_ON: MACRO
 ENDM
 
 ; TODO describe
-TEST_DS_OFF_ON: MACRO
+MACRO TEST_DS_OFF_ON
     INIT_TEST
     SOUND_ON
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
@@ -144,7 +144,7 @@ ENDM
 ; a 1 m-cycle length counter delay no matter on what 2MHz
 ; edge the switch to single speed occurred and on what
 ; 1MHz edge double speed was activated.
-TEST_DS_SS_DS: MACRO
+MACRO TEST_DS_SS_DS
     INIT_TEST
     SOUND_ON
     INIT_CH2_LC $2F ; channel 2 length counter = 17
@@ -161,7 +161,7 @@ ENDM
 ; Length counter ticks are delayed by 1 m-cycle after the
 ; third switch to double speed no matter on what 2MHz
 ; edges single speed was activated.
-TEST_DS_SS_DS_SS_DS: MACRO
+MACRO TEST_DS_SS_DS_SS_DS
     INIT_TEST
     SOUND_ON
     INIT_CH2_LC $23 ; channel 2 length counter = 29

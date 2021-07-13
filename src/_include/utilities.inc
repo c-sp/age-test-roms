@@ -73,13 +73,13 @@ lcd_off:
 ;
 ; ----------------------------------------------------------------------------
 
-COMPACT_RESULTS_LINES: MACRO
+MACRO COMPACT_RESULTS_LINES
     REPT \1
         COMPACT_RESULTS_LINE \2, \3
     ENDR
 ENDM
 
-COMPACT_RESULTS_LINE: MACRO
+MACRO COMPACT_RESULTS_LINE
     STATIC_ASSERT (\1 > 0) && (\1 <= 8)
     STATIC_ASSERT \2 > 0
 

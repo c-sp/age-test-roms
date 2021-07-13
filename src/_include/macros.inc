@@ -18,7 +18,7 @@ INCLUDE "hardware.inc"
 ; @param \3 number of bytes to clear
 ; @destroys af, bc, d, hl
 ;
-MEMSET: MACRO
+MACRO MEMSET
     ld hl, \1
     ld d, \2
     ld bc, \3
@@ -38,7 +38,7 @@ ENDM
 ; @param \3 number of bytes to copy
 ; @destroys af, bc, de, hl
 ;
-MEMCPY: MACRO
+MACRO MEMCPY
     ld hl, \1
     ld de, \2
     ld bc, \3
@@ -67,7 +67,7 @@ ENDM
 ;
 ; @see DELAY, DELAY256
 ;
-NOPS: MACRO
+MACRO NOPS
     REPT \1
         nop
     ENDR
@@ -83,7 +83,7 @@ ENDM
 ;
 ; @see DELAY256, NOPS
 ;
-DELAY: MACRO
+MACRO DELAY
     IF (\1) >= 256
         DELAY256 (\1) / 256
         NOPS (\1) % 256
@@ -102,7 +102,7 @@ ENDM
 ;
 ; @see DELAY, NOPS
 ;
-DELAY256: MACRO
+MACRO DELAY256
     IF \1 > 0
         ; 8 m-cycles for this block
         push af ; 4 m-cycles
@@ -151,7 +151,7 @@ ENDM
 ;
 ; @destroys a
 ;
-TIMER_OFF: MACRO
+MACRO TIMER_OFF
     xor a, a
     ldh [rTAC], a
 ENDM
@@ -162,7 +162,7 @@ ENDM
 ; @param \1 `TAC` frequency flags
 ; @destroys a
 ;
-TIMER_RESTART_CLEAN: MACRO
+MACRO TIMER_RESTART_CLEAN
     ; turn off timer
     TIMER_OFF
     ldh [rTIMA], a
@@ -180,12 +180,18 @@ ENDM
 ;
 ; @destroys a
 ;
-SWITCH_SPEED: MACRO
+MACRO SWITCH_SPEED
 	ld a, $30
     ldh [rP1], a
 	ld a, 1
 	ldh [rKEY1], a
 	stop
+ENDM
+
+; Indicate a finished test by executing a special no-op instruction.
+;
+MACRO INDICATE_FINISHED_TEST
+    ld b, b
 ENDM
 
 

@@ -1,4 +1,7 @@
-; Test DIV timing on CGB speed switch
+; Test rDIV timing when switching between CGB speeds.
+; The number of machine cycles until the first DIV increment
+; after switching speeds is always the same.
+; rDIV always reads 0 (zero) right after speed switching.
 ;
 ; Verified:
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-06-23)
@@ -23,39 +26,39 @@ EXPECTED_TEST_RESULTS:
 
 
 
-SAVE_DIV: MACRO
+MACRO SAVE_DIV
     ldh a, [rDIV]
     ld [hl+], a
 ENDM
 
-TEST_DS: MACRO
+MACRO TEST_DS
     ldh [rDIV], a ; reset div
-    DELAY \1     ; wait before switching to double speed
-    SWITCH_SPEED ; switch to double speed
-    DELAY \2     ; wait before reading rDIV
-    SAVE_DIV     ; read rDIV
-    SWITCH_SPEED ; switch to single speed
+    DELAY \1      ; wait before switching to double speed
+    SWITCH_SPEED  ; switch to double speed
+    DELAY \2      ; wait before reading rDIV
+    SAVE_DIV      ; read rDIV
+    SWITCH_SPEED  ; switch to single speed
 ENDM
 
-TEST_DS_SS: MACRO
+MACRO TEST_DS_SS
     ldh [rDIV], a ; reset div
-    SWITCH_SPEED ; switch to double speed
-    DELAY \1     ; wait before switching to single speed
-    SWITCH_SPEED ; switch to single speed
-    DELAY \2     ; wait before reading rDIV
-    SAVE_DIV     ; read rDIV
+    SWITCH_SPEED  ; switch to double speed
+    DELAY \1      ; wait before switching to single speed
+    SWITCH_SPEED  ; switch to single speed
+    DELAY \2      ; wait before reading rDIV
+    SAVE_DIV      ; read rDIV
 ENDM
 
-TEST_DS_SS_DS: MACRO
+MACRO TEST_DS_SS_DS
     ldh [rDIV], a ; reset div
-    SWITCH_SPEED ; switch to double speed
-    DELAY \1     ; wait before switching to single speed
-    SWITCH_SPEED ; switch to single speed
-    DELAY \2     ; wait before switching to double speed
-    SWITCH_SPEED ; switch to double speed
-    DELAY \3     ; wait before reading rDIV
-    SAVE_DIV     ; read rDIV
-    SWITCH_SPEED ; switch to single speed
+    SWITCH_SPEED  ; switch to double speed
+    DELAY \1      ; wait before switching to single speed
+    SWITCH_SPEED  ; switch to single speed
+    DELAY \2      ; wait before switching to double speed
+    SWITCH_SPEED  ; switch to double speed
+    DELAY \3      ; wait before reading rDIV
+    SAVE_DIV      ; read rDIV
+    SWITCH_SPEED  ; switch to single speed
 ENDM
 
 
@@ -70,10 +73,10 @@ run_test:
     TEST_DS $00, $3D
     TEST_DS $01, $3C
     TEST_DS $01, $3D
-    TEST_DS $40, $3C
-    TEST_DS $40, $3D
-    TEST_DS $41, $3C
-    TEST_DS $41, $3D
+    TEST_DS $C0, $3C
+    TEST_DS $C0, $3D
+    TEST_DS $C1, $3C
+    TEST_DS $C1, $3D
 
     ; double speed -> single speed
 
@@ -86,14 +89,14 @@ run_test:
     TEST_DS_SS $03, $3C
     TEST_DS_SS $03, $3D
 
-    TEST_DS_SS $40, $3C
-    TEST_DS_SS $40, $3D
-    TEST_DS_SS $41, $3C
-    TEST_DS_SS $41, $3D
-    TEST_DS_SS $42, $3C
-    TEST_DS_SS $42, $3D
-    TEST_DS_SS $43, $3C
-    TEST_DS_SS $43, $3D
+    TEST_DS_SS $C0, $3C
+    TEST_DS_SS $C0, $3D
+    TEST_DS_SS $C1, $3C
+    TEST_DS_SS $C1, $3D
+    TEST_DS_SS $C2, $3C
+    TEST_DS_SS $C2, $3D
+    TEST_DS_SS $C3, $3C
+    TEST_DS_SS $C3, $3D
 
     ; double speed -> single speed -> double speed
 

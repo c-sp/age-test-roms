@@ -38,7 +38,7 @@ EXPECTED_TEST_RESULTS:
 
 
 
-SAVE_TIMA: MACRO
+MACRO SAVE_TIMA
     ldh a, [rTIMA]
     ld [hl+], a
 ENDM
@@ -49,7 +49,7 @@ ENDM
 ; immediately read TIMA & IF.
 ; During the speed switch the timer keeps running
 ; while the CPU is inactive for a while.
-TEST_DS_IF: MACRO
+MACRO TEST_DS_IF
     TIMER_RESTART_CLEAN \1
     SWITCH_SPEED ; switch to double speed
     SAVE_TIMA
@@ -64,7 +64,7 @@ ENDM
 ; is 1 m-cycle late.
 ; However, this 1 m-cycle delay only affects the
 ; 1->0 edge and not the 0->1 edge.
-TEST_INC_EDGE: MACRO
+MACRO TEST_INC_EDGE
     TIMER_RESTART_CLEAN \3
     DELAY \1
     SWITCH_SPEED ; switch to double speed

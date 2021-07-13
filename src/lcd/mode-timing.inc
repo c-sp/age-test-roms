@@ -7,7 +7,7 @@ INC_MODE_TIMING = 1
 
 
 
-_READ_LINES_STAT: MACRO
+MACRO _READ_LINES_STAT
     STATIC_ASSERT (\2 == 4) || (\2 == 2)
     ld c, \1            ; 2 m-cycles
 .loop\@:
@@ -19,7 +19,7 @@ _READ_LINES_STAT: MACRO
     nop                 ; 1 m-cycle to make jp always use 4 m-cycles
 ENDM
 
-_READ_LINES_STAT_SPARSE: MACRO
+MACRO _READ_LINES_STAT_SPARSE
     _READ_LINES_STAT 4, \1 ; read first 4 lines
 
     DELAY (138 * 456) / \1 - 2 ; skip 138 lines
@@ -48,7 +48,7 @@ PURGE _READ_LINES_STAT, _READ_LINES_STAT_SPARSE
 
 
 
-_INIT_READ_LINE_STAT: MACRO
+MACRO _INIT_READ_LINE_STAT
     call lcd_off
     xor a, a
     ldh [rSTAT], a
@@ -63,7 +63,7 @@ ENDM
 ; @param \1 scx
 ; @param \2 initial delay (m-cycles)
 ;
-READ_LINES_STAT: MACRO
+MACRO READ_LINES_STAT
     _INIT_READ_LINE_STAT \1
     DELAY \2
     call read_lines_stat
@@ -72,7 +72,7 @@ ENDM
 ; @param \1 scx
 ; @param \2 initial delay (m-cycles)
 ;
-READ_LINES_STAT_DS: MACRO
+MACRO READ_LINES_STAT_DS
     _INIT_READ_LINE_STAT \1
     DELAY \2
     call read_lines_stat_ds

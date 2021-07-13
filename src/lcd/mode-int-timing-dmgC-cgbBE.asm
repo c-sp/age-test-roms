@@ -82,7 +82,7 @@ wait_for_int:
 ; @param \3 the stat interrupt bit to set
 ; @param \4 m-cycles before reading rSTAT after interrupt
 ;
-TEST_STAT_INT: MACRO
+MACRO TEST_STAT_INT
     push hl
     ld hl, .read_stat\@
 
@@ -117,7 +117,7 @@ TEST_STAT_INT: MACRO
     ld [hl+], a
 ENDM
 
-PAD_RESULTS: MACRO
+MACRO PAD_RESULTS
     xor a
     REPT \1
         ld [hl+], a
@@ -164,7 +164,7 @@ run_test:
     TEST_STAT_INT 7, 230 + 140 * 456 / 4, STATF_MODE01, 1238
     PAD_RESULTS 4
 
-    CP_IS_CGB
+    CP_ALLOW_CGB_FEATURES
     jr z, .run_test_cgb
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret
