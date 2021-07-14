@@ -164,7 +164,7 @@ run_test:
     TEST_STAT_INT 7, 230 + 140 * 456 / 4, STATF_MODE01, 1238
     PAD_RESULTS 4
 
-    CP_ALLOW_CGB_FEATURES
+    CP_CGB_FEATURES_USABLE
     jr z, .run_test_cgb
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret

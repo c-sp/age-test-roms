@@ -8,6 +8,77 @@ INCLUDE "macros.inc"
 
 ; ----------------------------------------------------------------------------
 ;
+;   CGB features & cartridge ompatibility
+;
+; ----------------------------------------------------------------------------
+
+PUSHS
+SECTION "cgb-features", WRAM0
+CGB_REQUIRED: DS 1        ; running a CGB-exclusive cartridge on a DMG
+CGB_FEATURES_USABLE: DS 1 ; running a CGB-compatible cartridge on a CGB
+POPS
+
+; Set the zero flag,
+; if this cartridge is CGB exclusive but we're running on a DMG.
+; Reset the zero flag otherwise.
+;
+; @destroys af
+;
+MACRO CP_CGB_REQUIRED
+    ld a, [CGB_REQUIRED]
+    cp a, 1
+ENDM
+
+; Set the zero flag,
+; if CGB features are usable
+; (i.e. if we're running a CGB compatible cartridge on a Game Boy Color).
+; Reset the zero flag otherwise.
+;
+; @destroys af
+;
+MACRO CP_CGB_FEATURES_USABLE
+    ld a, [CGB_FEATURES_USABLE]
+    cp a, 1
+ENDM
+
+; Check the availability of Game Boy Color features
+; and the cartridge compatibility.
+; This method must be called with the initial value
+; of CPU register a.
+;
+; @destroys af, b
+;
+check_cgb_on_startup:
+    push af
+    xor a, a
+    ld [CGB_REQUIRED], a
+    ld [CGB_FEATURES_USABLE], a
+    pop af
+    ; check the initial CPU register value: is this a Game Boy Color?
+    cp a, $11
+    ld a, [$143] ; cartridge compatibility byte
+    jr nz, .no_cgb
+    ; Game Boy Color recognized,
+    ; check cartridge compatibility
+    cp a, CART_COMPATIBLE_DMG_GBC
+    ret c ; cartridge not CGB compatible => CGB features not available
+    ld a, 1
+    ld [CGB_FEATURES_USABLE], a ; cartridge CGB compatible => CGB features available
+    ret
+.no_cgb:
+    ; this is no Game Boy Color,
+    ; check cartridge compatibility
+    cp a, CART_COMPATIBLE_GBC
+    ret nz
+    ; cartridge not DMG compatible
+    ld a, 1
+    ld [CGB_REQUIRED], a
+    ret
+
+
+
+; ----------------------------------------------------------------------------
+;
 ;   LCD
 ;
 ; ----------------------------------------------------------------------------
@@ -64,6 +135,74 @@ lcd_off:
     pop hl
     pop af
     ret
+
+; Copy tile data into video ram and setup palettes.
+;
+; @destroys af, bc, de, hl
+;
+setup_gfx:
+    call lcd_off
+    ; copy tile data for ASCII characters 32 - 95 in different styles
+    MEMCPY _VRAM8000, .FONT_DATA_BEGIN, .FONT_DATA_END - .FONT_DATA_BEGIN
+
+    ; setup DMG palettes
+    ld a, %11100100
+    ldh [rBGP], a
+    ldh [rOBP0], a
+    ldh [rOBP1], a
+
+    ; setup CGB background palette
+    ld a, %10000000
+    ldh [rBCPS], a
+    ld c, rBCPD & $FF
+    ld a, %11111111 ; r = g = b = %11111
+    ldh [c], a
+    ld a, %01111111
+    ldh [c], a
+    ld a, %10110101 ; r = g = b = %10101
+    ldh [c], a
+    ld a, %01010110
+    ldh [c], a
+    ld a, %01001010 ; r = g = b = %01010
+    ldh [c], a
+    ld a, %00101001
+    ldh [c], a
+    xor a, a        ; r = g = b = %00000
+    ldh [c], a
+    ldh [c], a
+
+    ; setup CGB object palette
+    ld a, %10000000
+    ldh [rOCPS], a
+    ld c, rOCPD & $FF
+    ld a, %11111111 ; r = g = b = %11111
+    ldh [c], a
+    ld a, %01111111
+    ldh [c], a
+    ld a, %10110101 ; r = g = b = %10101
+    ldh [c], a
+    ld a, %01010110
+    ldh [c], a
+    ld a, %01001010 ; r = g = b = %01010
+    ldh [c], a
+    ld a, %00101001
+    ldh [c], a
+    xor a, a        ; r = g = b = %00000
+    ldh [c], a
+    ldh [c], a
+    ret
+
+; We use the "Cellphone Font":
+; https://opengameart.org/content/ascii-bitmap-font-cellphone
+; originally created by domsson:
+; https://opengameart.org/users/domsson
+;
+.FONT_DATA_BEGIN:
+    INCBIN "font.2bpp"
+    INCBIN "font-inverse.2bpp"
+    INCBIN "font-left.2bpp"
+    INCBIN "font-left-inverse.2bpp"
+.FONT_DATA_END:
 
 
 
@@ -136,6 +275,28 @@ compact_results:
     pop hl
     ld [hl+], a
     ret
+
+
+
+; ----------------------------------------------------------------------------
+;
+;   miscellaneous
+;
+; ----------------------------------------------------------------------------
+
+freeze:
+    ; deny all interrupts from being handled
+    xor a, a
+    ldh [rIE], a
+    ; enable interrupt handling so that
+    ; "halt" does not terminate immediately
+    ei
+    nop
+    ; halt CPU
+    halt
+    nop
+    ; just in case: repeat
+    jr freeze
 
 
 

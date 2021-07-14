@@ -27,126 +27,56 @@ ELSE
     FAIL "rom mode not specified: set one of ROM_IS_CGB_ONLY, ROM_IS_CGB_COMPATIBLE or ROM_IS_DMG_ONLY before including test-setup.inc"
 ENDC
 
-; Check if CGB features are available.
-; This requires CGB hardware to be present and the cartridge
-; compatibility byte to be set to "CGB compatible" or "CGB only".
-;
-; @returns zero flag set if CGB features are available,
-;          zero flag reset otherwise
-;
-MACRO CP_ALLOW_CGB_FEATURES
-    ld a, [CGB_FEATURES]
-    cp a, 1
-ENDM
-
 
 
 ; ----------------------------------------------------------------------------
 ;
-;   entry
+;   main
 ;
 ; ----------------------------------------------------------------------------
 
 SECTION "test-result", WRAM0
-CGB_FEATURES: DS 1
 TEST_SUCCESS: DS 1
 TEST_RESULTS: DS 16 * 8
 
 SECTION "entry", ROM0[$100]
-    di
+    di ; interrupt handling should already be disabled, but just to be sure ...
     jp main
 
 SECTION "main", ROM0[$150]
 INCLUDE "utilities.inc"
 main:
-    ; check the hardware:
-    ; is this a Game Boy Color?
-    ld hl, CGB_FEATURES
-    ld [hl], 1
-    cp a, $11
-    jr z, .cgb_recognized
-    ld [hl], 0
-    ; no Game Boy Color:
-    ; fail test, if Game Boy Color required
-    ld a, [$143]
-    cp a, CART_COMPATIBLE_GBC
-    jp nc, .fail_cgb_required
-    jp .init_test
-.cgb_recognized:
-    ; Game Boy Color recognized:
-    ; check cartridge compatibility
-    ld a, [$143]
-    cp a, CART_COMPATIBLE_DMG
-    jr nz, .init_test
-    ld [hl], 0
-.init_test:
+    call check_cgb_on_startup
+    CP_CGB_REQUIRED
+    jp nz, .hardware_compatible
+    ld hl, .CGB_REQUIRED
+    jp fail_test
+.CGB_REQUIRED:
+    DB "   GAME BOY COLOR\n"
+    DB "      REQUIRED", 0
+
+.hardware_compatible:
     MEMSET TEST_RESULTS, 0, 256
-    call .setup_lcd
     call run_test ; must be defined by the code that is including this file
 
 
 
 ; ----------------------------------------------------------------------------
 ;
-;   test finished
+;   evaluate numerical test result
 ;
 ; ----------------------------------------------------------------------------
 
     push hl ; address of expected test results in hl
+    di
     call lcd_off
     MEMSET _SCRN0, 0, 18 * 32 ; clear tile map at $9800
+
     ld hl, TEST_SUCCESS
     ld [hl], 1
-    pop de ; address of expected test results in de
-    call .print_results
 
-.show_final_screen:
-    call .prepare_lcd ; also prints "TEST PASSED" or "TEST FAILED" at the top
-    ld a, [TEST_SUCCESS]
-    or a, a
-    jr z, .test_failed
-.test_passed:
-    ld b, 3
-    ld c, 5
-    ld d, 8
-    ld e, 13
-    ld h, 21
-    ld l, 34
-    INDICATE_FINISHED_TEST
-    jr .freeze
-.test_failed:
-    ld b, 0
-    INDICATE_FINISHED_TEST
-.freeze:
-    jr .freeze
-
-.fail_cgb_required:
-    call lcd_off
-    MEMSET _SCRN0, 0, 18 * 32 ; clear tile map at $9800
-    xor a, a
-    ld [TEST_SUCCESS], a
-    ld de, .CGB_REQUIRED_1
-    ld hl, _SCRN0 + 3 * 32
-    call .print_ascii
-    ld de, .CGB_REQUIRED_2
-    ld hl, _SCRN0 + 4 * 32
-    call .print_ascii
-    jp .show_final_screen
-.CGB_REQUIRED_1:
-    DB "   GAME BOY COLOR", 0
-.CGB_REQUIRED_2:
-    DB "      REQUIRED", 0
-
-
-
-; Print & compare test results
-;
-; @param hl address of the expected test results
-; @destroys af, bc, de, hl
-; @returns a=0 for a failed test, a=1 for a successful test
-;
-.print_results:
     ld bc, TEST_RESULTS
+    pop de ; address of expected test results in de
     ld hl, _SCRN0 + 2 * 32
 
     ld a, [de] ; number of rows (8 bytes per row)
@@ -156,7 +86,8 @@ main:
     jr c, .valid_number_of_rows
     ld hl, TEST_SUCCESS
     ld [hl], 0
-    ret
+    jp show_final_screen
+
 .valid_number_of_rows:
     inc a
     push af
@@ -164,7 +95,7 @@ main:
     call .print_row
     pop af
     dec a
-    ret z ; all rows printed
+    jp z, show_final_screen ; all rows printed
     push af
     ld a, l
     and a, %11100000
@@ -246,15 +177,40 @@ main:
 
 
 
-.prepare_lcd:
-    ld de, .TEST_PASSED
+; ----------------------------------------------------------------------------
+;
+;   test utilities
+;
+; ----------------------------------------------------------------------------
+
+show_final_screen:
+    call setup_gfx ; also turns off the lcd
     ld a, [TEST_SUCCESS]
     or a, a
-    jr nz, .print_header
+    jr z, .test_failed
+    ; print "test passed", indicate test success and freeze
+    ld de, .TEST_PASSED
+    call .print_and_show
+    ld b, 3
+    ld c, 5
+    ld d, 8
+    ld e, 13
+    ld h, 21
+    ld l, 34
+    INDICATE_FINISHED_TEST
+    jp freeze
+
+.test_failed:
+    ; print "test failed", indicate test failure and freeze
     ld de, .TEST_FAILED
-.print_header:
+    call .print_and_show
+    ld b, 0
+    INDICATE_FINISHED_TEST
+    jp freeze
+
+.print_and_show:
     ld hl, _SCRN0 + 4
-    call .print_ascii
+    call print_ascii
     xor a, a
     ldh [rSCX], a
     ld a, LCDCF_ON | LCDCF_BG8000 | LCDCF_BGON
@@ -266,13 +222,39 @@ main:
 .TEST_FAILED:
     DB "TEST FAILED!", 0
 
-.print_ascii:
+
+
+fail_test:
+    di
+    call lcd_off
+    ; clear tile map at $9800
+    push hl
+    MEMSET _SCRN0, 0, 18 * 32
+    pop hl
+    ; indicate test failure to show_final_screen
+    xor a, a
+    ld [TEST_SUCCESS], a
+    ; print further details?
+    ld a, h
+    or a, l
+    jp z, show_final_screen
+    ; print further details!
+    push hl
+    pop de
+    ld hl, _SCRN0 + 3 * 32
+    call print_ascii
+    jp show_final_screen
+
+
+
+print_ascii:
     ld a, [de]
     or a, a
     ret z ; null-terminator found
     inc de
     cp a, "\n"
-    jr nz, .print_char1
+    jr nz, .check_char
+
     ; print newline
     ld a, l
     and a, %11100000
@@ -281,78 +263,17 @@ main:
     ld a, h
     adc a, 0
     ld h, a
-    jr .print_ascii
-.print_char1:
+    jr print_ascii
+
+    ; check & print character
+.check_char:
     sub a, 32
     cp a, 64
-    jr c, .print_char2
-    ld a, 1 ; replace invalid character by white space
-.print_char2:
+    jr c, .print_char
+    xor a, a ; replace invalid character by white space
+.print_char:
     ld [hl+], a
-    jr .print_ascii
-
-; We use the "Cellphone Font":
-; https://opengameart.org/content/ascii-bitmap-font-cellphone
-; that was created by domsson:
-; https://opengameart.org/users/domsson
-;
-.FONT_DATA_BEGIN:
-    INCBIN "font.2bpp"
-    INCBIN "font-inverse.2bpp"
-    INCBIN "font-left.2bpp"
-    INCBIN "font-left-inverse.2bpp"
-.FONT_DATA_END:
-
-.setup_lcd:
-    call lcd_off
-    ; clear tile map at $9800
-    MEMSET _SCRN0, 0, 18 * 32
-    ; copy tile data for ASCII characters 32 - 95 in different styles
-    MEMCPY _VRAM8000, .FONT_DATA_BEGIN, .FONT_DATA_END - .FONT_DATA_BEGIN
-    ; setup DMG palettes
-    ld a, %11100100
-    ldh [rBGP], a
-    ldh [rOBP0], a
-    ldh [rOBP1], a
-    ; setup CGB background palette
-    ld a, %10000000
-    ldh [rBCPS], a
-    ld c, rBCPD & $FF
-    ld a, %11111111 ; r = g = b = %11111
-    ldh [c], a
-    ld a, %01111111
-    ldh [c], a
-    ld a, %10110101 ; r = g = b = %10101
-    ldh [c], a
-    ld a, %01010110
-    ldh [c], a
-    ld a, %01001010 ; r = g = b = %01010
-    ldh [c], a
-    ld a, %00101001
-    ldh [c], a
-    xor a, a        ; r = g = b = %00000
-    ldh [c], a
-    ldh [c], a
-    ; setup CGB object palette
-    ld a, %10000000
-    ldh [rOCPS], a
-    ld c, rOCPD & $FF
-    ld a, %11111111 ; r = g = b = %11111
-    ldh [c], a
-    ld a, %01111111
-    ldh [c], a
-    ld a, %10110101 ; r = g = b = %10101
-    ldh [c], a
-    ld a, %01010110
-    ldh [c], a
-    ld a, %01001010 ; r = g = b = %01010
-    ldh [c], a
-    ld a, %00101001
-    ldh [c], a
-    xor a, a        ; r = g = b = %00000
-    ldh [c], a
-    ldh [c], a
-    ret
+    jr print_ascii
 
 
 

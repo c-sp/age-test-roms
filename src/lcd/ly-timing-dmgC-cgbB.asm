@@ -131,7 +131,7 @@ run_test:
     TEST 2, timed_ly_reads
     TEST 3, timed_ly_reads
 
-    CP_ALLOW_CGB_FEATURES
+    CP_CGB_FEATURES_USABLE
     jr z, .run_test_cgb
     ld hl, EXPECTED_TEST_RESULTS_DMG
     ret

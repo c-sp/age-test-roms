@@ -78,7 +78,7 @@ MACRO RUN_TEST
         _TEST SCX, timed_writes, 4
     ENDR
 
-    CP_ALLOW_CGB_FEATURES
+    CP_CGB_FEATURES_USABLE
     jp z, .run_test_cgb\@
     call compact_test_results
     ld hl, EXPECTED_TEST_RESULTS_DMG

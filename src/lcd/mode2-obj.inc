@@ -11,53 +11,58 @@ INCLUDE "test-setup.inc"
 
 
 
-OAM_DATA:
-    ;   Y    X   Tile Flags
-    DB $14, $08, $10, $00
-    DB $14, $10, $10, $00
-    DB $14, $18, $10, $00
-    DB $14, $20, $10, $00
-    DB $14, $28, $10, $00
-    DB $14, $30, $10, $00
-    DB $14, $38, $10, $00
-    DB $14, $40, $10, $00
-    DB $14, $48, $10, $00
-    DB $14, $50, $10, $00
-    ;   Y    X  Tile  Flags
-    DB $1C, $58, $10, $00
-    DB $1C, $60, $10, $00
-    DB $1C, $68, $10, $00
-    DB $1C, $70, $10, $00
-    DB $1C, $78, $10, $00
-    DB $1C, $80, $10, $00
-    DB $1C, $88, $10, $00
-    DB $1C, $90, $10, $00
-    DB $1C, $98, $10, $00
-    DB $1C, $A0, $10, $00
-    ;   Y    X  Tile  Flags
-    DB $2C, $08, $10, $00
-    DB $2C, $10, $10, $00
-    DB $2C, $18, $10, $00
-    DB $2C, $20, $10, $00
-    DB $2C, $28, $10, $00
-    DB $2C, $30, $10, $00
-    DB $2C, $38, $10, $00
-    DB $2C, $40, $10, $00
-    DB $2C, $48, $10, $00
-    DB $2C, $50, $10, $00
-    ;   Y    X  Tile  Flags
-    DB $34, $58, $10, $00
-    DB $34, $60, $10, $00
-    DB $34, $68, $10, $00
-    DB $34, $70, $10, $00
-    DB $34, $78, $10, $00
-    DB $34, $80, $10, $00
-    DB $34, $88, $10, $00
-    DB $34, $90, $10, $00
-    DB $34, $98, $10, $00
-    DB $34, $A0, $10, $00
+MACRO RUN_TEST
+    IF DEF(DOUBLE_SPEED)
+        SWITCH_SPEED
+    ENDC
+
+    ; initialize tile data & OAM RAM
+    call setup_gfx ; also turns of the lcd
+    MEMCPY _OAMRAM, OBJ_DATA, OAM_COUNT * sizeof_OAM_ATTRS
+
+    ; initialize frame counter
+    ld a, 2
+    ld [FRAME_COUNTER], a
+
+    ; initialize CPU registers for rLCDC writing
+    ld c, rLCDC & $FF
+    ld d, LCDCF_ON | \1
+    ld e, LCDCF_ON | \2
+
+    ; activate v-blank interrupt
+    xor a, a
+    ldh [rIF], a
+    ld a, IEF_VBLANK
+    ldh [rIE], a
+
+    ; switch on LCD and wait for interrupts
+    ld a, d
+    ldh [rLCDC], a
+
+    DELAY 142 * 456 / M_CYCLE_SIZE
+    ei
+    jp nop_field
+ENDM
 
 
+
+nop_field:
+    REPT 512
+        nop
+    ENDR
+    ld hl, .NO_INT
+    jp fail_test
+.NO_INT:
+    DB "V-BLANK INTERRUPT\n"
+    DB "NOT TRIGGERED", 0
+
+
+
+; ----------------------------------------------------------------------------
+;
+;   v-blank interrupt handler
+;
+; ----------------------------------------------------------------------------
 
 PUSHS
 
@@ -68,22 +73,44 @@ SECTION "v-blank-interrupt-handler", ROM0[$40]
     jp vblank_handler
 
 SECTION "lcd-interrupt-handler", ROM0[$48]
-    jp hl ; 1 m-cycle
+    jp hl
 
 POPS
 
-activate_interrupts:
-    xor a, a
-    ldh [rIF], a
-    ld a, IEF_STAT | IEF_VBLANK
-    ldh [rIE], a
-    ld hl, obj_toggle_wait
-    ld a, STATF_MODE10
-    ldh [rSTAT], a
-    ret
+IF DEF(DOUBLE_SPEED)
+    DEF M_CYCLE_SIZE EQU 2
+    DEF LINE_DELAY EQU 184
+    DEF WRITE_COUNT EQU 6
+ELSE
+    DEF M_CYCLE_SIZE EQU 4
+    DEF LINE_DELAY EQU 88
+    DEF WRITE_COUNT EQU 3
+ENDC
+
+MACRO LCDC_WRITES
+.loop\@:
+    REPT WRITE_COUNT
+        ld a, \1   ; 1 m-cycle
+        ldh [c], a ; 2 m-cycles
+        ld a, \2   ; 1 m-cycle
+        ldh [c], a ; 2 m-cycles
+    ENDR
+    ld a, \1   ; 1 m-cycle
+    ldh [c], a ; 2 m-cycles
+    DELAY LINE_DELAY
+    dec h
+    jp nz, .loop\@
+ENDM
 
 vblank_handler:
-    call activate_interrupts
+    ld h, 24
+    ld l, 24
+    ; delay until line 4 mode 2 begins
+    DELAY 14 * 456 / M_CYCLE_SIZE - 16
+    LCDC_WRITES d, e
+    ld h, l
+    LCDC_WRITES e, d
+
     ld a, [FRAME_COUNTER]
     or a, a
     jr z, .continue
@@ -92,99 +119,65 @@ vblank_handler:
     jr nz, .continue
     INDICATE_FINISHED_TEST
 .continue:
-    reti
 
-
-
-obj_toggle_wait:
-    ld a, [rLY]
-    cp a, 3
-    jp nz, continue_after_int
-    ld hl, obj_toggle_1
-    jp continue_after_int
-
-MACRO WRITE_LCDC
-    REPT \3
-        ld a, \1   ; 1 m-cycle
-        ldh [c], a ; 2 m-cycles
-        ld a, \2   ; 1 m-cycle
-        ldh [c], a ; 2 m-cycles
-    ENDR
-ENDM
-
-obj_toggle_1:
-    ; mode 2 takes 80 4MHz cycles:
-    ;   - 20 m-cycles at single speed
-    ;   - 40 m-cycles at double speed
-    ;
-    ; 5 m-cycles + 1 m-cycle until we're here
-    ; m-cycle 6
-    IF DEF(DOUBLE_SPEED)
-        WRITE_LCDC d, e, 5
-    ELSE
-        WRITE_LCDC d, e, 2
-    ENDC
-    ; m-cycle 18 (single speed) / 36 (double speed)
-    ld a, [rLY]
-    cp a, 27
-    jp c, continue_after_int
-    ld hl, obj_toggle_2
-    jp continue_after_int
-
-obj_toggle_2:
-    IF DEF(DOUBLE_SPEED)
-        WRITE_LCDC e, d, 5
-    ELSE
-        WRITE_LCDC e, d, 2
-    ENDC
-    ld a, [rLY]
-    cp a, 43
-    jp c, continue_after_int
-    ; disable mode 2 interupt and wait for v-blank interrupt
-    xor a, a
-    ld [rSTAT], a
+    DELAY 91 * 456 / M_CYCLE_SIZE
+    add sp, 2
     ei
-.wait
-    jr .wait
-
-continue_after_int:
-    pop af ; discard nop_field address
-ei_nop_field:
-    ei
-nop_field:
-    REPT 512
-        nop
-    ENDR
-    ; TODO fail test immediately: no mode 2 interrupt triggered
+    jp nop_field
 
 
 
-MACRO RUN_TEST
-    IF DEF(DOUBLE_SPEED)
-        SWITCH_SPEED
-    ENDC
+; ----------------------------------------------------------------------------
+;
+;   object data
+;
+; ----------------------------------------------------------------------------
 
-    ; initialize OAM RAM
-    call lcd_off
-    MEMCPY _OAMRAM, OAM_DATA, OAM_COUNT * sizeof_OAM_ATTRS
-
-    ; initialize frame counter
-    ld a, 3
-    ld [FRAME_COUNTER], a
-
-    ; initialize CPU registers for rLCDC writing
-    ld c, rLCDC & $FF
-    ld d, LCDCF_ON | \1
-    ld e, LCDCF_ON | \2
-
-    ; activate v-blank & mode 2 interrupts
-    call activate_interrupts
-
-    ; switch on LCD and wait for interrupts
-    ld a, LCDCF_ON
-    ldh [rLCDC], a
-    jp ei_nop_field
-ENDM
+OBJ_DATA:
+    ;   Y    X   Tile Flags
+    DB $14, $08, $22, $00
+    DB $14, $10, $22, $00
+    DB $14, $18, $22, $00
+    DB $14, $20, $22, $00
+    DB $14, $28, $22, $00
+    DB $14, $30, $22, $00
+    DB $14, $38, $22, $00
+    DB $14, $40, $22, $00
+    DB $14, $48, $22, $00
+    DB $14, $50, $22, $00
+    ;   Y    X  Tile  Flags
+    DB $1C, $58, $22, $00
+    DB $1C, $60, $22, $00
+    DB $1C, $68, $22, $00
+    DB $1C, $70, $22, $00
+    DB $1C, $78, $22, $00
+    DB $1C, $80, $22, $00
+    DB $1C, $88, $22, $00
+    DB $1C, $90, $22, $00
+    DB $1C, $98, $22, $00
+    DB $1C, $A0, $22, $00
+    ;   Y    X  Tile  Flags
+    DB $2C, $08, $22, $00
+    DB $2C, $10, $22, $00
+    DB $2C, $18, $22, $00
+    DB $2C, $20, $22, $00
+    DB $2C, $28, $22, $00
+    DB $2C, $30, $22, $00
+    DB $2C, $38, $22, $00
+    DB $2C, $40, $22, $00
+    DB $2C, $48, $22, $00
+    DB $2C, $50, $22, $00
+    ;   Y    X  Tile  Flags
+    DB $34, $58, $22, $00
+    DB $34, $60, $22, $00
+    DB $34, $68, $22, $00
+    DB $34, $70, $22, $00
+    DB $34, $78, $22, $00
+    DB $34, $80, $22, $00
+    DB $34, $88, $22, $00
+    DB $34, $90, $22, $00
+    DB $34, $98, $22, $00
+    DB $34, $A0, $22, $00
 
 
 
