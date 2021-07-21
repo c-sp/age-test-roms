@@ -1,6 +1,7 @@
 # AGE test roms
 
-These Game Boy test roms were written to complement other test suites.
+These Game Boy test roms were written to complement
+[other test suites](https://github.com/c-sp/gameboy-test-roms).
 
 # Build
 
