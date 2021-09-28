@@ -24,7 +24,7 @@ ELIF DEF(ROM_IS_DMG_ONLY)
         DB CART_COMPATIBLE_DMG
 
 ELSE
-    FAIL "rom mode not specified: set one of ROM_IS_CGB_ONLY, ROM_IS_CGB_COMPATIBLE or ROM_IS_DMG_ONLY before including test-setup.inc"
+    FAIL "rom compatibility not specified: set one of ROM_IS_CGB_ONLY, ROM_IS_CGB_COMPATIBLE or ROM_IS_DMG_ONLY before including test-setup.inc"
 ENDC
 
 
@@ -56,7 +56,7 @@ main:
     DB "      REQUIRED", 0
 
 .hardware_compatible:
-    MEMSET TEST_RESULTS, 0, 256
+    MEMSET TEST_RESULTS, 0, 16 * 8
     call run_test ; must be defined by the code that is including this file
 
 
