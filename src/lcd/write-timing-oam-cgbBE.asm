@@ -1,7 +1,5 @@
 ; Test OAM write access
 ;
-; TODO verify 2021-07-p9
-;
 ; Verified (DMG_C undefined):
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-07-09)
 ;   passes on CPU CGB B - CPU-CGB-02 (2021-07-09)
