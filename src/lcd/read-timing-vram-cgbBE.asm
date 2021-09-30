@@ -1,16 +1,14 @@
 ; Test VRAM read access
 ;
-; TODO verify again! (2021-09-30)
-;
 ; Verified (DMG_C undefined):
-;   passes on CPU CGB E - CPU-CGB-06 (2021-07-08)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-07-08)
-;    fails on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-08)
+;   passes on CPU CGB E - CPU-CGB-06 (2021-09-30)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-09-30)
+;    fails on DMG-CPU C (blob) - DMG-CPU-08 (2021-09-30)
 ;
 ; Verified (DMG_C set):
-;    fails on CPU CGB E - CPU-CGB-06 (2021-07-08)
-;    fails on CPU CGB B - CPU-CGB-02 (2021-07-08)
-;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-08)
+;    fails on CPU CGB E - CPU-CGB-06 (2021-09-30)
+;    fails on CPU CGB B - CPU-CGB-02 (2021-09-30)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-09-30)
 ;
 IF DEF(DMG_C)
     DEF ROM_IS_DMG_ONLY EQU 1

@@ -1,15 +1,14 @@
 ; Test OAM read access
 ;
-; TODO verify again! (2021-09-30)
-;
 ; Verified (CGB_E undefined):
-;    fails on CPU CGB E - CPU-CGB-06 (2021-07-08)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-07-08)
-;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-08)
+;    fails on CPU CGB E - CPU-CGB-06 (2021-09-30)
+;   passes on CPU CGB B - CPU-CGB-02 (2021-09-30)
+;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-09-30)
 ;
 ; Verified (CGB_E set):
-;   passes on CPU CGB E - CPU-CGB-06 (2021-07-08)
-;    fails on CPU CGB B - CPU-CGB-02 (2021-07-08)
+;   passes on CPU CGB E - CPU-CGB-06 (2021-09-30)
+;    fails on CPU CGB B - CPU-CGB-02 (2021-09-30)
+;    fails on DMG-CPU C (blob) - DMG-CPU-08 (2021-09-30)
 ;
 IF DEF(CGB_E)
     DEF ROM_IS_CGB_ONLY EQU 1
