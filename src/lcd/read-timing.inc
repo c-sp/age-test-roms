@@ -5,7 +5,7 @@ INCLUDE "test-setup.inc"
 
 
 
-DEF BYTES_PER_LINE EQU 10
+DEF BYTES_PER_LINE EQU 12
 
 PUSHS
 SECTION "timing-results", WRAM0

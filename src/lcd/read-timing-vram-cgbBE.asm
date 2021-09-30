@@ -1,5 +1,7 @@
 ; Test VRAM read access
 ;
+; TODO verify again! (2021-09-30)
+;
 ; Verified (DMG_C undefined):
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-07-08)
 ;   passes on CPU CGB B - CPU-CGB-02 (2021-07-08)
@@ -58,121 +60,121 @@ EXPECTED_TIMING_RESULTS:
     ;
     ; single speed
     ;
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 0
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 1
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 2
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $FF, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 3
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $FF, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 4
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 5
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 6
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 7
-    DB $00, $FF, CFF, $FF, CFF, $FF,  CFF, $FF, CFF, $FF
-    DB CFF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 0
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 1
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 2
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $FF, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 3
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $FF, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 4
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 5
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 6
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 7
+    DB $00, $FF, CFF, $FF, CFF, $FF, $00, $00,  CFF, $FF, CFF, $FF
+    DB CFF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
     ;
     ; double speed
     ;
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 0
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 1
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 2
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 3
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 4
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 5
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 6
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
-    ; line 0, 1, 143                  line 0, 1 (next frame)
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF ; SCX 7
-    DB $00, $FF, $00, $FF, $00, $FF,  $00, $FF, $00, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $FF, $FF, $FF, $FF, $FF,  $FF, $FF, $FF, $FF
-    DB $FF, $00, $FF, $00, $FF, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 0
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 1
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 2
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 3
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 4
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 5
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 6
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
+    ; line 0, 1, 143, 144                       line 0, 1 (next frame)
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF ; SCX 7
+    DB $00, $FF, $00, $FF, $00, $FF, $00, $00,  $00, $FF, $00, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $00, $00,  $FF, $FF, $FF, $FF
+    DB $FF, $00, $FF, $00, $FF, $00, $00, $00,  $FF, $00, $FF, $00
 
 
 
@@ -204,8 +206,17 @@ timed_reads:
     ld a, [de]
     ld [hl+], a
 
+    ; read during line 144 (was the edge of mode 3 for the lines before)
+    DELAY 46 + (4 + 80) / 4
+    ld a, [de]
+    ld [hl+], a
+    ; read during line 144 (was the edge of mode 0 for the lines before)
+    DELAY 172 / 4 - 4
+    ld a, [de]
+    ld [hl+], a
+
     ; read at the edge of line 154 mode 3 (line 0 next frame)
-    DELAY 46 + (4 + 80) / 4 + (10 * 456) / 4
+    DELAY 46 + (4 + 80) / 4 + (9 * 456) / 4
     ld a, [de]
     ld [hl+], a
     ; read at the edge of line 154 mode 0 (line 0 next frame)
@@ -251,8 +262,17 @@ timed_reads_ds:
     ld a, [de]
     ld [hl+], a
 
+    ; read during line 144 (was the edge of mode 3 for the lines before)
+    DELAY 98 + 80 / 2
+    ld a, [de]
+    ld [hl+], a
+    ; read during line 144 (was the edge of mode 0 for the lines before)
+    DELAY 172 / 2 - 4
+    ld a, [de]
+    ld [hl+], a
+
     ; read at the edge of line 154 mode 2 (line 0 next frame)
-    DELAY 98 + 80 / 2 + (10 * 456) / 2
+    DELAY 98 + 80 / 2 + (9 * 456) / 2
     ld a, [de]
     ld [hl+], a
     ; read at the edge of line 154 mode 0 (line 0 next frame)

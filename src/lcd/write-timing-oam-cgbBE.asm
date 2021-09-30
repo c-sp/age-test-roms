@@ -58,8 +58,8 @@ EXPECTED_TEST_RESULTS_CGB:
 
 EXPECTED_TIMING_RESULTS:
     ;
-    ; (*) DMG-C: This line seems to depend on when the LCD was switched off before.
-    ;            When the test is expanded to cover one more then 2 frame,
+    ; (*) DMG-C: This line seems to depend on when the LCD was last switched off.
+    ;            When the test is expanded to cover more than 2 frames,
     ;            the complete line looks different.
     ;            Note that this does NOT happen on my CGB-B/E.
     ;            TODO: we should look into this.
