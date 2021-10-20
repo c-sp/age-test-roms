@@ -7,55 +7,6 @@ INCLUDE "hardware.inc"
 
 ; ----------------------------------------------------------------------------
 ;
-;   memory
-;
-; ----------------------------------------------------------------------------
-
-; clear memory
-;
-; @param \1 destination address
-; @param \2 the value to set
-; @param \3 number of bytes to clear
-; @destroys af, bc, d, hl
-;
-MACRO MEMSET
-    ld hl, \1
-    ld d, \2
-    ld bc, \3
-.memset\@:
-    ld a, d
-    ld [hl+], a
-    dec bc
-    ld a, b
-    or a, c
-    jr nz, .memset\@
-ENDM
-
-; copy (non-overlapping) memory
-;
-; @param \1 destination address
-; @param \2 source address
-; @param \3 number of bytes to copy
-; @destroys af, bc, de, hl
-;
-MACRO MEMCPY
-    ld hl, \1
-    ld de, \2
-    ld bc, \3
-.memcpy\@:
-    ld a, [de]
-    ld [hl+], a
-    inc de
-    dec bc
-    ld a, b
-    or a, c
-    jr nz, .memcpy\@
-ENDM
-
-
-
-; ----------------------------------------------------------------------------
-;
 ;   delay
 ;
 ; ----------------------------------------------------------------------------

@@ -22,6 +22,8 @@ POPS
 ; if this cartridge is CGB exclusive but we're running on a DMG.
 ; Reset the zero flag otherwise.
 ;
+; check_cgb_on_startup must have been called before.
+;
 ; @destroys af
 ;
 MACRO CP_CGB_REQUIRED
@@ -33,6 +35,8 @@ ENDM
 ; if CGB features are usable
 ; (i.e. if we're running a CGB compatible cartridge on a Game Boy Color).
 ; Reset the zero flag otherwise.
+;
+; check_cgb_on_startup must have been called before.
 ;
 ; @destroys af
 ;
@@ -73,6 +77,75 @@ check_cgb_on_startup:
     ; cartridge not DMG compatible
     ld a, 1
     ld [CGB_REQUIRED], a
+    ret
+
+
+
+; ----------------------------------------------------------------------------
+;
+;   memory
+;
+; ----------------------------------------------------------------------------
+
+; set memory (see memset)
+;
+; @param \1 destination address
+; @param \2 the value to set
+; @param \3 number of bytes to set
+; @destroys af, bc, d, hl
+;
+MACRO MEMSET
+    ld hl, \1
+    ld d, \2
+    ld bc, \3
+    call memset
+ENDM
+
+; set memory
+;
+; @param bc number of bytes to set
+; @param d the value to set
+; @param hl destination address
+; @destroys af, bc, d, hl
+;
+memset:
+    ld a, d
+    ld [hl+], a
+    dec bc
+    ld a, b
+    or a, c
+    jr nz, memset
+    ret
+
+; copy non-overlapping memory (see memcpy)
+;
+; @param \1 destination address
+; @param \2 source address
+; @param \3 number of bytes to copy
+; @destroys af, bc, de, hl
+;
+MACRO MEMCPY
+    ld hl, \1
+    ld de, \2
+    ld bc, \3
+    call memcpy
+ENDM
+
+; copy non-overlapping memory
+;
+; @param bc number of bytes to copy
+; @param de source address
+; @param hl destination address
+; @destroys af, bc, de, hl
+;
+memcpy:
+    ld a, [de]
+    ld [hl+], a
+    inc de
+    dec bc
+    ld a, b
+    or a, c
+    jr nz, memcpy
     ret
 
 
