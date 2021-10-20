@@ -7,7 +7,8 @@ INCLUDE "macros.inc"
 
 ; ----------------------------------------------------------------------------
 ;
-;   CGB compatibility byte
+;   rom entry point:
+;   CGB flag & hardware compatibility check
 ;
 ; ----------------------------------------------------------------------------
 
@@ -27,18 +28,6 @@ ELSE
     FAIL "rom compatibility not specified: set one of ROM_IS_CGB_ONLY, ROM_IS_CGB_COMPATIBLE or ROM_IS_DMG_ONLY before including test-setup.inc"
 ENDC
 
-
-
-; ----------------------------------------------------------------------------
-;
-;   main
-;
-; ----------------------------------------------------------------------------
-
-SECTION "test-result", WRAM0
-TEST_SUCCESS: DS 1
-TEST_RESULTS: DS 16 * 8
-
 SECTION "entry", ROM0[$100]
     di ; interrupt handling should already be disabled, but just to be sure ...
     jp main
@@ -49,23 +38,53 @@ main:
     call check_cgb_on_startup
     CP_CGB_REQUIRED
     jp nz, .hardware_compatible
-    ld hl, .CGB_REQUIRED
+    ld hl, .FAIL_CGB_REQUIRED
     jp fail_test
-.CGB_REQUIRED:
+.FAIL_CGB_REQUIRED:
     DB "   GAME BOY COLOR\n"
     DB "      REQUIRED", 0
 
 .hardware_compatible:
+
+
+
+; ----------------------------------------------------------------------------
+;
+;   main (visual test)
+;
+;   - run_test has to be defined by the code that is including this file
+;   - the test result is visible on screen only
+;   - once the test result is 'stable',
+;     INDICATE_FINISHED_TEST has to be executed
+;   - checking for test success requires a separate screenshot
+;     of the expecetd test result
+;
+; ----------------------------------------------------------------------------
+
+IF DEF(VISUAL_TEST)
+    jp run_test
+ENDC
+
+
+
+; ----------------------------------------------------------------------------
+;
+;   main (numerical test)
+;
+;   - run_test has to be defined by the code that is including this file
+;   - run_test must return with hl pointing to the expected test results
+;
+; ----------------------------------------------------------------------------
+
+IF !DEF(VISUAL_TEST)
+
+PUSHS
+SECTION "test-result", WRAM0
+TEST_RESULTS: DS 16 * 8
+POPS
+
     MEMSET TEST_RESULTS, 0, 16 * 8
-    call run_test ; must be defined by the code that is including this file
-
-
-
-; ----------------------------------------------------------------------------
-;
-;   evaluate numerical test result
-;
-; ----------------------------------------------------------------------------
+    call run_test
 
     push hl ; address of expected test results in hl
     di
@@ -175,6 +194,8 @@ main:
     add a, "A" - 10 - 32
     ret
 
+ENDC ; !DEF(VISUAL_TEST)
+
 
 
 ; ----------------------------------------------------------------------------
@@ -182,6 +203,19 @@ main:
 ;   test utilities
 ;
 ; ----------------------------------------------------------------------------
+
+; Indicate a finished test by executing a special no-op instruction.
+;
+MACRO INDICATE_FINISHED_TEST
+    ld b, b
+ENDM
+
+PUSHS
+SECTION "test-success", WRAM0
+TEST_SUCCESS: DS 1
+POPS
+
+
 
 show_final_screen:
     call setup_gfx ; also turns off the lcd
@@ -277,4 +311,4 @@ print_ascii:
 
 
 
-ENDC
+ENDC ; !DEF(INC_TEST_SETUP)

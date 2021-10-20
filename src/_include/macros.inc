@@ -139,12 +139,6 @@ MACRO SWITCH_SPEED
 	stop
 ENDM
 
-; Indicate a finished test by executing a special no-op instruction.
-;
-MACRO INDICATE_FINISHED_TEST
-    ld b, b
-ENDM
-
 
 
 ENDC

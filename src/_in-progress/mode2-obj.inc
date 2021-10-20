@@ -7,6 +7,7 @@ ELSE
     DEF ROM_IS_CGB_COMPATIBLE EQU 1
 ENDC
 
+DEF VISUAL_TEST EQU 1
 INCLUDE "test-setup.inc"
 
 
@@ -47,9 +48,7 @@ ENDM
 
 
 nop_field:
-    REPT 512
-        nop
-    ENDR
+    NOPS 512
     ld hl, .NO_INT
     jp fail_test
 .NO_INT:
