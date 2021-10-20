@@ -1,8 +1,6 @@
 IF !DEF(INC_TEST_SETUP)
 INC_TEST_SETUP = 1
 
-INCLUDE "macros.inc"
-
 
 
 ; ----------------------------------------------------------------------------
