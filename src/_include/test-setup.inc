@@ -17,7 +17,7 @@ INC_TEST_SETUP = 1
 ;
 ;       CART_REQUIRES_NON_CGB_MODE (optional):
 ;           for tests that are explicitly desinged to run in
-;           non-CGB-mode (will be verified).
+;           non-CGB mode (will be verified).
 ;
 ; ----------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ IF DEF(CART_REQUIRES_NON_CGB_MODE)
 .FAIL_NON_CGB_MODE:
     DB "   GAME BOY COLOR\n"
     DB "    REQUIRED FOR\n"
-    DB "    NON-CGB-MODE", 0
+    DB "    NON-CGB MODE", 0
 
 ELSE
 
