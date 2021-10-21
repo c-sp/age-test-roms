@@ -6,9 +6,9 @@
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-07-02)
 ;   passes on CPU CGB B - CPU-CGB-02 (2021-07-02)
 ;
-DEF ROM_IS_CGB_ONLY EQU 1
-INCLUDE "test-setup.inc"
-INCLUDE "lcd/mode-timing.inc"
+INCLUDE "hardware.inc"
+DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_GBC
+INCLUDE "stat-mode/stat-mode.inc"
 
 
 

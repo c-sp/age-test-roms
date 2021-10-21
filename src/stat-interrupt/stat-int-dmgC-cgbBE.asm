@@ -1,12 +1,13 @@
-; Basic interrupt $02 (LCD mode) timing is measured.
-; Edge cases are ignored here.
+; STAT interrupt (interrupt $02) timing is measured.
+; Interrupt enable/disable edge cases are ignored here.
 ;
 ; Verified:
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-07-02)
 ;   passes on CPU CGB B - CPU-CGB-02 (2021-07-02)
 ;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-07-02)
 ;
-DEF ROM_IS_CGB_COMPATIBLE EQU 1
+INCLUDE "hardware.inc"
+DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG_GBC
 INCLUDE "test-setup.inc"
 
 

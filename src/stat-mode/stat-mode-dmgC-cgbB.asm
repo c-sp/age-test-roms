@@ -11,16 +11,16 @@
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-07-02)
 ;    fails on CPU CGB B - CPU-CGB-02 (2021-07-02)
 ;
+INCLUDE "hardware.inc"
 IF DEF(CGB_E)
-    DEF ROM_IS_CGB_ONLY EQU 1
+    DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_GBC
     DEF M1E EQU $81 ; no mode-0 m-cycle at the end of mode-1 on CGB-E
 ELSE
-    DEF ROM_IS_CGB_COMPATIBLE EQU 1
+    DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG_GBC
     DEF M1E EQU $80
 ENDC
 
-INCLUDE "test-setup.inc"
-INCLUDE "lcd/mode-timing.inc"
+INCLUDE "stat-mode/stat-mode.inc"
 
 
 

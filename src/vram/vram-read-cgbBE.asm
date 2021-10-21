@@ -10,15 +10,16 @@
 ;    fails on CPU CGB B - CPU-CGB-02 (2021-09-30)
 ;   passes on DMG-CPU C (blob) - DMG-CPU-08 (2021-09-30)
 ;
+INCLUDE "hardware.inc"
 IF DEF(DMG_C)
-    DEF ROM_IS_DMG_ONLY EQU 1
+    DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG
     DEF CFF EQU $FF
 ELSE
-    DEF ROM_IS_CGB_COMPATIBLE EQU 1
+    DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG_GBC
     DEF CFF EQU $00
 ENDC
 
-INCLUDE "lcd/read-timing.inc"
+INCLUDE "oam/read.inc" ; TODO kind of ugly, restructure code
 
 
 

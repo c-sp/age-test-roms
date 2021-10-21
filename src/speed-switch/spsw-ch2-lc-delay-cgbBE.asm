@@ -4,7 +4,8 @@
 ;   passes on CPU CGB E - CPU-CGB-06 (2021-06-24)
 ;   passes on CPU CGB B - CPU-CGB-02 (2021-06-24)
 ;
-DEF ROM_IS_CGB_ONLY EQU 1
+INCLUDE "hardware.inc"
+DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_GBC
 INCLUDE "test-setup.inc"
 
 

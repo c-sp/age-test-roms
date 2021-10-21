@@ -1,6 +1,8 @@
 IF !DEF(INC_MODE_TIMING)
 INC_MODE_TIMING = 1
 
+INCLUDE "test-setup.inc"
+
 
 
 ; TODO rewrite this with less LCD on/off switching

@@ -10,21 +10,18 @@ INC_TEST_SETUP = 1
 ;
 ; ----------------------------------------------------------------------------
 
-IF DEF(ROM_IS_CGB_ONLY)
-    SECTION "cgb-mode", ROM0[$143]
-        DB CART_COMPATIBLE_GBC
-
-ELIF DEF(ROM_IS_CGB_COMPATIBLE)
-    SECTION "cgb-mode", ROM0[$143]
-        DB CART_COMPATIBLE_DMG_GBC
-
-ELIF DEF(ROM_IS_DMG_ONLY)
-    SECTION "cgb-mode", ROM0[$143]
-        DB CART_COMPATIBLE_DMG
-
-ELSE
-    FAIL "rom compatibility not specified: set one of ROM_IS_CGB_ONLY, ROM_IS_CGB_COMPATIBLE or ROM_IS_DMG_ONLY before including test-setup.inc"
+IF !DEF(CART_COMPATIBILITY)
+    FAIL "cartridge compatibility not specified"
 ENDC
+
+IF ((CART_COMPATIBILITY != CART_COMPATIBLE_GBC) \
+    && (CART_COMPATIBILITY != CART_COMPATIBLE_DMG_GBC) \
+    && (CART_COMPATIBILITY != CART_COMPATIBLE_DMG))
+    FAIL STRFMT("invalid CART_COMPATIBILITY: %#X", CART_COMPATIBILITY)
+ENDC
+
+SECTION "cart-cgb-flag", ROM0[$143]
+DB CART_COMPATIBILITY
 
 SECTION "entry", ROM0[$100]
     di ; interrupt handling should already be disabled, but just to be sure ...
