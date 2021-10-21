@@ -1,14 +1,15 @@
-; Test LCD mode timing while running at double speed.
+; Test STAT mode timing while running at double speed.
 ; Mode 3 duration is measured for different SCX values but
 ; without any window or sprite rendering.
 ;
 ; Verified:
-;   passes on CPU CGB E - CPU-CGB-06 (2021-07-02)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-07-02)
+;   2021-10-21 pass: CPU CGB E - CPU-CGB-06
+;   2021-10-21 pass: CPU CGB B - CPU-CGB-02
+;   2021-10-21 fail: DMG-CPU C (blob) - DMG-CPU-08
 ;
 INCLUDE "hardware.inc"
 DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_GBC
-INCLUDE "stat-mode/stat-mode.inc"
+INCLUDE "stat-mode/stat-mode-utilities.inc"
 
 
 

@@ -5,23 +5,40 @@ INC_TEST_SETUP = 1
 
 ; ----------------------------------------------------------------------------
 ;
-;   rom entry point:
-;   CGB flag & hardware compatibility check
+;   The rom's entry point.
+;   CGB flag and hardware compatibility is checked here.
+;   The following flags can or have to be set by the code importing this file:
+;
+;       CART_COMPATIBILITY (required):
+;           the cartridge's CGB flag
+;
+;       CART_IS_VISUAL_TEST (optional):
+;           for 'visual' tests that comes with a screenshot
+;
+;       CART_REQUIRES_NON_CGB_MODE (optional):
+;           for tests that are explicitly desinged to run in
+;           non-CGB-mode (will be verified).
 ;
 ; ----------------------------------------------------------------------------
 
 IF !DEF(CART_COMPATIBILITY)
-    FAIL "cartridge compatibility not specified"
+    FAIL "CART_COMPATIBILITY not defined"
 ENDC
 
 IF ((CART_COMPATIBILITY != CART_COMPATIBLE_GBC) \
     && (CART_COMPATIBILITY != CART_COMPATIBLE_DMG_GBC) \
     && (CART_COMPATIBILITY != CART_COMPATIBLE_DMG))
-    FAIL STRFMT("invalid CART_COMPATIBILITY: %#X", CART_COMPATIBILITY)
+    FAIL STRFMT("invalid CART_COMPATIBILITY %#X", CART_COMPATIBILITY)
+ENDC
+
+IF ((CART_COMPATIBILITY != CART_COMPATIBLE_DMG) && DEF(CART_REQUIRES_NON_CGB_MODE))
+    FAIL STRFMT("invalid CART_COMPATIBILITY %#X for CART_REQUIRES_NON_CGB_MODE", CART_COMPATIBILITY)
 ENDC
 
 SECTION "cart-cgb-flag", ROM0[$143]
 DB CART_COMPATIBILITY
+
+
 
 SECTION "entry", ROM0[$100]
     di ; interrupt handling should already be disabled, but just to be sure ...
@@ -31,13 +48,32 @@ SECTION "main", ROM0[$150]
 INCLUDE "utilities.inc"
 main:
     call check_cgb_on_startup
-    CP_CGB_REQUIRED
-    jp nz, .hardware_compatible
+
+IF DEF(CART_REQUIRES_NON_CGB_MODE)
+
+    ; non-CGB mode required
+    CP_IS_CGB
+    jr z, .hardware_compatible
+    ld hl, .FAIL_NON_CGB_MODE
+    jp fail_test
+.FAIL_NON_CGB_MODE:
+    DB "   GAME BOY COLOR\n"
+    DB "    REQUIRED FOR\n"
+    DB "    NON-CGB-MODE", 0
+
+ELSE
+
+    ; non-CGB mode not required,
+    ; check cartridge compatibility
+    CP_FAIL_CGB_REQUIRED
+    jr nz, .hardware_compatible
     ld hl, .FAIL_CGB_REQUIRED
     jp fail_test
 .FAIL_CGB_REQUIRED:
     DB "   GAME BOY COLOR\n"
     DB "      REQUIRED", 0
+
+ENDC
 
 .hardware_compatible:
 
@@ -56,7 +92,7 @@ main:
 ;
 ; ----------------------------------------------------------------------------
 
-IF DEF(VISUAL_TEST)
+IF DEF(CART_IS_VISUAL_TEST)
     jp run_test
 ENDC
 
@@ -71,7 +107,7 @@ ENDC
 ;
 ; ----------------------------------------------------------------------------
 
-IF !DEF(VISUAL_TEST)
+IF !DEF(CART_IS_VISUAL_TEST)
 
 PUSHS
 SECTION "test-result", WRAM0
@@ -189,7 +225,7 @@ POPS
     add a, "A" - 10 - 32
     ret
 
-ENDC ; !DEF(VISUAL_TEST)
+ENDC ; !DEF(CART_IS_VISUAL_TEST)
 
 
 

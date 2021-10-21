@@ -14,9 +14,23 @@ INCLUDE "macros.inc"
 
 PUSHS
 SECTION "cgb-features", WRAM0
-CGB_REQUIRED: DS 1        ; running a CGB-exclusive cartridge on a DMG
+IS_CGB: DS 1              ; running on a CGB
+FAIL_CGB_REQUIRED: DS 1   ; running a CGB-exclusive cartridge on a DMG
 CGB_FEATURES_USABLE: DS 1 ; running a CGB-compatible cartridge on a CGB
 POPS
+
+; Set the zero flag,
+; if we're running on a CGB.
+; Reset the zero flag otherwise.
+;
+; check_cgb_on_startup must have been called before.
+;
+; @destroys af
+;
+MACRO CP_IS_CGB
+    ld a, [IS_CGB]
+    cp a, 1
+ENDM
 
 ; Set the zero flag,
 ; if this cartridge is CGB exclusive but we're running on a DMG.
@@ -26,8 +40,8 @@ POPS
 ;
 ; @destroys af
 ;
-MACRO CP_CGB_REQUIRED
-    ld a, [CGB_REQUIRED]
+MACRO CP_FAIL_CGB_REQUIRED
+    ld a, [FAIL_CGB_REQUIRED]
     cp a, 1
 ENDM
 
@@ -55,15 +69,18 @@ ENDM
 check_cgb_on_startup:
     push af
     xor a, a
-    ld [CGB_REQUIRED], a
+    ld [IS_CGB], a
+    ld [FAIL_CGB_REQUIRED], a
     ld [CGB_FEATURES_USABLE], a
     pop af
     ; check the initial CPU register value: is this a Game Boy Color?
     cp a, $11
-    ld a, [$143] ; cartridge compatibility byte
     jr nz, .no_cgb
-    ; Game Boy Color recognized,
+    ; Game Boy Color recognized
+    ld a, 1
+    ld [IS_CGB], a
     ; check cartridge compatibility
+    ld a, [$143] ; cartridge CGB flag
     cp a, CART_COMPATIBLE_DMG_GBC
     ret c ; cartridge not CGB compatible => CGB features not available
     ld a, 1
@@ -72,11 +89,12 @@ check_cgb_on_startup:
 .no_cgb:
     ; this is no Game Boy Color,
     ; check cartridge compatibility
+    ld a, [$143] ; cartridge CGB flag
     cp a, CART_COMPATIBLE_GBC
     ret nz
     ; cartridge not DMG compatible
     ld a, 1
-    ld [CGB_REQUIRED], a
+    ld [FAIL_CGB_REQUIRED], a
     ret
 
 

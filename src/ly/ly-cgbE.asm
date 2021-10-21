@@ -1,2 +1,9 @@
-DEF CGB_E EQU 1
-INCLUDE "ly/ly-dmgC-cgbB.asm"
+; Verified:
+;   2021-10-21 pass: CPU CGB E - CPU-CGB-06
+;   2021-10-21 fail: CPU CGB B - CPU-CGB-02
+;   2021-10-21 fail: DMG-CPU C (blob) - DMG-CPU-08
+;
+INCLUDE "hardware.inc"
+DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG_GBC
+DEF EXTEND_L99 EQU 1
+INCLUDE "ly/ly.inc"
