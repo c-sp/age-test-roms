@@ -4,8 +4,9 @@
 ; rDIV always reads 0 (zero) right after speed switching.
 ;
 ; Verified:
-;   passes on CPU CGB E - CPU-CGB-06 (2021-06-23)
-;   passes on CPU CGB B - CPU-CGB-02 (2021-06-23)
+;   2021-10-21 pass: CPU CGB E - CPU-CGB-06
+;   2021-10-21 pass: CPU CGB B - CPU-CGB-02
+;   2021-10-21 fail: DMG-CPU C (blob) - DMG-CPU-08
 ;
 INCLUDE "hardware.inc"
 DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_GBC
