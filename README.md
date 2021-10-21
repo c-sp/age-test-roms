@@ -5,13 +5,14 @@ These Game Boy test roms were written to complement
 
 ## Test Naming
 
-All test names include the devices the respective test has been verified to be
-compatible to.
+All tests are named to include the devices they have been verified
+to be compatible to.
 
-E.g. a test named `foo-cgbBE.gb` is compatible only to `CPU-CGB-B` and
-`CPU-CGB-E`.
-A test named `foo-dmgC-cgbB.gb` is compatible only to `CPU-DMG-C` and
-`CPU-CGB-B`.
+| Test name | compatible devices |
+|-----------|--------------------|
+| `foo-cgbBE.gb` | `CPU-CGB-B` & `CPU-CGB-E`
+| `foo-dmgC-cgbB.gb` | `CPU-DMG-C` & `CPU-CGB-B`
+| `foo-dmgC-ncmB.gb` | `CPU-DMG-C` & `CPU-CGB-B` in non-CGB-mode
 
 ## Font
 
