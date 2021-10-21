@@ -12,7 +12,7 @@ to be compatible to.
 |-----------|--------------------|
 | `foo-cgbBE.gb` | `CPU-CGB-B` & `CPU-CGB-E`
 | `foo-dmgC-cgbB.gb` | `CPU-DMG-C` & `CPU-CGB-B`
-| `foo-dmgC-ncmB.gb` | `CPU-DMG-C` & `CPU-CGB-B` in non-CGB mode
+| `foo-dmgC-ncmB.gb` | `CPU-DMG-C` & `CPU-CGB-B (non-CGB mode)`
 
 ## Font
 
