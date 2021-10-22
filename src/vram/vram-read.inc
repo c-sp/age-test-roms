@@ -1,5 +1,8 @@
 ; Test VRAM read access
 ;
+IF !DEF(INC_VRAM_READ)
+INC_VRAM_READ = 1
+
 IF DEF(DMG_C)
     DEF CFF EQU $FF
 ELSE
@@ -278,3 +281,7 @@ timed_reads_ds:
 
 run_test:
     RUN_TEST _SCRN0
+
+
+
+ENDC ; !DEF(INC_VRAM_READ)

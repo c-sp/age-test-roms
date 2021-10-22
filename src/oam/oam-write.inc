@@ -1,5 +1,8 @@
 ; Test OAM write access
 ;
+IF !DEF(INC_OAM_WRITE)
+INC_OAM_WRITE = 1
+
 IF DEF(DMG_C)
     DEF C81 EQU $81
     DEF C00 EQU $00
@@ -256,3 +259,7 @@ timed_writes_ds:
 
 run_test:
     RUN_TEST _OAMRAM
+
+
+
+ENDC ; !DEF(INC_OAM_WRITE)

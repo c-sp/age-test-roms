@@ -2,6 +2,9 @@
 ; Interrupt enable/disable edge cases are ignored here.
 ;
 ; TODO rewrite this with less LCD on/off switching
+;
+IF !DEF(INC_STAT_INT)
+INC_STAT_INT = 1
 
 INCLUDE "test-setup.inc"
 
@@ -202,3 +205,7 @@ run_test:
     SWITCH_SPEED
     ld hl, EXPECTED_TEST_RESULTS_CGB
     ret
+
+
+
+ENDC ; !DEF(INC_STAT_INT)

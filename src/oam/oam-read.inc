@@ -1,5 +1,8 @@
 ; Test OAM read access
 ;
+IF !DEF(INC_OAM_READ)
+INC_OAM_READ = 1
+
 IF DEF(CGB_E)
     DEF EFF EQU $FF
 ELSE
@@ -278,3 +281,7 @@ timed_reads_ds:
 
 run_test:
     RUN_TEST _OAMRAM
+
+
+
+ENDC ; !DEF(INC_OAM_READ)

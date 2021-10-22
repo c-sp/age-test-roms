@@ -1,5 +1,5 @@
-IF !DEF(INC_READ_TIMING)
-INC_READ_TIMING = 1
+IF !DEF(INC_READ)
+INC_READ = 1
 
 INCLUDE "test-setup.inc"
 
@@ -77,4 +77,4 @@ ENDM
 
 
 
-ENDC
+ENDC ; !DEF(INC_READ)

@@ -1,5 +1,8 @@
 ; Tests TIMA timing on CGB speed switch
 ;
+IF !DEF(INC_SPSW_TIMA)
+INC_SPSW_TIMA = 1
+
 IF DEF(CGB_E)
     DEF OFS EQU 1
 ELSE
@@ -119,3 +122,7 @@ run_test:
     TIMER_OFF
     ld hl, EXPECTED_TEST_RESULTS
     ret
+
+
+
+ENDC ; !DEF(INC_SPSW_TIMA)

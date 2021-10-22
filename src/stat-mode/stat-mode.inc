@@ -1,6 +1,9 @@
 ; Test STAT mode timing.
 ; Mode 3 duration is measured for different SCX values but
 ; without any window or sprite rendering.
+;
+IF !DEF(INC_STAT_MODE)
+INC_STAT_MODE = 1
 
 IF DEF(CGB_E)
     DEF M1E EQU $81 ; no mode-0 m-cycle at the end of mode-1 on CGB-E
@@ -134,3 +137,7 @@ run_test:
 
     ld hl, EXPECTED_TEST_RESULTS
     ret
+
+
+
+ENDC ; !DEF(INC_STAT_MODE)

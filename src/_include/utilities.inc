@@ -391,4 +391,4 @@ freeze:
 
 
 
-ENDC
+ENDC ; !DEF(INC_UTILITIES)
