@@ -227,7 +227,7 @@ lcd_off:
     pop af
     ret
 
-; Copy tile data into video ram and setup palettes.
+; Turn off the LCD, copy tile data into video ram and setup palettes.
 ;
 ; @destroys af, bc, de, hl
 ;
@@ -235,7 +235,27 @@ setup_gfx:
     call lcd_off
     ; copy tile data for ASCII characters 32 - 95 in different styles
     MEMCPY _VRAM8000, .FONT_DATA_BEGIN, .FONT_DATA_END - .FONT_DATA_BEGIN
+    ; setup palettes
+    call setup_palettes
+    ret
 
+; We use the "Cellphone Font":
+; https://opengameart.org/content/ascii-bitmap-font-cellphone
+; originally created by domsson:
+; https://opengameart.org/users/domsson
+;
+.FONT_DATA_BEGIN:
+    INCBIN "font.2bpp"
+    INCBIN "font-inverse.2bpp"
+    INCBIN "font-left.2bpp"
+    INCBIN "font-left-inverse.2bpp"
+.FONT_DATA_END:
+
+; Setup palettes.
+;
+; @destroys af, c
+;
+setup_palettes:
     ; setup DMG palettes
     ld a, %11100100
     ldh [rBGP], a
@@ -282,19 +302,6 @@ setup_gfx:
     ldh [c], a
     ldh [c], a
     ret
-
-; We use the "Cellphone Font":
-; https://opengameart.org/content/ascii-bitmap-font-cellphone
-; originally created by domsson:
-; https://opengameart.org/users/domsson
-;
-.FONT_DATA_BEGIN:
-    INCBIN "font.2bpp"
-    INCBIN "font-inverse.2bpp"
-    INCBIN "font-left.2bpp"
-    INCBIN "font-left-inverse.2bpp"
-.FONT_DATA_END:
-
 
 
 ; ----------------------------------------------------------------------------

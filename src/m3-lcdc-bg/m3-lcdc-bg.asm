@@ -1,0 +1,3 @@
+INCLUDE "hardware.inc"
+DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG_GBC
+INCLUDE "m3-lcdc-bg/m3-lcdc-bg.inc"

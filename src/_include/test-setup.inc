@@ -76,6 +76,9 @@ ELSE
 ENDC
 
 .hardware_compatible:
+    xor a, a
+    ldh [rIE], a
+    ldh [rIF], a
 
 
 

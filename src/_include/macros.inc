@@ -139,6 +139,17 @@ MACRO SWITCH_SPEED
 	stop
 ENDM
 
+; Set a specific bit in IE without modifying
+; any other bits.
+;
+; @destroys af
+;
+MACRO SET_IE_BIT
+    ld a, [rIE]
+    or a, \1
+    ld [rIE], a
+ENDM
+
 
 
 ENDC ; !DEF(INC_MACROS)

@@ -19,7 +19,7 @@ MACRO RUN_TEST
     ENDC
 
     ; initialize tile data & OAM RAM
-    call setup_gfx ; also turns of the lcd
+    call setup_gfx ; also turns off the lcd
     MEMCPY _OAMRAM, OBJ_DATA, OAM_COUNT * sizeof_OAM_ATTRS
 
     ; initialize frame counter
@@ -53,8 +53,8 @@ nop_field:
     ld hl, .NO_INT
     jp fail_test
 .NO_INT:
-    DB "V-BLANK INTERRUPT\n"
-    DB "NOT TRIGGERED", 0
+    DB " V-BLANK INTERRUPT\n"
+    DB "   NOT TRIGGERED", 0
 
 
 
@@ -71,9 +71,6 @@ FRAME_COUNTER: DS 1
 
 SECTION "v-blank-interrupt-handler", ROM0[$40]
     jp vblank_handler
-
-SECTION "lcd-interrupt-handler", ROM0[$48]
-    jp hl
 
 POPS
 
