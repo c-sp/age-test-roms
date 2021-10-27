@@ -67,11 +67,11 @@ SECTION "stat-interrupt-handler", ROM0[$48]
 POPS
 
 IF DEF(DOUBLE_SPEED)
-    DEF LINE_NOPS EQU 30
-    DEF REPETITIONS EQU 20 ; must be even to finish with the original LCDC value
+    DEF LINE_NOPS EQU 28
+    DEF REPETITIONS EQU 10
 ELSE
-    DEF LINE_NOPS EQU 6
-    DEF REPETITIONS EQU 10 ; must be even to finish with the original LCDC value
+    DEF LINE_NOPS EQU 3
+    DEF REPETITIONS EQU 5
 ENDC
 
 on_mode2_interrupt:
@@ -96,6 +96,9 @@ toggle_bg_map:
     REPT REPETITIONS
         xor a, b  ; 1 m-cycle
         ld [c], a ; 2 m-cycles
+        nop       ; 1 m-cycle
+        xor a, b  ; 1 m-cycle
+        ld [c], a ; 2 m-cycles
     ENDR
     ; start toggling the BG tile data area on line 64
     ldh a, [rLY]
@@ -109,6 +112,9 @@ toggle_bg_data:
     ; toggle the BG tile data area a few times during this line
     ld a, [c]     ; 2 m-cycles
     REPT REPETITIONS
+        xor a, b  ; 1 m-cycle
+        ld [c], a ; 2 m-cycles
+        nop       ; 1 m-cycle
         xor a, b  ; 1 m-cycle
         ld [c], a ; 2 m-cycles
     ENDR
