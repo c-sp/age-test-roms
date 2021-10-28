@@ -13,7 +13,13 @@ OBJECTS := $(SOURCES:$(SRC_DIR)/%.asm=$(OBJ_DIR)/%.o)
 DEPS    := $(SOURCES:$(SRC_DIR)/%.asm=$(DEP_DIR)/%.d)
 ROMS    := $(SOURCES:$(SRC_DIR)/%.asm=$(BIN_DIR)/%.gb)
 
-all: $(ROMS)
+SRC_PNGS := $(wildcard $(SRC_DIR)/*.png) $(wildcard $(SRC_DIR)/*/*.png)
+SRC_PNGS := $(filter-out $(wildcard src/_include/*), $(SRC_PNGS))
+BIN_PNGS := $(SRC_PNGS:$(SRC_DIR)/%.png=$(BIN_DIR)/%.png)
+
+
+
+all: $(ROMS) $(BIN_PNGS)
 
 $(ROMS): $(BIN_DIR)/%.gb : $(OBJ_DIR)/%.o
 	@mkdir -p $(@D)
@@ -28,6 +34,11 @@ $(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.asm
 $(DEPS):
 
 include $(wildcard $(DEPS))
+
+$(BIN_PNGS): $(BIN_DIR)/%.png : $(SRC_DIR)/%.png
+	cp $< $@
+
+
 
 .PHONY: clean
 clean:
