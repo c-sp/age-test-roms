@@ -48,8 +48,8 @@ ENDC
     ldh [rLCDC], a
 
 nop_field:
-    ; 10 v-blank lines at double speed
-    NOPS 456 * 10 / 2
+    ; 11 lines at double speed
+    NOPS 456 * 11 / 2
     ; there should have been an interrupt until now
     di
     ld hl, .NO_INT

@@ -15,6 +15,7 @@ run_test:
     ; draw two vertical lines:
     ; one is visible right away,
     ; the other one may become visible by modifying SCX
+    ; TODO: light gray line #20
     ld b, 18
     call .draw_vline
     ld b, 21
@@ -26,7 +27,6 @@ run_test:
     SET_IE_BIT IEF_STAT
     ; init mode 2 interrupt handler
     ld hl, no_op
-    ld c, rLCDC - $FF00
     ; LCD on
 IF DEF(DOUBLE_SPEED)
     SWITCH_SPEED
@@ -55,8 +55,8 @@ ENDC
 
 
 nop_field:
-    ; 10 v-blank lines at double speed
-    NOPS 456 * 10 / 2
+    ; 11 lines at double speed
+    NOPS 456 * 11 / 2
     ; there should have been an interrupt until now
     di
     ld hl, .NO_INT

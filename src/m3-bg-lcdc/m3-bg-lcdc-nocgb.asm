@@ -1,3 +1,3 @@
 INCLUDE "hardware.inc"
 DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG
-INCLUDE "m3-lcdc-bg/m3-lcdc-bg.inc"
+INCLUDE "m3-bg-lcdc/m3-bg-lcdc.inc"
