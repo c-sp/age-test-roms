@@ -1,3 +1,8 @@
+; Verified:
+;   2021-11-12: CPU CGB E - CPU-CGB-06 (non-CGB mode)
+;   2021-11-12: CPU CGB B - CPU-CGB-02 (non-CGB mode)
+;   2021-11-12: DMG-CPU C (blob) - DMG-CPU-08
+;
 INCLUDE "hardware.inc"
 DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_DMG
 DEF CART_IS_VISUAL_TEST EQU 1
@@ -86,7 +91,13 @@ modify_bgp6:
     MODIFY_BGP 48, 9, modify_bgp7
 
 modify_bgp7:
-    MODIFY_BGP 56, 10, no_op
+    MODIFY_BGP 56, 10, modify_bgp8
+
+modify_bgp8:
+    MODIFY_BGP 64, 11, modify_bgp9
+
+modify_bgp9:
+    MODIFY_BGP 72, 12, no_op
 
 continue:
     pop af

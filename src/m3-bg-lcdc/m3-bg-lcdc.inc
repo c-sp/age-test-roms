@@ -5,6 +5,8 @@ DEF CART_IS_VISUAL_TEST EQU 1
 INCLUDE "test-setup.inc"
 INCLUDE "vblank-frame-counter.inc"
 
+; TODO use different tile IDs to examine CGB glitch
+
 run_test:
     call lcd_off
     call setup_palettes
