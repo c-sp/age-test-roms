@@ -5,24 +5,24 @@ DEF CART_IS_VISUAL_TEST EQU 1
 INCLUDE "test-setup.inc"
 INCLUDE "vblank-frame-counter.inc"
 
-; TODO use different tile IDs to examine CGB glitch
-
 run_test:
     call lcd_off
     call setup_palettes
-    ; clear tile data, fill tile map 1 ($9800 - $9BFF) with tile #0
-    ; and fill tile map 2 ($9C00 - $9FFF) with tile #1
-    MEMSET _VRAM8000, 0, $1C00
-    MEMSET _SCRN1, 1, $400
-    ; set two tile #2 lines around the "toggle-LCDC-area"
+    ; clear tile data
+    MEMSET _VRAM8000, 0, $1800
+    ; fill tile map 1 ($9800 - $9BFF) with tile %01010101
+    MEMSET _SCRN0, %01010101, $400
+    ; fill tile map 2 ($9C00 - $9FFF) with tile %00001111
+    MEMSET _SCRN1, %00001111, $400
+    ; set two tile $2 lines around the "toggle-LCDC-area"
     ; for color comparison
     MEMSET _SCRN0 + 3 * SCRN_VX_B, 2, SCRN_VX_B
     MEMSET _SCRN0 + 12 * SCRN_VX_B, 2, SCRN_VX_B
-    ; fill tile #0 (LCDC.4=0) with the darkest shade
-    ; fill tile #1 (LCDC.4=1) with the darkest shade
-    MEMSET _VRAM9000, $FF, $10
-    MEMSET _VRAM8000 + $10, $FF, $10
-    ; fill tile #2 (LCDC.4=1) with vertical lines of all 4 shades
+    ; fill tile %01010101 (LCDC.4=0) with the darkest shade
+    MEMSET _VRAM9000 + (%01010101 * $10), $FF, $10
+    ; fill tile %00001111 (LCDC.4=0/1) with the darkest shade
+    MEMSET _VRAM8000 + (%00001111 * $10), $FF, $10
+    ; fill tile $2 (LCDC.4=1) with vertical lines of all 4 shades
     ld hl, _VRAM8000 + $20
     ld d, %00110011
     ld e, %00001111
