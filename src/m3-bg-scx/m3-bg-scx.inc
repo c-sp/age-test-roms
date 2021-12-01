@@ -12,13 +12,30 @@ run_test:
     MEMSET _VRAM8000, 0, $2000
     ; fill tile 1 (LCDC.4=1) with the darkest shade
     MEMSET _VRAM8000 + $10, $FF, $10
-    ; draw two vertical lines:
-    ; one is visible right away,
-    ; the other one may become visible by modifying SCX
-    ; TODO: light gray line #20
+    ; fill tile 2 (LCDC.4=1) with a light shade
+    ld hl, _VRAM8000 + $20
+    ld c, 8
+    ld a, $FF
+.set_tile2:
+    ld [hl+], a
+    inc l
+    dec c
+    jr nz, .set_tile2
+    ; draw three vertical lines:
+    ; two are always visible,
+    ; the last one may become visible by modifying SCX
+    ld b, 1
+    ld d, 1
+    call .draw_vline
     ld b, 18
+    ld d, 1
     call .draw_vline
     ld b, 21
+    ld d, 1
+    call .draw_vline
+    ; light gray line #20
+    ld b, 20
+    ld d, 2
     call .draw_vline
     ; enable frame counter & mode 2 interrupt
     call activate_vblank_frame_counter
@@ -40,7 +57,7 @@ ENDC
     ld l, b
     ld c, 18
 .set_vline:
-    ld a, 1
+    ld a, d
     ld [hl], a
     ld a, l
     add a, SCRN_VX_B
@@ -69,9 +86,9 @@ nop_field:
 
 
 IF DEF(DOUBLE_SPEED)
-    DEF NOP_COUNT EQU 90 ; TODO adjust delay
+    DEF NOP_COUNT EQU 90
 ELSE
-    DEF NOP_COUNT EQU 28 ; TODO adjust delay
+    DEF NOP_COUNT EQU 28
 ENDC
 
 PUSHS
@@ -81,7 +98,7 @@ POPS
 
 no_op:
     ldh a, [rLY]
-    cp a, 31
+    cp a, 7
     jp nz, continue
     ld hl, modify_scx
     jp continue
@@ -89,12 +106,12 @@ no_op:
 modify_scx:
     ldh a, [rLY]  ; 3 m-cycles
     ld b, a       ; 1 m-cycle
-    sub a, 32     ; 2 m-cycles
+    sub a, 8      ; 2 m-cycles
     and a, 7      ; 2 m-cycles
     ldh [rSCX], a ; 3 m-cycles
     NOPS NOP_COUNT
     ld a, b
-    sub a, 32     ; 2 m-cycles
+    sub a, 8      ; 2 m-cycles
     srl a         ; 2 m-cycles
     srl a         ; 2 m-cycles
     srl a         ; 2 m-cycles
@@ -102,7 +119,7 @@ modify_scx:
     add a, 8      ; 2 m-cycles
     ldh [rSCX], a ; 3 m-cycles
     ld a, b
-    cp a, 95
+    cp a, 71
     jr nz, continue
     ld hl, no_op
     xor a, a
