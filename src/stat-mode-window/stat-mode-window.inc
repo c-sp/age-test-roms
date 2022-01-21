@@ -258,9 +258,9 @@ ENDC
     ldh [rWY], a
     ld de, LINE_STATS
     ld hl, wait
-    ld a, 2
+    ld a, IEF_STAT
     ldh [rIE], a
-    ld a, $20
+    ld a, STATF_MODE10
     ldh [rSTAT], a
     ei
     ld a, LCDCF_ON | LCDCF_WINON
