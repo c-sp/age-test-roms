@@ -281,6 +281,7 @@ show_final_screen:
     call print_ascii
     xor a, a
     ldh [rSCX], a
+    ldh [rSCY], a
     ld a, LCDCF_ON | LCDCF_BG8000 | LCDCF_BGON
     ldh [rLCDC], a
     ret
