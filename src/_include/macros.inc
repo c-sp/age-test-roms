@@ -98,6 +98,15 @@ ENDM
 ;
 ; ----------------------------------------------------------------------------
 
+; Turn off the sound.
+;
+; @destroys a
+;
+MACRO SOUND_OFF
+    xor a
+    ldh [rNR52], a
+ENDM
+
 ; Turn off the timer.
 ;
 ; @destroys a
@@ -136,7 +145,7 @@ MACRO SWITCH_SPEED
     ldh [rP1], a
 	ld a, 1
 	ldh [rKEY1], a
-	stop
+	stop ; RGBDS automatically inserts a NOP after STOP
 ENDM
 
 ; Set a specific bit in IE without modifying

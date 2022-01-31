@@ -76,6 +76,7 @@ ENDM
 
 run_test:
     call lcd_off
+    SOUND_OFF
     ld hl, TEST_RESULTS
 
     TEST_DS_IF TACF_4KHZ

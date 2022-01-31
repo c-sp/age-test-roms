@@ -2,6 +2,9 @@
 
 These Game Boy test roms were written to complement
 [other test suites](https://github.com/c-sp/gameboy-test-roms).
+I use them to test
+[my Game Boy emulator AGE](https://github.com/c-sp/AGE)
+for regressions.
 
 ## Test naming
 

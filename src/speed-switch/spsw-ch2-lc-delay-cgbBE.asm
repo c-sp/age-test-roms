@@ -31,7 +31,7 @@ EXPECTED_TEST_RESULTS:
 
 
 
-    MACRO SAVE_NR52
+MACRO SAVE_NR52
     ldh a, [rNR52]
     ld [hl+], a
 ENDM
@@ -41,11 +41,6 @@ MACRO ADD_4_BYTE_PADDING
     inc hl
     inc hl
     inc hl
-ENDM
-
-MACRO SOUND_OFF
-    xor a, a
-    ldh [rNR52], a
 ENDM
 
 MACRO SOUND_ON
