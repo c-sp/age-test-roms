@@ -100,8 +100,8 @@ run_test:
     inc hl
     inc hl
 
-    TEST_INC_EDGE 2, 0, TACF_262KHZ ; 1 m-cycle before immediate increment by DIV reset
-    TEST_INC_EDGE 2, 1, TACF_262KHZ ; 1 m-cycle before immediate increment by DIV reset
+    TEST_INC_EDGE 3, 0, TACF_262KHZ ; 1 m-cycle before immediate increment by DIV reset
+    TEST_INC_EDGE 3, 1, TACF_262KHZ ; 1 m-cycle before immediate increment by DIV reset
     TEST_INC_EDGE 4, 0, TACF_262KHZ ; trigger immediate increment by DIV reset
     TEST_INC_EDGE 4, 1, TACF_262KHZ ; trigger immediate increment by DIV reset
 
