@@ -12,7 +12,7 @@ before returning control to the CPU.
 I have experienced my Game Boy Color E (CPU CGB E - CPU-CGB-06) to become
 instable for a while when running these roms several times in a row.
 Even a reset could not stabilize it,
-but after some time everything seems to be fine again.
+but after some time everything seemed to be fine again.
 
 My Game Boy Color B (CPU CGB B - CPU-CGB-02) on the other hand did not show any
-instability issues.
+stability issues.
