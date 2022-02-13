@@ -14,15 +14,19 @@ INCLUDE "test-setup.inc"
 EXPECTED_TEST_RESULTS:
     ; number of test result rows
     DB 11
-    ; 65 KHz timer interrupt handling
-    DB $0F, $10, $08, $E0, $0F, $10, $08, $E0
-    DB $0F, $10, $09, $E0, $0F, $10, $09, $E0
-    DB $10, $10, $09, $E0, $10, $10, $09, $E0
-    ; manual IF - DIV timing
+    ; timer interrupt
+    ; (DIV, DIV after STOP, TIMA, IF)
+    DB $0F, $10, $08, $E0
+    DB $0F, $10, $08, $E0
+    DB $0F, $10, $09, $E0
+    DB $0F, $10, $09, $E0
+    DB $10, $10, $09, $E0
+    DB $10, $10, $09, $E0
+    ; immediate interrupt - DIV timing
     DB $00, $00, $01, $01, $00, $00, $01, $01
     DB $00, $00, $01, $01, $00, $00, $01, $01
     DB $00, $00, $01, $01, $00, $00, $00, $00
-    ; manual IF - TIMA timing
+    ; immediate interrupt - TIMA timing
     DB $E0, $01, $E0, $01, $E0, $02, $E0, $02
     DB $E0, $01, $E0, $01, $E0, $02, $E0, $02
     DB $E0, $01, $E0, $01, $E0, $02, $E0, $02
