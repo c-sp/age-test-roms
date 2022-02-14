@@ -15,10 +15,11 @@ INCLUDE "test-setup.inc"
 
 EXPECTED_TEST_RESULTS:
     ; number of test result rows
-    DB 7
+    DB 8
     ; TIMA & IF for 4KHz, 262KHz, 65KHz, 16KHz
     DB $80, $E0,  $04, $E4,  $01, $E4,  $00, $E4
     ; 4KHz TIMA (immediate) increment edges
+    DB $80, $80, $81, $81,  $80, $80, $81, $81
     DB $80, $80, $81, $81,  $81, $81, $82, $82
     ; 4KHz TIMA 1->0 edge
     DB $81, $81, $82, $82,  $81, $81, $82, $82
@@ -84,6 +85,10 @@ run_test:
     TEST_DS_IF TACF_65KHZ
     TEST_DS_IF TACF_16KHZ
 
+    TEST_INC_EDGE   0, 252, TACF_4KHZ ; immediately after TIMA start
+    TEST_INC_EDGE   0, 253, TACF_4KHZ ; immediately after TIMA start
+    TEST_INC_EDGE 109, 252, TACF_4KHZ ; 2 m-cycles before immediate increment by DIV reset
+    TEST_INC_EDGE 109, 253, TACF_4KHZ ; 2 m-cycles before immediate increment by DIV reset
     TEST_INC_EDGE 110, 252, TACF_4KHZ ; 1 m-cycle before immediate increment by DIV reset
     TEST_INC_EDGE 110, 253, TACF_4KHZ ; 1 m-cycle before immediate increment by DIV reset
     TEST_INC_EDGE 111, 252, TACF_4KHZ ; trigger immediate increment by DIV reset

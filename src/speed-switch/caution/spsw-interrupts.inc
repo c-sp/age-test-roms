@@ -34,6 +34,7 @@ EXPECTED_TEST_RESULTS:
     DB $E0, $01, $E0, $01, $E0, $02, $E0, $02
 
 run_test:
+    SOUND_OFF
     call lcd_off
     ld hl, TEST_RESULTS
 
