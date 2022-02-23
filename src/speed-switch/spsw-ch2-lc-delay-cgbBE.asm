@@ -1,9 +1,8 @@
 ; Tests how CGB speed switching affects APU length counter timing
 ;
 ; Verified:
-;   2021-10-21 pass: CPU CGB E - CPU-CGB-06
-;   2021-10-21 pass: CPU CGB B - CPU-CGB-02
-;   2021-10-21 fail: DMG-CPU C (blob) - DMG-CPU-08
+;   2022-02-23 pass: CPU CGB E - CPU-CGB-06
+;   2022-02-23 pass: CPU CGB B - CPU-CGB-02
 ;
 INCLUDE "hardware.inc"
 DEF CART_COMPATIBILITY EQU CART_COMPATIBLE_GBC
@@ -13,7 +12,7 @@ INCLUDE "test-setup.inc"
 
 EXPECTED_TEST_RESULTS:
     ; number of test result rows
-    DB 7
+    DB 8
     ; ch2 init -> double speed
     DB $F2, $F0,  $F2, $F0,  $F2, $F0,  $F2, $F0
     ; ch2 init -> double speed -> ch2 init
@@ -24,10 +23,14 @@ EXPECTED_TEST_RESULTS:
     DB $F2, $F0,  $F2, $F0,  $00, $00,  $00, $00
     ; sound on -> double speed -> sound off, sound on, ch2 init
     DB $F2, $F0,  $F2, $F0,  $F2, $F0,  $F2, $F0
-    ; ch2 init -> double speed -> single speed -> double speed
+    ; ch2 init -> double speed -> normal speed -> double speed
     DB $F2, $F0,  $F2, $F0,  $F2, $F0,  $F2, $F0
-    ; ch2 init -> double speed -> single speed -> double speed -> single speed -> double speed
+    ; ch2 init -> double speed -> normal speed -> double speed -> normal speed -> double speed
     DB $F2, $F0,  $F2, $F0,  $F2, $F0,  $F2, $F0
+    ; immediate length counter decrement (NS -> DS)
+    DB $F2, $F0, $F2, $F0, $F2, $F0, $F2, $F0
+    ; immediate length counter decrement (DS -> NS)
+    DB $F2, $F0, $F2, $F0, $F2, $F0, $F2, $F0
 
 
 
@@ -78,7 +81,7 @@ MACRO TEST_DS
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
     DELAY \3
     SAVE_NR52       ; read channel-2-on flag
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
 ENDM
 
 ; Initialising channel 2 while running at double speed does
@@ -92,7 +95,7 @@ MACRO TEST_DS_CH2_INIT
     INIT_CH2_LC $3F ; channel 2 length counter = 1
     DELAY \2
     SAVE_NR52       ; read channel-2-on flag
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
 ENDM
 
 ; Resetting the DIV while running at double speed does
@@ -107,7 +110,7 @@ MACRO TEST_DS_DIV_RESET
     ldh [rDIV], a    ; reset DIV
     DELAY \2
     SAVE_NR52       ; read channel-2-on flag
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
 ENDM
 
 ; TODO describe
@@ -119,7 +122,7 @@ MACRO TEST_DS_ON
     INIT_CH2_LC $3F ; channel 2 length counter = 1
     DELAY \2
     SAVE_NR52       ; read channel-2-on flag
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
 ENDM
 
 ; TODO describe
@@ -134,44 +137,71 @@ MACRO TEST_DS_OFF_ON
     INIT_CH2_LC $3F ; channel 2 length counter = 1
     DELAY \3
     SAVE_NR52       ; read channel-2-on flag
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
 ENDM
 
 ; The second switch to double speed does not introduce
 ; a 1 m-cycle length counter delay no matter on what 2MHz
-; edge the switch to single speed occurred and on what
+; edge the switch to normal speed occurred and on what
 ; 1MHz edge double speed was activated.
-MACRO TEST_DS_SS_DS
+MACRO TEST_DS_NS_DS
     INIT_TEST
     SOUND_ON
     INIT_CH2_LC $2F ; channel 2 length counter = 17
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
     DELAY \1
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
     DELAY \2
     SWITCH_SPEED    ; switch to double speed (length counter ticks not delayed)
     DELAY \3
     SAVE_NR52       ; read channel-2-on flag
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
 ENDM
 
 ; Length counter ticks are delayed by 1 m-cycle after the
 ; third switch to double speed no matter on what 2MHz
-; edges single speed was activated.
-MACRO TEST_DS_SS_DS_SS_DS
+; edges normal speed was activated.
+MACRO TEST_DS_NS_DS_NS_DS
     INIT_TEST
     SOUND_ON
     INIT_CH2_LC $23 ; channel 2 length counter = 29
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
     DELAY \1
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
     SWITCH_SPEED    ; switch to double speed (length counter ticks not delayed)
     DELAY \2
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
     SWITCH_SPEED    ; switch to double speed (length counter ticks delayed by 1 m-cycle)
     DELAY \3
     SAVE_NR52       ; read channel-2-on flag
-    SWITCH_SPEED    ; switch to single speed
+    SWITCH_SPEED    ; switch to normal speed
+ENDM
+
+; The DIV reset automatically triggered when switching
+; speeds may cause immediate length counter decrements.
+; However, the edge for immediate decrements is 1 m-cycle late.
+; This 1 m-cycle delay only affects the 1->0 edge
+; and not the 0->1 edge though.
+MACRO TEST_RESET_EDGE_DS
+    INIT_TEST
+    SOUND_ON
+    INIT_CH2_LC $3A ; channel 2 length counter = 6
+    DELAY \1
+    SWITCH_SPEED    ; switch to double speed
+    DELAY \2
+    SAVE_NR52       ; read channel-2-on flag
+    SWITCH_SPEED    ; switch to normal speed
+ENDM
+
+MACRO TEST_RESET_EDGE_NS
+    SWITCH_SPEED    ; switch to double speed
+    INIT_TEST
+    SOUND_ON
+    INIT_CH2_LC $36 ; channel 2 length counter = 3
+    DELAY \1
+    SWITCH_SPEED    ; switch to normal speed
+    DELAY \2
+    SAVE_NR52       ; read channel-2-on flag
 ENDM
 
 
@@ -216,23 +246,41 @@ run_test:
     TEST_DS_OFF_ON 1, 1, 4061
     TEST_DS_OFF_ON 1, 1, 4062
 
-    TEST_DS_SS_DS 0, 0, 4092
-    TEST_DS_SS_DS 0, 0, 4093
-    TEST_DS_SS_DS 0, 1, 4092
-    TEST_DS_SS_DS 0, 1, 4093
-    TEST_DS_SS_DS 1, 0, 4092
-    TEST_DS_SS_DS 1, 0, 4093
-    TEST_DS_SS_DS 1, 1, 4092
-    TEST_DS_SS_DS 1, 1, 4093
+    TEST_DS_NS_DS 0, 0, 4092
+    TEST_DS_NS_DS 0, 0, 4093
+    TEST_DS_NS_DS 0, 1, 4092
+    TEST_DS_NS_DS 0, 1, 4093
+    TEST_DS_NS_DS 1, 0, 4092
+    TEST_DS_NS_DS 1, 0, 4093
+    TEST_DS_NS_DS 1, 1, 4092
+    TEST_DS_NS_DS 1, 1, 4093
 
-    TEST_DS_SS_DS_SS_DS 0, 0, 4093
-    TEST_DS_SS_DS_SS_DS 0, 0, 4094
-    TEST_DS_SS_DS_SS_DS 0, 1, 4093
-    TEST_DS_SS_DS_SS_DS 0, 1, 4094
-    TEST_DS_SS_DS_SS_DS 1, 0, 4093
-    TEST_DS_SS_DS_SS_DS 1, 0, 4094
-    TEST_DS_SS_DS_SS_DS 1, 1, 4093
-    TEST_DS_SS_DS_SS_DS 1, 1, 4094
+    TEST_DS_NS_DS_NS_DS 0, 0, 4093
+    TEST_DS_NS_DS_NS_DS 0, 0, 4094
+    TEST_DS_NS_DS_NS_DS 0, 1, 4093
+    TEST_DS_NS_DS_NS_DS 0, 1, 4094
+    TEST_DS_NS_DS_NS_DS 1, 0, 4093
+    TEST_DS_NS_DS_NS_DS 1, 0, 4094
+    TEST_DS_NS_DS_NS_DS 1, 1, 4093
+    TEST_DS_NS_DS_NS_DS 1, 1, 4094
+
+    TEST_RESET_EDGE_DS 986, 12285
+    TEST_RESET_EDGE_DS 986, 12286
+    TEST_RESET_EDGE_DS 987, 8189
+    TEST_RESET_EDGE_DS 987, 8190
+    TEST_RESET_EDGE_DS 2009, 8189
+    TEST_RESET_EDGE_DS 2009, 8190
+    TEST_RESET_EDGE_DS 2010, 8189
+    TEST_RESET_EDGE_DS 2010, 8190
+
+    TEST_RESET_EDGE_NS 2010, 6140
+    TEST_RESET_EDGE_NS 2010, 6141
+    TEST_RESET_EDGE_NS 2011, 4092
+    TEST_RESET_EDGE_NS 2011, 4093
+    TEST_RESET_EDGE_NS 4057, 4092
+    TEST_RESET_EDGE_NS 4057, 4093
+    TEST_RESET_EDGE_NS 4058, 4092
+    TEST_RESET_EDGE_NS 4058, 4093
 
     SOUND_OFF
     ld hl, EXPECTED_TEST_RESULTS
