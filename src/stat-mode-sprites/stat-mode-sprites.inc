@@ -3,261 +3,6 @@ INC_STAT_MODE_SPRITES = 1
 
 INCLUDE "test-setup.inc"
 
-EXPECTED_RESULT_LINES:
-IF DEF(DOUBLE_SPEED)
-    ; NOPS + 0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
-
-    ; NOPS + 1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
-
-    ; NOPS + 2
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  3
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 2
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 11
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
-
-    ; NOPS + 3
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 3
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
-
-    ; NOPS + 4
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  7
-    ; NOPS + 4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX 15
-
-    ; NOPS + 5
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 5
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
-
-    ; NOPS + 6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
-
-    ; NOPS + 7
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 7
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
-ELSE
-    ; NOPS + 0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
-
-    ; NOPS + 1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 1
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
-    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-
-    ; NOPS + 2
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 2
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
-    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
-    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
-    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
-
-    ; NOPS + 3
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 3
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
-
-    ; NOPS + 4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  0
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  1
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  2
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  3
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 4
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  9
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 10
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 11
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
-    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
-ENDC
-
-PUSHS
-SECTION "line-stats", WRAM0
-RESULT_LINES: DS 16 * 8 * 8
-POPS
-
 IF DEF(DOUBLE_SPEED)
     DEF INITIAL_DELAY EQU 108
     DEF NUM_NOPS      EQU 8
@@ -266,14 +11,6 @@ ELSE
     DEF NUM_NOPS      EQU 5
 ENDC
 
-EXPECTED_TEST_RESULTS:
-    ; number of test result rows
-    DB NUM_NOPS * 2
-    ; compacted results
-REPT NUM_NOPS * 2
-    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-ENDR
-
 
 
 run_test:
@@ -281,23 +18,30 @@ run_test:
 IF DEF(DOUBLE_SPEED)
     SWITCH_SPEED
 ENDC
+    ; prepare OAM
     MEMCPY _OAMRAM, OAM_DATA, 16 * 4
-    ld de, wait_for_first_line
-    ld bc, read_stat
-    ld hl, RESULT_LINES
+    ; set test result destination
+    ld hl, STAT_VALUES
+    ; turn off LYC to prevent funny STAT values
     ld a, $FF
     ldh [rLYC], a
+    ; prepare mode 2 interrupt handling
+    ld de, wait_for_first_line
+    ld bc, read_stat
     xor a, a
     ldh [rIF], a
     ld a, STATF_MODE10
     ldh [rSTAT], a
+    ; enable STAT interrupt
     ld a, IEF_STAT
     ldh [rIE], a
     ei
+    ; switch on LCD
     ld a, LCDCF_ON | LCDCF_OBJON
     ldh [rLCDC], a
 nop_field:
-    ; 11 lines at double speed
+    ; wait for the next interrupt
+    ; (enough NOPs for 12 LCD lines at double speed)
     NOPS 456 * 12 / 2
     ; there should have been an interrupt by now
     di
@@ -306,26 +50,6 @@ nop_field:
 .NO_INT:
     DB "  MODE2 INTERRUPT\n"
     DB "   NOT TRIGGERED", 0
- 
-OAM_DATA:
-    ;   Y    X  tile  attributes
-    DB $18, $00, $00, $00
-    DB $20, $01, $00, $00
-    DB $28, $02, $00, $00
-    DB $30, $03, $00, $00
-    DB $38, $04, $00, $00
-    DB $40, $05, $00, $00
-    DB $48, $06, $00, $00
-    DB $50, $07, $00, $00
-    ;   Y    X  tile  attributes
-    DB $58, $08, $00, $00
-    DB $60, $09, $00, $00
-    DB $68, $0A, $00, $00
-    DB $70, $0B, $00, $00
-    DB $78, $0C, $00, $00
-    DB $80, $0D, $00, $00
-    DB $88, $0E, $00, $00
-    DB $90, $0F, $00, $00
 
 
 
@@ -338,11 +62,14 @@ SECTION "stat-interrupt-handler", ROM0[$48]
 POPS
 
 wait_for_first_line:
+    ; skip the first 7 LCD lines
     cp a, 7
     jp nz, next_m2_int
-    push bc
-    pop de ; continue with read_stat (minus NOPs)
-    dec bc ; one more NOP on the next frame
+    ; switch to "read_stat" on line 8
+    push bc ; current read_stat with N nops
+    pop de
+    dec bc  ; read_stat with N+1 NOPs on the next frame
+    ; finish test after 8 NOPs
     ld a, read_stat & $FF
     sub a, c
     cp a, NUM_NOPS + 1
@@ -367,19 +94,307 @@ read_stat:
     jr nz, next_m2_int
     ld de, wait_for_first_line
 next_m2_int:
+    ; remove interrupt return address
     pop af
+    ; wait for the next mode 2 interrupt
     ei
     jp nop_field
 
 finish_test:
+    ; remove interrupt return address
     pop af
-    ld bc, RESULT_LINES
-    ld de, EXPECTED_RESULT_LINES
+    ; compact STAT values
+    ld bc, STAT_VALUES
+    ld de, EXPECTED_STAT_VALUES
     ld hl, TEST_RESULTS
     COMPACT_RESULTS_LINES NUM_NOPS * 2, 8, 8
+    ; finish test
     ld hl, EXPECTED_TEST_RESULTS
     ret
 
 
+
+OAM_DATA:
+    ;   Y    X  tile  attributes
+    DB $18, $00, $00, $00
+    DB $20, $01, $00, $00
+    DB $28, $02, $00, $00
+    DB $30, $03, $00, $00
+    DB $38, $04, $00, $00
+    DB $40, $05, $00, $00
+    DB $48, $06, $00, $00
+    DB $50, $07, $00, $00
+    ;   Y    X  tile  attributes
+    DB $58, $08, $00, $00
+    DB $60, $09, $00, $00
+    DB $68, $0A, $00, $00
+    DB $70, $0B, $00, $00
+    DB $78, $0C, $00, $00
+    DB $80, $0D, $00, $00
+    DB $88, $0E, $00, $00
+    DB $90, $0F, $00, $00
+
+EXPECTED_TEST_RESULTS:
+    ; number of test result rows
+    DB NUM_NOPS * 2
+    ; compacted results
+REPT NUM_NOPS * 2
+    DB $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+ENDR
+
+PUSHS
+SECTION "line-stats", WRAM0
+STAT_VALUES: DS 16 * 8 * 8
+POPS
+
+EXPECTED_STAT_VALUES:
+IF DEF(DOUBLE_SPEED)
+    ; NOPS + 0 (mode 3 cycle 176)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
+    ; NOPS + 0 (mode 3 cycle 176)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
+
+    ; NOPS + 1 (mode 3 cycle 178)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
+    ; NOPS + 1 (mode 3 cycle 178)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
+
+    ; NOPS + 2 (mode 3 cycle 180)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  3
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
+    ; NOPS + 2 (mode 3 cycle 180)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 11
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
+
+    ; NOPS + 3 (mode 3 cycle 182)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
+    ; NOPS + 3 (mode 3 cycle 182)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
+
+    ; NOPS + 4 (mode 3 cycle 184)
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  7
+    ; NOPS + 4 (mode 3 cycle 184)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX 15
+
+    ; NOPS + 5 (mode 3 cycle 186)
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
+    ; NOPS + 5 (mode 3 cycle 186)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
+
+    ; NOPS + 6 (mode 3 cycle 188)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
+    ; NOPS + 6 (mode 3 cycle 188)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
+
+    ; NOPS + 7 (mode 3 cycle 190)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
+    ; NOPS + 7 (mode 3 cycle 190)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
+ELSE
+    ; NOPS + 0 (mode 3 cycle 175)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
+    ; NOPS + 0 (mode 3 cycle 175)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
+
+    ; NOPS + 1 (mode 3 cycle 179)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  3
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
+    ; NOPS + 1 (mode 3 cycle 179)
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
+    DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 11
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
+
+    ; NOPS + 2 (mode 3 cycle 183)
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  4
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
+    ; NOPS + 2 (mode 3 cycle 183)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX 12
+    DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX 13
+    DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
+    DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
+
+    ; NOPS + 3 (mode 3 cycle 187)
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
+    ; NOPS + 3 (mode 3 cycle 187)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
+
+    ; NOPS + 4 (mode 3 cycle 191)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  0
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  1
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  2
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  3
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  4
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
+    ; NOPS + 4 (mode 3 cycle 191)
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  9
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 10
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 11
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 12
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 13
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
+    DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
+ENDC
 
 ENDC ; !DEF(INC_STAT_MODE_SPRITES)
