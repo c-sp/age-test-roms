@@ -149,7 +149,7 @@ POPS
 
 EXPECTED_STAT_VALUES:
 IF DEF(DOUBLE_SPEED)
-    ; NOPS + 0 (mode 3 cycle 176)
+    ; NOPS + 0 (line cycle 256)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
@@ -158,7 +158,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 0 (mode 3 cycle 176)
+    ; NOPS + 0 (line cycle 256)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
@@ -168,7 +168,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
 
-    ; NOPS + 1 (mode 3 cycle 178)
+    ; NOPS + 1 (line cycle 258)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
@@ -177,7 +177,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 1 (mode 3 cycle 178)
+    ; NOPS + 1 (line cycle 258)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
@@ -187,7 +187,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
 
-    ; NOPS + 2 (mode 3 cycle 180)
+    ; NOPS + 2 (line cycle 260)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
@@ -196,7 +196,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 2 (mode 3 cycle 180)
+    ; NOPS + 2 (line cycle 260)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
@@ -206,7 +206,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
 
-    ; NOPS + 3 (mode 3 cycle 182)
+    ; NOPS + 3 (line cycle 262)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  2
@@ -215,7 +215,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 3 (mode 3 cycle 182)
+    ; NOPS + 3 (line cycle 262)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX 10
@@ -225,7 +225,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
 
-    ; NOPS + 4 (mode 3 cycle 184)
+    ; NOPS + 4 (line cycle 264)
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
@@ -234,7 +234,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  7
-    ; NOPS + 4 (mode 3 cycle 184)
+    ; NOPS + 4 (line cycle 264)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
@@ -244,7 +244,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX 15
 
-    ; NOPS + 5 (mode 3 cycle 186)
+    ; NOPS + 5 (line cycle 266)
     DB $A0, $A0, $A0, $A0, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
@@ -253,7 +253,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 5 (mode 3 cycle 186)
+    ; NOPS + 5 (line cycle 266)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
@@ -263,7 +263,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
 
-    ; NOPS + 6 (mode 3 cycle 188)
+    ; NOPS + 6 (line cycle 268)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
@@ -272,7 +272,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 6 (mode 3 cycle 188)
+    ; NOPS + 6 (line cycle 268)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
@@ -282,7 +282,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
 
-    ; NOPS + 7 (mode 3 cycle 190)
+    ; NOPS + 7 (line cycle 270)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  2
@@ -291,7 +291,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 7 (mode 3 cycle 190)
+    ; NOPS + 7 (line cycle 270)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 10
@@ -301,7 +301,7 @@ IF DEF(DOUBLE_SPEED)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
 ELSE
-    ; NOPS + 0 (mode 3 cycle 175)
+    ; NOPS + 0 (line cycle 255)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
@@ -310,7 +310,7 @@ ELSE
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 0 (mode 3 cycle 175)
+    ; NOPS + 0 (line cycle 255)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
@@ -320,7 +320,7 @@ ELSE
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
 
-    ; NOPS + 1 (mode 3 cycle 179)
+    ; NOPS + 1 (line cycle 259)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  1
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  2
@@ -329,7 +329,7 @@ ELSE
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 1 (mode 3 cycle 179)
+    ; NOPS + 1 (line cycle 259)
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  8
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  9
     DB $A3, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 10
@@ -339,7 +339,7 @@ ELSE
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
 
-    ; NOPS + 2 (mode 3 cycle 183)
+    ; NOPS + 2 (line cycle 263)
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
@@ -348,7 +348,7 @@ ELSE
     DB $A0, $A0, $A0, $A3, $A3, $A3, $A3, $A3 ; SPX  5
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  6
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX  7
-    ; NOPS + 2 (mode 3 cycle 183)
+    ; NOPS + 2 (line cycle 263)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
@@ -358,7 +358,7 @@ ELSE
     DB $A0, $A0, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 14
     DB $A0, $A3, $A3, $A3, $A3, $A3, $A3, $A3 ; SPX 15
 
-    ; NOPS + 3 (mode 3 cycle 187)
+    ; NOPS + 3 (line cycle 267)
     DB $A0, $A0, $A0, $A0, $A0, $A3, $A3, $A3 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX  2
@@ -367,7 +367,7 @@ ELSE
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 3 (mode 3 cycle 187)
+    ; NOPS + 3 (line cycle 267)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A3 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A3, $A3 ; SPX 10
@@ -377,7 +377,7 @@ ELSE
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 14
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 15
 
-    ; NOPS + 4 (mode 3 cycle 191)
+    ; NOPS + 4 (line cycle 271)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  0
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  1
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  2
@@ -386,7 +386,7 @@ ELSE
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  5
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  6
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  7
-    ; NOPS + 4 (mode 3 cycle 191)
+    ; NOPS + 4 (line cycle 271)
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  8
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX  9
     DB $A0, $A0, $A0, $A0, $A0, $A0, $A0, $A0 ; SPX 10
