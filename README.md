@@ -24,6 +24,9 @@ your emulator should calculate RGB values as follows:
 - the four DMG shades are `#000000`, `#555555`, `#AAAAAA` and `#FFFFFF`
 - each CGB 5 bit RGB channel is converted to 8 bits
   using the formula `(X << 3) | (X >> 2)`
+- the shades for non-CGB mode are:
+  - background: `#000000`, `#0063C6`, `#7BFF31` and `#FFFFFF`
+  - objects: `#000000`, `#943939`, `#FF8484` and `#FFFFFF`
 
 ## Font
 

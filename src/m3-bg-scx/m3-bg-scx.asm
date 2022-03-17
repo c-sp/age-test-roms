@@ -1,5 +1,6 @@
 ; Verified:
 ;   2021-12-01: CPU CGB E - CPU-CGB-06
+;   2022-03-17: CPU CGB C - CPU-CGB-04
 ;   2021-12-01: CPU CGB B - CPU-CGB-02
 ;   2021-12-01: DMG-CPU C (blob) - DMG-CPU-08
 ;

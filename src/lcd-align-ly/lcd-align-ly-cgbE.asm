@@ -1,5 +1,6 @@
 ; Verified:
 ;   2022-03-13 pass: CPU CGB E - CPU-CGB-06
+;   2022-03-16 fail: CPU CGB C - CPU-CGB-04
 ;   2022-03-13 fail: CPU CGB B - CPU-CGB-02
 ;   2022-03-13 fail: DMG-CPU C (blob) - DMG-CPU-08
 ;
