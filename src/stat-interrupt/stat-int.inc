@@ -4,7 +4,7 @@
 ; TODO rewrite this with less LCD on/off switching
 ;
 IF !DEF(INC_STAT_INT)
-INC_STAT_INT = 1
+DEF INC_STAT_INT EQU 1
 
 INCLUDE "test-setup.inc"
 

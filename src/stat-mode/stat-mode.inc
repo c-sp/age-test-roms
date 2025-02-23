@@ -3,7 +3,7 @@
 ; without any window or sprite rendering.
 ;
 IF !DEF(INC_STAT_MODE)
-INC_STAT_MODE = 1
+DEF INC_STAT_MODE EQU 1
 
 IF DEF(CGB_E)
     DEF M1E EQU $81 ; no mode-0 m-cycle at the end of mode-1 on CGB-E

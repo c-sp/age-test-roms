@@ -1,5 +1,5 @@
 IF !DEF(INC_READ)
-INC_READ = 1
+DEF INC_READ EQU 1
 
 INCLUDE "test-setup.inc"
 

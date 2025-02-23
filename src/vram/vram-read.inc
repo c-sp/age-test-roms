@@ -1,7 +1,7 @@
 ; Test VRAM read access
 ;
 IF !DEF(INC_VRAM_READ)
-INC_VRAM_READ = 1
+DEF INC_VRAM_READ EQU 1
 
 IF DEF(DMG_C)
     DEF CFF EQU $FF

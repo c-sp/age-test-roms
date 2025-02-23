@@ -1,7 +1,7 @@
 ; Test OAM read access
 ;
 IF !DEF(INC_OAM_READ)
-INC_OAM_READ = 1
+DEF INC_OAM_READ EQU 1
 
 IF DEF(CGB_E)
     DEF EFF EQU $FF

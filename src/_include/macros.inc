@@ -1,5 +1,5 @@
 IF !DEF(INC_MACROS)
-INC_MACROS = 1
+DEF INC_MACROS EQU 1
 
 INCLUDE "hardware.inc"
 
