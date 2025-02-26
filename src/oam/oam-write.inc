@@ -1,7 +1,7 @@
 ; Test OAM write access
 ;
 IF !DEF(INC_OAM_WRITE)
-INC_OAM_WRITE = 1
+DEF INC_OAM_WRITE EQU 1
 
 IF DEF(DMG_C)
     DEF C81 EQU $81

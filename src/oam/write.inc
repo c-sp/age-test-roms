@@ -1,5 +1,5 @@
 IF !DEF(INC_WRITE)
-INC_WRITE = 1
+DEF INC_WRITE EQU 1
 
 INCLUDE "test-setup.inc"
 

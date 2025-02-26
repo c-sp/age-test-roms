@@ -1,5 +1,5 @@
 IF !DEF(INC_M3_LCDC_BG)
-INC_M3_LCDC_BG = 1
+DEF INC_M3_LCDC_BG EQU 1
 
 DEF CART_IS_VISUAL_TEST EQU 1
 INCLUDE "test-setup.inc"
@@ -94,13 +94,13 @@ no_op:
 
 toggle_bg_map:
     ; toggle the BG tile map a few times during this line
-    ld a, [c]     ; 2 m-cycles
+    ldh a, [c]     ; 2 m-cycles
     REPT REPETITIONS
         xor a, b  ; 1 m-cycle
-        ld [c], a ; 2 m-cycles
+        ldh [c], a ; 2 m-cycles
         nop       ; 1 m-cycle
         xor a, b  ; 1 m-cycle
-        ld [c], a ; 2 m-cycles
+        ldh [c], a ; 2 m-cycles
     ENDR
     ; start toggling the BG tile data area on line 64
     ldh a, [rLY]
@@ -112,13 +112,13 @@ toggle_bg_map:
 
 toggle_bg_data:
     ; toggle the BG tile data area a few times during this line
-    ld a, [c]     ; 2 m-cycles
+    ldh a, [c]     ; 2 m-cycles
     REPT REPETITIONS
         xor a, b  ; 1 m-cycle
-        ld [c], a ; 2 m-cycles
+        ldh [c], a ; 2 m-cycles
         nop       ; 1 m-cycle
         xor a, b  ; 1 m-cycle
-        ld [c], a ; 2 m-cycles
+        ldh [c], a ; 2 m-cycles
     ENDR
     ; do nothing after line 95
     ldh a, [rLY]
